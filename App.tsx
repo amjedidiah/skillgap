@@ -1,11 +1,12 @@
-import { StatusBar } from 'expo-status-bar';
-import { Text, View } from "react-native";
+import NativeSafeAreaView from "@/components/native-safe-area-view";
+import { StatusBar } from "expo-status-bar";
+import { Text } from "react-native";
 
 export default function App() {
   return (
-    <View>
-      <Text>Open up App.tsx to start working on your app!</Text>
+    <NativeSafeAreaView>
+      <Text>SkillGap!</Text>
       <StatusBar style="auto" />
-    </View>
+    </NativeSafeAreaView>
   );
 }
