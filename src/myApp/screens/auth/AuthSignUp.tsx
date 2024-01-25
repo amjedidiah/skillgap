@@ -50,7 +50,7 @@ const AuthSignUp = () => {
 
   const onSubmit = (data: string) => {
     console.log("ran in submit")
-    navigation.navigate("verifyEmail")
+    navigation.navigate("authOtpScreen")
   };
 
   const [disableSubmitButton, setDisableSubmitButton] = useState(false);
@@ -291,11 +291,11 @@ const AuthSignUp = () => {
                   
                   </View>
                 )}
-                name={"password"}
+                name={"phoneNumber"}
               />
 
               <View className="w-[327px]">
-                {errors.password && (
+                {errors.phoneNumber && (
                   <Text
                     className="text-red-500
                     font-bold "

@@ -38,7 +38,7 @@ console.log("this is the state",showOnboarding)
           setShowOnboarding(showOnboarding - 1)
    }
   if(showOnboarding === 2){
-    navigation.navigate("signupScreen")
+    navigation.navigate("appSignUp")
   }
 
    if( i === "next" && showOnboarding < 2){

@@ -2,7 +2,6 @@ import * as Font from "expo-font"
 
 export const loadFont = async () => {
    await Font.loadAsync({
-     
       "GeneralSans-Bold" : require("../assets/fonts/GeneralSans-Bold.otf"),
       "GeneralSans-BoldItalic" : require("../assets/fonts/GeneralSans-BoldItalic.otf"),
     "GeneralSans-Extralight" : require("../assets/fonts/GeneralSans-Extralight.otf"),

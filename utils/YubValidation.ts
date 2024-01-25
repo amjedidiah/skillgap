@@ -33,9 +33,8 @@ import * as Yup from "yup";
     
   })
 
-  export const validationPasswordChange = Yup.object().shape({
-    oldPassword: Yup.string().required("Old Password is required"),
-    newPassword: Yup.string().required("New password is required"),
+  export const validationResetPassword = Yup.object().shape({
+    newPassword: Yup.string().required("Password is required"),
     confirmPassword: Yup.string()
     .oneOf([Yup.ref('newPassword'), null], 'Passwords must match')
     .required('Please confirm your password'),
@@ -51,3 +50,6 @@ import * as Yup from "yup";
     city: Yup.string().required("City is required"),
    
   })
+
+
+  

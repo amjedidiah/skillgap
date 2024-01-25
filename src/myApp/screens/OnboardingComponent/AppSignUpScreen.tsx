@@ -45,7 +45,7 @@ const deviceHeight = Dimensions.get("window").height
     <AppButton  
     text="Sign Up"
     handleOnpress={() => {
-      navigation.navigate("SignUpScreen");
+      navigation.navigate("signUpScreen");
     }}
 
     />
@@ -54,7 +54,7 @@ const deviceHeight = Dimensions.get("window").height
       <View className="mt-4">
   
 <AppButton  
-    text="Sign Up"
+    text="Login In"
     handleOnpress={() => {
       navigation.navigate("loginScreen");
     }}

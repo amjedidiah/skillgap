@@ -28,9 +28,9 @@ const AppSplashScreen = ({}) => {
        </View>
 
         <Animated.View  
-        style={{
-          opacity: 0
-        }}
+        // style={{
+        //   opacity: 0
+        // }}
         className='absolute bottom-[38px]'>
             <Text className="text-white text-sm font-bold font-['Plus Jakarta Sans'] leading-[18px]">
             .....Bank on your skill
