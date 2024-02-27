@@ -66,7 +66,7 @@ useEffect(() =>{
 
   return (
     <Stack.Navigator
-      initialRouteName="appSignUp"
+      initialRouteName="onboarding"
       screenOptions={{
         animation: "slide_from_right",
       }}
