@@ -1,0 +1,59 @@
+{
+  "expo": {
+    "name": "Skill Gap",
+    "slug": "skillgap",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/icon88.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/images/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/splashnew.png",
+        "backgroundColor": "#ffffff"
+      },
+      "permissions": [
+        "android.permission.RECORD_AUDIO"
+      ],
+      "package": "com.ukonulucky.skillgap"
+    },
+    "web": {
+      "favicon": "./assets/images/favicon.png"
+    },
+    "experiments": {
+      "tsconfigPaths": true
+    },
+    "plugins": [
+      [
+        "expo-image-picker",
+        {
+          "locationAlwaysAndWhenInUsePermission": "Allow $(Skillgap) to use your gallary and camera."
+        }
+      ],
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/images/icon22.png",
+          "color": "#ffffff",
+          "sounds": ["./assets/sounds/alert2.wav"]
+         
+        }
+      ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "c0b27bb6-2b22-4f41-bada-3d69e73c305b"
+      }
+    }
+  }
+}
