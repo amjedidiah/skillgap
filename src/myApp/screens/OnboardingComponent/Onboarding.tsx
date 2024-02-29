@@ -2,9 +2,6 @@ import { View, Dimensions, Text } from "react-native";
 import * as SplashScreen from "expo-splash-screen";
 import { useCallback, useEffect, useState } from "react";
 
-
-
-
 import { onboardingType } from "@/myApp/types";
 import { loadFont } from "utils/fontDownload";
 import AppOnboardingComp from "@/myApp/components/AppOnboardingComp";
@@ -12,6 +9,7 @@ import AppSplashScreen from "@/myApp/screens/OnboardingComponent/AppSplashScreen
 import { onboardingArray } from "utils/data";
 import { useNavigation } from "@react-navigation/native";
 import { HomeScreenNavigationProps } from "type";
+import OnboardingNavigation from "navigation/OnboardingNavigation";
 
 const Onboarding = ({
   img,
@@ -19,6 +17,8 @@ const Onboarding = ({
   content,
   progressArray,
 }: onboardingType) => {
+
+
   const { width, height } = Dimensions.get("window");
 
 
@@ -30,8 +30,6 @@ const Onboarding = ({
   const [animate, setAnimate] = useState(false);
   const [showOnboarding, setShowOnboarding] = useState(0);
 
-
-console.log("this is the state",showOnboarding)
 
   const  handleOnboardingFunc = (i:string) => {
     console.log(i)
@@ -52,7 +50,7 @@ console.log("this is the state",showOnboarding)
     async function prepare() {
       try {
         // Pre-load fonts, make any API calls you need to do here
-        //  await loadFont();
+          await loadFont();
         // Artificially delay for two seconds to simulate a slow loading
         // experience. Please remove this if you copy and paste the code!
          await new Promise((resolve) => setTimeout(resolve, 2000));
@@ -88,9 +86,12 @@ console.log("this is the state",showOnboarding)
 
 
   return (
-    <View className="w-full h-full pb-12" onLayout={onLayoutRootView}>
+    <View className="w-full h-full pb-12 " onLayout={onLayoutRootView}>
+     {/* {
+      animate ?  <AppOnboardingComp handleOnboardingFunc={handleOnboardingFunc } {...onboardingArray[showOnboarding]}   /> : <AppSplashScreen />
+     } */}
      {
-      animate ?  <AppOnboardingComp  handleOnboardingFunc={handleOnboardingFunc } {...onboardingArray[showOnboarding]}   /> : <AppSplashScreen />
+      animate ?  <OnboardingNavigation  /> : <AppSplashScreen />
      }
     </View>
   );

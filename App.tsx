@@ -7,6 +7,7 @@ import { QueryClientProvider,   QueryClient  } from '@tanstack/react-query'
 import { store } from "redux/store/store";
 
 
+
 export default function App() {
   
 const queryClient = new QueryClient();
@@ -19,7 +20,5 @@ const queryClient = new QueryClient();
     </NavigationContainer>
     </QueryClientProvider>
     </Provider>
- 
- 
   );
 }

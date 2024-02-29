@@ -13,6 +13,7 @@ import AuthRecovery from "@/myApp/screens/auth/AuthRecovery";
 import AuthResetPassword from "@/myApp/screens/auth/AuthResetPassword";
 import ButtonTapNavigation from "./ButtomNavigation";
 import { HomeStackNavigatorParamList } from "type";
+import OnboardingNavigation from "./OnboardingNavigation";
 
 
 // @react-native-async-storage/async-storage@1.22.2 - expected version: 1.18.2
@@ -80,7 +81,15 @@ useEffect(() =>{
           animation: "slide_from_left",
         }}
       />
-
+      <Stack.Screen
+        name="OnboardingNavigation"
+        component={OnboardingNavigation}
+        options={{
+          headerShown: false,
+          animation: "slide_from_left",
+        }}
+      />
+{/* 
       {/* AuthResetPassword */}
       <Stack.Screen
         name="appSignUp"
@@ -92,19 +101,8 @@ useEffect(() =>{
       />
 
       {/* AuthPasswordResetSuccessScreen */}
-      <Stack.Screen
-        name="authResetPassword"
-        component={AuthResetPassword}
-        options={{
-          headerShown: false,
-          animation: "slide_from_left",
-        }}
-      />
+     
       
-     
-     
-    
-    
       <Stack.Screen
         name="loginScreen"
         component={AuthLogin}
@@ -123,23 +121,9 @@ useEffect(() =>{
       />
       {/* //  AuthOTP */}
 
-      <Stack.Screen
-        name="authOtpScreen"
-        component={AuthOTP}
-        options={{
-          headerShown: false,
-          animation: "slide_from_left",
-        }}
-      />
+    
 
-      <Stack.Screen
-        name="authRecoveryScreen"
-        component={AuthRecovery}
-        options={{
-          headerShown: false,
-          animation: "slide_from_left",
-        }}
-      />
+    
 
       {/* onboarding end */}
 
@@ -157,7 +141,7 @@ useEffect(() =>{
           animation: "slide_from_left",
         }}
       />
-
+ 
       {/* bottom tab navigation links end  */}
     </Stack.Navigator>
   );

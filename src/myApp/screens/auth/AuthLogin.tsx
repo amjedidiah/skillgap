@@ -105,6 +105,15 @@ const AuthLogin = () => {
 
   // changePasswordApi
 
+
+
+
+  // yarn add @magic-sdk/react-native-expo
+  // yarn add react-native-webview@^11.26.0 # Required Peer Dependency
+  // yarn add react-native-safe-area-context # Required Peer Dependency
+
+
+
   useEffect(() => {
     const handleState = async () => {
       console.log("ran useEffect");
@@ -129,7 +138,7 @@ const AuthLogin = () => {
         setTimeout(() => {
           setUpdate(false);
           navigation.navigate("buttonTapNavigation");
-        }, 230);
+        },500);
         setShowModal(true);
         setErrorType("success");
         setErrorMessage("");
@@ -141,10 +150,11 @@ const AuthLogin = () => {
 
   const onSubmit = async (data: { email: string }) => {
     try {
-      setLoading(true);
+      // setLoading(true);
       const magicToken = await magic.auth.loginWithEmailOTP({
         email: data?.email,
       });
+      console.log(magicToken);
       setUpdate(true);
      
       await loginMutation.mutateAsync({
@@ -203,7 +213,7 @@ console.log("this is showModal:",showModal,"this is erorMessage:",errorMessage, 
               render={({ field: { onChange, onBlur, value } }) => (
                 <View
                   className="w-full h-[52px] px-2 text-white  flex-row items-center justify-between space-x-2 
-                    bg-white rounded-[30px] shadow border border-gray-300 "
+                    bg-white rounded-[30px] shadow border border-gray-300"
                 >
                   <TextInput
                     onChangeText={(data) => {

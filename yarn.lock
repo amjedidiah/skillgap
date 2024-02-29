@@ -1875,29 +1875,29 @@
     "@jridgewell/resolve-uri" "^3.1.0"
     "@jridgewell/sourcemap-codec" "^1.4.14"
 
-"@magic-sdk/commons@^18.1.1":
-  version "18.1.1"
-  resolved "https://registry.yarnpkg.com/@magic-sdk/commons/-/commons-18.1.1.tgz#36c1dc04f319a333a7c46b8e53b9055d69436a79"
-  integrity sha512-Rcc1M3B+UacYbW8Io46rfMmzx3Z3Q03Ye3cBxYr5CPVP5/8vLHlO0mO/+E2PX8PPAMfshRHkgdql7zStE+njnA==
+"@magic-sdk/commons@^20.0.0":
+  version "20.0.0"
+  resolved "https://registry.yarnpkg.com/@magic-sdk/commons/-/commons-20.0.0.tgz#6eeb211dd01f230f8490d19e0ed5e744be4028ec"
+  integrity sha512-mH+1p0wEeFayZiHQgw8Q9gtVOZAp36thOHnYL+x8lytHYJLGcpKkimayg21FNRw3K+s5T0LG8ojBhT8ocgsnQg==
 
-"@magic-sdk/provider@^22.1.1":
-  version "22.1.1"
-  resolved "https://registry.yarnpkg.com/@magic-sdk/provider/-/provider-22.1.1.tgz#3ee2f3b62c240aee034d9fd1e99a2c3261355ad4"
-  integrity sha512-Bc1RdIqh+PyYdpVT8Xnmg0SmJeQunX0kKl2BmPItdWDG5YnQGLS76dKmVMbkCYCwneeVFWeVUwRv5Sr8ppc8ew==
+"@magic-sdk/provider@^24.0.0":
+  version "24.0.0"
+  resolved "https://registry.yarnpkg.com/@magic-sdk/provider/-/provider-24.0.0.tgz#176eca756a7847a82997c48e0ff6e097dcdab30d"
+  integrity sha512-mGnAImyxWz9yXPRYQrqK/zK/O4iPaq6//lisslVw2d3avfPb15erOx0hJOtruG9jJQFlF1Wl+ezLkT+fc78UTg==
   dependencies:
-    "@magic-sdk/types" "^18.1.1"
+    "@magic-sdk/types" "^20.0.0"
     eventemitter3 "^4.0.4"
     web3-core "1.5.2"
 
-"@magic-sdk/react-native-expo@^23.1.1":
-  version "23.1.1"
-  resolved "https://registry.yarnpkg.com/@magic-sdk/react-native-expo/-/react-native-expo-23.1.1.tgz#d37d6ada9e1c04c39c1947d8cff9a36f4e7afb40"
-  integrity sha512-LO8YJOwnFwDJfKg/C5shRJk9eSwz2bApxqxpIrcT4gV7srt/F+l6rB0e5IteElFTvSJV4Wb+vu9B1oCHujtnWg==
+"@magic-sdk/react-native-expo@^25.0.0":
+  version "25.0.0"
+  resolved "https://registry.yarnpkg.com/@magic-sdk/react-native-expo/-/react-native-expo-25.0.0.tgz#1730964cb8962f99a67261efc3b1d17ad6c0dbca"
+  integrity sha512-DUFwYuSoa99k3/t/vOeHeCbQr71wJ6RfG1fco+eN0J/4VNxIdZjWnQsMwjqGBhv3U9l57p32A4yEcgLbZFOv6w==
   dependencies:
     "@aveq-research/localforage-asyncstorage-driver" "^3.0.1"
-    "@magic-sdk/commons" "^18.1.1"
-    "@magic-sdk/provider" "^22.1.1"
-    "@magic-sdk/types" "^18.1.1"
+    "@magic-sdk/commons" "^20.0.0"
+    "@magic-sdk/provider" "^24.0.0"
+    "@magic-sdk/types" "^20.0.0"
     "@react-native-async-storage/async-storage" "^1.15.5"
     "@types/lodash" "^4.14.158"
     buffer "~5.6.0"
@@ -1909,10 +1909,10 @@
     tslib "^2.0.3"
     whatwg-url "~8.1.0"
 
-"@magic-sdk/types@^18.1.1":
-  version "18.1.1"
-  resolved "https://registry.yarnpkg.com/@magic-sdk/types/-/types-18.1.1.tgz#3bbab822efd6f9dc695a8b8849f556c3db6fd169"
-  integrity sha512-QH6fAujGgSGyvTxMhf98oUlsnutS6M9VcHmFdmOTnCq7iuxa6qeDPIsBTjqnqBrg5qFePhA5WresvcClMp3HJw==
+"@magic-sdk/types@^20.0.0":
+  version "20.0.0"
+  resolved "https://registry.yarnpkg.com/@magic-sdk/types/-/types-20.0.0.tgz#527e23d9f453bdae7f110ade24f3969c2d6431ee"
+  integrity sha512-ziEIXPwuTyffL5pFuWBNm62RuGRL+7gqbmgZFmIH9sz7B6ptXIq89mc8yEjfO9YIjxgRQWoQF2bG/ihY6jjz6g==
 
 "@nicolo-ribaudo/eslint-scope-5-internals@5.1.1-v1":
   version "5.1.1-v1"
@@ -5329,6 +5329,11 @@ globby@^11.0.1, globby@^11.1.0:
     merge2 "^1.4.1"
     slash "^3.0.0"
 
+google-libphonenumber@^3.2.10:
+  version "3.2.34"
+  resolved "https://registry.yarnpkg.com/google-libphonenumber/-/google-libphonenumber-3.2.34.tgz#ef29b53be0f9fb517aaa53d26a541150f86ec921"
+  integrity sha512-CLwkp0lZvMywh6dCh0T3Fm8XsfJhLAupc8AECwYkJNQBPW8wQPrv/tV0oFKCs8FMw+pTQyNPZoycgBzYjqtTZQ==
+
 gopd@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/gopd/-/gopd-1.0.1.tgz#29ff76de69dac7489b7c0918a5788e56477c332c"
@@ -7990,10 +7995,18 @@ react-native-country-picker-modal@^2.0.0:
     prop-types "15.7.2"
     react-async-hook "3.6.1"
 
-react-native-safe-area-context@4.6.3:
-  version "4.6.3"
-  resolved "https://registry.yarnpkg.com/react-native-safe-area-context/-/react-native-safe-area-context-4.6.3.tgz#f06cfea05b1c4b018aa9758667a109f619c62b55"
-  integrity sha512-3CeZM9HFXkuqiU9HqhOQp1yxhXw6q99axPWrT+VJkITd67gnPSU03+U27Xk2/cr9XrLUnakM07kj7H0hdPnFiQ==
+react-native-phone-number-input@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/react-native-phone-number-input/-/react-native-phone-number-input-2.1.0.tgz#e9743d391d438d33b91ae3d03482b291b3d20ea5"
+  integrity sha512-EItzeDH6QUw6Kd1uwqFgcUl1YstxULB1M3HuCMHTvHVLoPE3ddjiuHyx+EHs0+4FcZtaXLQzLuC4cC/c4XIEuA==
+  dependencies:
+    google-libphonenumber "^3.2.10"
+    react-native-country-picker-modal "^2.0.0"
+
+react-native-safe-area-context@^4.9.0:
+  version "4.9.0"
+  resolved "https://registry.yarnpkg.com/react-native-safe-area-context/-/react-native-safe-area-context-4.9.0.tgz#21a570ca3594cb4259ba65f93befaa60d91bcbd0"
+  integrity sha512-/OJD9Pb8IURyvn+1tWTszWPJqsbZ4hyHBU9P0xhOmk7h5owSuqL0zkfagU0pg7Vh0G2NKQkaPpUKUMMCUMDh/w==
 
 react-native-safe-modules@^1.0.3:
   version "1.0.3"
@@ -8038,10 +8051,10 @@ react-native-svg@13.9.0:
     css-select "^5.1.0"
     css-tree "^1.1.3"
 
-react-native-webview@13.2.2:
-  version "13.2.2"
-  resolved "https://registry.yarnpkg.com/react-native-webview/-/react-native-webview-13.2.2.tgz#06b04db8e1f4ed57a9dc92f4094aa0e41271b89b"
-  integrity sha512-uT70y2GUqQzaj2RwRb/QuKRdXeDjXM6oN3DdPqYQlOOMFTCT8r62fybyjVVRoik8io+KLa5KnmuSoS5B2O1BmA==
+react-native-webview@^11.26.0:
+  version "11.26.1"
+  resolved "https://registry.yarnpkg.com/react-native-webview/-/react-native-webview-11.26.1.tgz#658c09ed5162dc170b361e48c2dd26c9712879da"
+  integrity sha512-hC7BkxOpf+z0UKhxFSFTPAM4shQzYmZHoELa6/8a/MspcjEP7ukYKpuSUTLDywQditT8yI9idfcKvfZDKQExGw==
   dependencies:
     escape-string-regexp "2.0.0"
     invariant "2.2.4"

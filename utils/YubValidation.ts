@@ -13,7 +13,7 @@ import * as Yup from "yup";
     lastName: Yup.string().required("Last name is required"),
     userName: Yup.string().required("User name is required"),
     email: Yup.string().email().required("Email is required"),
-    phoneNumber: Yup.string().max(8, "eight characters required").min(8, "eight characters required").required("Phone number is required"),
+    phoneNumber: Yup.string().required("Phone number is required")
     // password: Yup.string()
     // .required('Password contain atleast 8 - 12 characters')
     // .min(8, 'Password must be at least 8 characters long').max(12,"Password can not exceed 12 characters long")

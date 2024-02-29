@@ -65,6 +65,24 @@ export const onboardingArray = [
 
 
 
+export const onBoardingScreen1Data = {
+    heading:"Yo Champ!",
+    content:"Win cash completing bets in your favourite game and sport. Play solo or with your squad",
+    img: require("../assets/images/Onboarding1.jpg"),
+}
+export const onBoardingScreen2Data = {
+    heading:"You rock!",
+    content:"Bet on yourself using your skill in games and sports against the best players in the world/ your region",
+    img: require("../assets/images/Onboarding2.jpg"),
+  
+}
+export const onBoardingScreen3Data = {
+    heading:"Gain Points!",
+    content:"Refer friend to earn unique skillgap coins and other rewards",
+    img: require("../assets/images/Onboarding3.jpg")
+}
+
+
 
 export const homeCategoryData = [{
     key: 1,

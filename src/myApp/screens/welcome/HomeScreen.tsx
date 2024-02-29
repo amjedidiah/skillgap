@@ -12,11 +12,25 @@ import ContestantComp from '@/myApp/components/ContestantComp'
 import LeaderModalComp from '@/myApp/components/LeaderModalComp';
 import { useSelector } from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { BackHandler } from 'react-native';
 
 
 
 
 const HomeScreen = () => {
+
+  // removing back naviagtion when pressing the back button
+  useEffect(() => {
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      () => {
+        // Return true to prevent default back navigation
+        return true;
+      }
+    );
+
+    return () => backHandler.remove();
+  }, []);
 
   const [showModal, setShowModal] = useState(false)
 const appUserStore = useSelector(data => data?.authReducer?.user)

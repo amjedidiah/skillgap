@@ -33,8 +33,8 @@ const deviceHeight = Dimensions.get("window").height
           height: deviceHeight * 1.9 / 5  + 10
         }}
         > 
-        <View className=" justify-center items-center mb-2 ">
-            <AppTextHeading text={"Skillgap"} />
+        <View className=" justify-center  text-center items-center mb-2 ">
+            <AppTextHeading text={"Skillgap"} classText="text-center" />
            
           </View>
           <View className="text-center">
