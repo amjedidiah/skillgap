@@ -119,6 +119,7 @@ const AuthLogin = () => {
       console.log("ran useEffect");
       if (isError && update) {
         setShowModal(true);
+        setLoading(!loading)
         setErrorType("error");
         const errorMessage = error?.response?.data.message || error?.message;
         setErrorMessage(errorMessage);
@@ -133,7 +134,7 @@ const AuthLogin = () => {
       }
       if (isSuccess && update) {
         dispatch(loginAction(appData?.data));
-        setLoading(false);
+        setLoading(!loading);
         await AsyncStorage.setItem("userLoginToken", appData?.data?.jwt);
         setTimeout(() => {
           setUpdate(false);
@@ -150,7 +151,7 @@ const AuthLogin = () => {
 
   const onSubmit = async (data: { email: string }) => {
     try {
-      // setLoading(true);
+       setLoading(!loading);
       const magicToken = await magic.auth.loginWithEmailOTP({
         email: data?.email,
       });
@@ -265,7 +266,7 @@ console.log("this is showModal:",showModal,"this is erorMessage:",errorMessage, 
         >
           <Text className="text-center text-white text-sm font-medium font-['GeneralSans-Regular'] leading-normal">
            {
-            loading ?  "Log In..." : " Log In"
+            loading ?  "Loading..." : " Log In"
            }
           </Text>
         </TouchableOpacity>

@@ -38,14 +38,17 @@ const AuthSignUp = () => {
   const [formData, setFormData] = useState(null);
   const [errorMessage, setErrorMessage] = useState("");
   const [updateRegister, setUpdateRegister] = useState(false);
-
+  const  [disableButton, setDisableButton] = useState(false)
+  
   // phoneNumber state
   const [phoneValue, setPhoneValue] = useState("");
   const [formattedValue, setFormattedValue] = useState("");
   const [isPhoneNumberValid, setIsPhoneNumberValid] = useState(false);
 
 
-const dispatch = useDispatch()
+
+  // 
+
 
   const [country, setCountry] = useState<Country>({
     callingCode: ["234"],
@@ -136,6 +139,7 @@ const dispatch = useDispatch()
   // onSubmit function for submiting forms
   const onSubmit = async (data: any) => {
     try {
+      setDisableButton(!disableButton)
        setFormData(data)
       
       // verify email from magic.link
@@ -163,6 +167,7 @@ const dispatch = useDispatch()
   useEffect(() => {
     if (isError  && update) {
       setShowModal(true);
+      setDisableButton(!disableButton)
       setErrorType("error");
       const errorMessage = error?.response?.data.message || error?.message;
       const errorMagicMessage =
@@ -179,6 +184,7 @@ const dispatch = useDispatch()
     if (isSuccess && update) {
       // dispatch(loginAction(appData?.data));
       setShowModal(true);
+      setDisableButton(!disableButton)
       setErrorType("success");
       setErrorMessage("");
       setPhoneValue("")
@@ -556,16 +562,19 @@ const dispatch = useDispatch()
         {/* app button start */}
 
         <TouchableOpacity
+        disabled={disableButton}
           activeOpacity={0.5}
           onPress={handleSubmit(onSubmit)}
-          className={`w-full px-2.5 py-4 bg-sky-500 rounded-[40px] justify-center items-center mt-4`}
+          className={`w-full px-2.5 py-4 bg-sky-500 rounded-[40px] justify-center items-center mt-4 ${disableButton && "bg-sky-300"}`}
         >
           <Text
           style={{
             fontFamily:"GeneralSans-Regular"
           }}
           className="text-center text-white text-sm font-medium  leading-normal">
-            SignUp
+          {
+            disableButton ? "Loading..." : "SignUp"
+          }
           </Text>
         </TouchableOpacity>
 
