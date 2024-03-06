@@ -204,9 +204,8 @@ const AuthSignUp = () => {
       setShowModal(true);
       setErrorType("error");
       const errorMessage = error?.response?.data.message || error?.message;
-      const errorMagicMessage =
-        magicError?.response?.data.message || magicError?.message;
-      setErrorMessage(errorMessage || errorMagicMessage);
+    
+      setErrorMessage(errorMessage);
       setValidateMagicData(false)
       setUpdate(false)
       setDisableButton(false);
@@ -221,7 +220,7 @@ const AuthSignUp = () => {
     if (isSuccess && update) {
       // dispatch(loginAction(appData?.data));
       setShowModal(true);
-      setDisableButton(!disableButton)
+      setDisableButton(false)
       setErrorType("success");
       setErrorMessage("");
       setPhoneValue("")

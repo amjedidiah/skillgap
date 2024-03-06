@@ -50,7 +50,7 @@ const PhoneNumberScreen: React.FC = ({
                   height:"100%",
                   justifyContent:"center",
                   alignItems:"center",
-                  paddingVertical: 13,
+                  paddingVertical: 12,
                   textAlignVertical:"center"
                 }}
                  textInputStyle={{ fontSize: 16,
