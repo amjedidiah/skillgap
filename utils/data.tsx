@@ -60,6 +60,27 @@ export const onboardingArray = [
             }
         ]
     },
+    {
+        key: 4, 
+        heading:"Yo Champ!",
+        content:"Win cash completing bets in your favourite game and sport. Play solo or with your squad",
+        img: require("../assets/images/Onboarding1.jpg"),
+        progressArray: [
+            {
+                i: 1,
+                active:true
+            },
+            {
+                i: 2,
+                active:false
+            },
+            {
+                i: 3,
+                active:false
+            }
+        ]
+
+    }
   
 ]
 

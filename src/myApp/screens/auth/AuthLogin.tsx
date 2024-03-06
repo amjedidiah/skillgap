@@ -8,13 +8,12 @@ import {
   Image,
   TouchableOpacity,
   Modal,
+  Alert,
 } from "react-native";
 import React, { useCallback, useEffect, useState } from "react";
-import { Magic } from "@magic-sdk/react-native-expo";
+import { Magic, RPCError, RPCErrorCode } from "@magic-sdk/react-native-expo";
 import { useInternetConnection } from "@magic-sdk/react-native-expo";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useRoute } from '@react-navigation/native';
-import { SafeAreaView } from "react-native-safe-area-context";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm, Controller } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
@@ -28,12 +27,14 @@ import AlertMessage from "@/myApp/components/AlertMessage";
 
 import { useDispatch } from "react-redux";
 import { loginAction } from "redux/slices/authSlice";
-import { loginApi } from "@/api/authApi";
+import { loginApi, validateEmail } from "@/api/authApi";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 
 
 const AuthLogin = () => {
-  // manage
+  
+// manage
 
   const [showModal, setShowModal] = useState(false);
   const [errorType, setErrorType] = useState(null);
@@ -42,37 +43,35 @@ const AuthLogin = () => {
 
   const [email, setEmail] = useState("");
   const [update, setUpdate] = useState(false);
-
+  const [updateEmailMutation, setUpdateEmailMutation] = useState(false);
+  
   // seting up magic
   const magic = new Magic("pk_live_AF0A2FCCABF5C8EF");
 
 
   const [form, setForm] = useState<authSignInCompProps>({
-    email: "",
+    email: ""
   });
 
 
+  // valaidte email mutation
 
-  const route = useRoute()
-  const receivedData = route.params?.data
-  useEffect(() => {
-   if(receivedData){
-    setShowEmailModal(true)
-    setEmail(receivedData)
-   }
-  }, [receivedData])
-  // check internet connection
+  const validateEmailMutation = useMutation({
+    mutationKey:["validate-email"],
+    mutationFn: validateEmail
+  })
+
+
+  //destructure propertie from validateEmailMutation 
+
+  const { data:emailMutationData, error: emailMutationErrorMessage, isError: emailMutationError, isPending:emailMutationPending, isSuccess:emailMutationSuccess } = validateEmailMutation
+
+
+   console.log("email validation", "data", emailMutationData, "error", emailMutationErrorMessage?.response?.data?.message, "isError",emailMutationError, "isPending", emailMutationPending)
+  
 
   const connected = useInternetConnection();
 
-  useEffect(() => {
-    if (!connected) {
-      console.log("internet is not connected");
-      return;
-      // Unomount this component and show your "You're offline" screen.
-    }
-    console.log("internet is connected");
-  }, [connected]);
 
   // creating a redux dispatch
 
@@ -103,70 +102,132 @@ const AuthLogin = () => {
     formState: { errors },
   } = useForm(formOptions);
 
-  // changePasswordApi
-
-
-
-
-  // yarn add @magic-sdk/react-native-expo
-  // yarn add react-native-webview@^11.26.0 # Required Peer Dependency
-  // yarn add react-native-safe-area-context # Required Peer Dependency
-
-
 
   useEffect(() => {
     const handleState = async () => {
-      console.log("ran useEffect");
-      if (isError && update) {
+      // console.log("ran useEffect");
+      if (isError   && update) {
         setShowModal(true);
         setLoading(!loading)
         setErrorType("error");
-        const errorMessage = error?.response?.data.message || error?.message;
+        const errorMessage = error?.response?.data.message ||  
         setErrorMessage(errorMessage);
-        setLoading(false);
-        console.log("ran error");
+      
+        // console.log("ran error");
       }
-      if (isPending && update) {
+      if (isPending  && update) {
         setShowModal(true);
         setErrorType("loading");
         setErrorMessage("");
-        console.log("ran loading");
+        // console.log("ran loading");
       }
       if (isSuccess && update) {
         dispatch(loginAction(appData?.data));
-        setLoading(!loading);
-        await AsyncStorage.setItem("userLoginToken", appData?.data?.jwt);
-        setTimeout(() => {
-          setUpdate(false);
-          navigation.navigate("buttonTapNavigation");
-        },500);
+        setLoading(false);
         setShowModal(true);
         setErrorType("success");
         setErrorMessage("");
+        // await AsyncStorage.setItem("userLoginToken", appData?.data?.jwt);
         reset();
+       setTimeout(() => {
+        setShowModal(false);
+        dispatch(loginAction(appData))
+       }, 500)
+
+      
+      
+       
       }
     };
     handleState();
   }, [isError, isPending, isSuccess]);
 
+  useEffect(() => {
+    const handleEmailValidtion = () => {
+      if (emailMutationError   && updateEmailMutation) {
+        console.log("ran email muation error");
+        setShowModal(true);
+        setLoading(false);
+        setErrorType("error");
+        const errorMessage = emailMutationErrorMessage?.response?.data.message ||  emailMutationErrorMessage?.data
+        setErrorMessage(errorMessage);
+      
+        // console.log("ran error");
+      }
+      if (emailMutationPending  && updateEmailMutation) {
+        console.log("ran email muation pending");
+        setShowModal(true);
+        setErrorType("loading");
+        setErrorMessage("");
+        // console.log("ran loading");
+      }
+      if (emailMutationSuccess && updateEmailMutation) {
+       
+        setUpdateEmailMutation(false)
+        setShowModal(false);
+        setErrorType(null)
+     
+      console.log("email confirmtion from server successful");
+      
+      }
+   
+    }
+    handleEmailValidtion()
+
+  },[emailMutationPending, emailMutationSuccess, emailMutationError])
+
   const onSubmit = async (data: { email: string }) => {
     try {
-       setLoading(!loading);
-      const magicToken = await magic.auth.loginWithEmailOTP({
-        email: data?.email,
+      setLoading(!loading);
+       //check if a user has already logged in
+     
+    // setUpdate(true)
+    setUpdateEmailMutation(true)
+       await validateEmailMutation.mutateAsync(data)
+      
+
+
+   const magicToken = await magic.auth.loginWithEmailOTP({
+        email: data?.email
       });
-      console.log(magicToken);
-      setUpdate(true);
+      if(!magicToken){
+            throw new Error("Email validation failed")
+      }
+    
+  
+       setUpdate(true);
      
       await loginMutation.mutateAsync({
         magicToken,
       });
     } catch (err) {
-      console.log("this is the error", err.message);
+    
+      setLoading(false);
+    
+      if (err instanceof RPCError) {
+        switch (err.code) {
+          case RPCErrorCode.MagicLinkFailedVerification:
+            Alert.alert("Magic Email Verirfication Error", "Email verification failed")
+            break;
+          case RPCErrorCode.MagicLinkExpired:
+            Alert.alert("Magic Email Verirfication Error", "Email verifiction failed due to expired link")
+
+          break;
+
+          case RPCErrorCode.MagicLinkRateLimited:
+            Alert.alert("Magic Email Verirfication Error", "Email verification failed due to rate limit")
+
+          break;
+          case RPCErrorCode.UserAlreadyLoggedIn:
+            Alert.alert("Magic Email Verirfication Error", "User allredy loggedin")
+        }
     }
   };
+}
 
-console.log("this is showModal:",showModal,"this is erorMessage:",errorMessage, "this is errorType:",errorType,"this is the isError:", isError, "this is the isPending:",isPending,"isSuccess", isSuccess)
+// console.log("this is showModal:",showModal,"this is erorMessage:",errorMessage, "this is errorType:",errorType,"this is the isError:", isError, "this is the isPending:",isPending,"isSuccess", isSuccess)
+
+console.log("this is emailMutationPending:",emailMutationPending,"this is emailMutationError:",emailMutationError, "this is emailMuttionSuccess:",emailMutationSuccess)
  
 
   // showEmailModal, setShowEmailModal
@@ -176,8 +237,7 @@ console.log("this is showModal:",showModal,"this is erorMessage:",errorMessage, 
       <Modal visible={showModal} transparent={true} animationType="fade">   
     <AlertMessage message={errorMessage} type={errorType} setShowModal = {setShowModal} />
     </Modal>
-      {/* Render the Magic iframe! */}
-      <magic.Relayer />
+    
       
 
       <View className="w-full mt-4 pb-4">
@@ -213,7 +273,7 @@ console.log("this is showModal:",showModal,"this is erorMessage:",errorMessage, 
               }}
               render={({ field: { onChange, onBlur, value } }) => (
                 <View
-                  className="w-full h-[52px] px-2 text-white  flex-row items-center justify-between space-x-2 
+                  className="w-full h-[42px] px-2 text-white  flex-row items-center justify-between space-x-2 
                     bg-white rounded-[30px] shadow border border-gray-300"
                 >
                   <TextInput
@@ -298,6 +358,7 @@ console.log("this is showModal:",showModal,"this is erorMessage:",errorMessage, 
     </SafeAreaView>
   );
 };
+
 
 const styles = StyleSheet.create({});
 

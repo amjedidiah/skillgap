@@ -17,9 +17,7 @@ const PhoneNumberScreen: React.FC = ({
     <>
   
       <View className="w-full" >
-        <SafeAreaView className="py-12  " >
-       
-          <PhoneInput
+      <PhoneInput
             ref={phoneInput}
             defaultValue={phoneValue}
             defaultCode="NG"
@@ -28,9 +26,6 @@ const PhoneNumberScreen: React.FC = ({
                 setPhoneValue(text);
                 const checkValid = phoneInput.current?.isValidNumber(text);
                 setIsPhoneNumberValid(checkValid ? checkValid : false);
-            
-                
-            
             }}
             value={phoneValue}
             onChangeFormattedText={(text) => {
@@ -44,19 +39,28 @@ const PhoneNumberScreen: React.FC = ({
 
             textContainerStyle={{ 
                  flexDirection: "row",
-                //  backgroundColor:"red",
                 alignItems:"center",
-                // backgroundColor:"red",
+                justifyContent:"center",
                 height:"100%",
+                paddingVertical: 2
                  }}
-                  codeTextStyle={{ fontSize: 16,  width: 50,
-                 
+                  codeTextStyle={{ fontSize: 16, 
+                     width: 50,
                   lineHeight:16,
                   height:"100%",
+                  justifyContent:"center",
+                  alignItems:"center",
+                  paddingVertical: 13,
+                  textAlignVertical:"center"
                 }}
                  textInputStyle={{ fontSize: 16,
-                     flex:1,
-                     lineHeight:16,
+                  lineHeight:16,
+                  height:"100%",
+                  justifyContent:"center",
+                  alignItems:"center",
+                   paddingTop: 10,
+                  textAlignVertical:"center"
+            
                       }}
             withDarkTheme
           
@@ -64,15 +68,15 @@ const PhoneNumberScreen: React.FC = ({
             containerStyle={{
                  borderWidth: 1, borderColor: "#D1D5DB", borderRadius: 30 ,
                  width:"100%",
-                 height:52,
+                 height:42,
                  backgroundColor:"white",
                  flexDirection: "row",
-                 alignItems:"center"
-
+                 alignItems:"center",
+                 justifyContent: "center",
+                 overflow:"hidden",
+               
             }}
           />
-       
-        </SafeAreaView>
       </View>
     </>
   );

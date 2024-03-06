@@ -11,7 +11,7 @@ function ArenaNavigation() {
 
   return (
     <Stack.Navigator
-      initialRouteName="arenaCreateContestScreen"
+      initialRouteName="arenaChatScreen"
       screenOptions={{
         animation: "slide_from_left",
       }}

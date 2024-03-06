@@ -4,7 +4,9 @@ const authSlice = createSlice({
   name: "auth",
   initialState: {
     userAuth: null,
-    user: null
+    user: null,
+    isLoggedIn: false,
+    isLoaded: false
   },
   reducers: {
     isAuthenticated: (state, action) => {
@@ -12,19 +14,24 @@ const authSlice = createSlice({
     },
    
     logOutAction: (state) => {
-      state.userAuth = null;
+      state.user = null;
+      state.isLoggedIn = false
+      
     },
 
   loginAction : (state, action) => {
     console.log("ran at action", action.payload)
-   
-    
      state.user = action.payload;
+     state.isLoggedIn = true
+     state.isLoaded = true
      console.log("this is the state", state)
+  },
+  navigateAuthAction : (state, action) => {
+    state.isLoaded = true
   }
   },
 });
 
-export const { isAuthenticated, logOutAction, loginAction } = authSlice.actions;
+export const { isAuthenticated, logOutAction, loginAction, navigateAuthAction } = authSlice.actions;
 
 export const authReducer = authSlice.reducer;

@@ -7,13 +7,18 @@ import {
   ScrollView,
   TouchableOpacity,
   Modal,
+  KeyboardAvoidingView,
+  Platform,
+  Alert,
 } from "react-native";
 import React, { useEffect, useState, useCallback } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm, Controller } from "react-hook-form";
 import { useNavigation } from "@react-navigation/native";
-import { Magic } from "@magic-sdk/react-native-expo";
+import { Magic, RPCError, RPCErrorCode } from "@magic-sdk/react-native-expo";
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+
 // third party imports ends
 
 // imports from app starts
@@ -39,6 +44,7 @@ const AuthSignUp = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [updateRegister, setUpdateRegister] = useState(false);
   const  [disableButton, setDisableButton] = useState(false)
+ 
   
   // phoneNumber state
   const [phoneValue, setPhoneValue] = useState("");
@@ -46,8 +52,15 @@ const AuthSignUp = () => {
   const [isPhoneNumberValid, setIsPhoneNumberValid] = useState(false);
 
 
+  // state controlling the magicMutation
+  const [validateMagicData, setValidateMagicData] = useState(false)
 
-  // 
+  // initiating a reducer dispatch
+
+  const dispatch = useDispatch()
+
+  // setig the magic
+  const magic = new Magic("pk_live_AF0A2FCCABF5C8EF");
 
 
   const [country, setCountry] = useState<Country>({
@@ -63,8 +76,7 @@ const AuthSignUp = () => {
   // instanciating navigation hook
   const navigation = useNavigation();
 
-  // seting up magic
-  const magic = new Magic("pk_live_AF0A2FCCABF5C8EF");
+
 
   // controling when to display indicating for isPending, isError and success
 
@@ -93,21 +105,19 @@ const AuthSignUp = () => {
   //  rect hook form section starts
 
   const handleRegister = async () => {
-    if (magicData) {
+   
       const region = JSON.stringify(country);
     console.log("this is the region", {...formData,"region":region,"jwt":magicData?.jwt});
+    setUpdate(true)
       await registerMutation.mutateAsync({
         ...formData,
         region,
         jwt: magicData?.jwt
       });
-    }
+    
   };
 
-  useEffect(() => {
-    console.log("code arn use Effect 33");
-    handleRegister();
-  }, [updateRegister, magicData]);
+
 
   console.log(
     "this are the data from magic api",
@@ -139,47 +149,74 @@ const AuthSignUp = () => {
   // onSubmit function for submiting forms
   const onSubmit = async (data: any) => {
     try {
-      setDisableButton(!disableButton)
+      if(!isPhoneNumberValid){
+        console.log("this is the inner data",data)
+        return
+      }
+       setDisableButton(!disableButton)
        setFormData(data)
       
       // verify email from magic.link
 
-      console.log("code ran in submit");
+   
+     console.log("this is the auth",magic.auth)
+       magic.user.logout()
       const magicToken = await magic.auth.loginWithEmailOTP({
         email: data?.email,
       });
-      await magic.user?.logout();
      
-
-     
-      setUpdate(true);
+      setValidateMagicData(!validateMagicData)
       await validateMagicMutation.mutateAsync({
         magicToken,
         validateMagic: true,
       });
-      setUpdateRegister(!updateRegister);
+    
     } catch (err: any) {
-      console.log(err.message);
-    }
+       setDisableButton(!disableButton);
+    
+      if (err instanceof RPCError) {
+        switch (err.code) {
+          case RPCErrorCode.MagicLinkFailedVerification:
+            Alert.alert("Magic Email Verirfication Error", "Email verification failed")
+            break;
+          case RPCErrorCode.MagicLinkExpired:
+            Alert.alert("Magic Email Verirfication Error", "Email verifiction failed due to expired link")
+
+          break;
+
+          case RPCErrorCode.MagicLinkRateLimited:
+            Alert.alert("Magic Email Verirfication Error", "Email verification failed due to rate limit")
+
+          break;
+          case RPCErrorCode.UserAlreadyLoggedIn:
+            Alert.alert("Magic Email Verirfication Error", "User allredy loggedin")
+        }
+    } 
+  } finally{
+  setDisableButton(false)
+  };
+    
   };
 
   // useEffect for controlling loading, error, success state of the form
   useEffect(() => {
     if (isError  && update) {
       setShowModal(true);
-      setDisableButton(!disableButton)
       setErrorType("error");
       const errorMessage = error?.response?.data.message || error?.message;
       const errorMagicMessage =
         magicError?.response?.data.message || magicError?.message;
       setErrorMessage(errorMessage || errorMagicMessage);
-      console.log("ran error");
+      setValidateMagicData(false)
+      setUpdate(false)
+      setDisableButton(false);
+     
     }
     if (isPending  && update) {
       setShowModal(true);
       setErrorType("loading");
       setErrorMessage("");
-      console.log("ran loading");
+      console.log("ran loading in second");
     }
     if (isSuccess && update) {
       // dispatch(loginAction(appData?.data));
@@ -192,46 +229,61 @@ const AuthSignUp = () => {
       setTimeout(() => {
         setShowModal(false);
         setUpdate(false);
+        setValidateMagicData(false)
+        setErrorType(null);
         reset();
-        navigation.navigate("buttonTapNavigation");
+        dispatch(loginAction(data))
       
       }, 500);
 
-      console.log("ran success");
     }
   }, [
     isError,
     isPending,
     isSuccess,
-    magicIsError,
-    magicIsPending,
-    magicIsSuccess,
+   
   ]);
+
+  useEffect(() => {
+   
+    const handleEmailValidtion = () => {
+      if (magicIsError   && validateMagicData) {
+        console.log("ran email muation error");
+        setShowModal(true);
+        // setLoading(false);
+        setErrorType("error");
+        const errorMessage = magicError?.response?.data.message ||  magicError?.data
+        setErrorMessage(errorMessage? errorMessage : "Internal server error");
+      setDisableButton(false)
+      setValidateMagicData(false)
+        // console.log("ran error");
+      }
+      if (magicIsPending  && validateMagicData) {
+        console.log("ran email muation pending");
+        setShowModal(true);
+        setErrorType("loading");
+        setErrorMessage("");
+        // console.log("ran loading");
+      }
+      if (magicIsSuccess && validateMagicData) {
+        handleRegister();
+         
+      console.log("email confirmtion from server successful");
+      
+      }
+   
+    }
+    handleEmailValidtion()
+
+  },[magicIsError, magicIsPending, magicIsSuccess])
 
   // check when phoneNumber is valid
 
-  useEffect(() => {
-   if(!isPhoneNumberValid && form.phoneNumber){
-   return setError('phoneNumber', {
-      type: 'manual',
-      message: 'Phone number is invalid',
-    });
-   }
-  
-   if(isPhoneNumberValid){
-  return  setError('phoneNumber', {
-      type: 'manual',
-      message: "",
-    });
-   }
-  },[isPhoneNumberValid, form.phoneNumber])
 
-  console.log("this is the show Mode", showModal, errorMessage, errorType);
-  console.log("isPhoneNumberValid:", isPhoneNumberValid, "erros:", errors, "form:", form)
+  // console.log("isPhoneNumberValid:", isPhoneNumberValid, "erros:", errors, "form:", form, "phoneNumber", form.phoneNumber)
   return (
     <SafeAreaView className="bg-white flex-1 py-[13px] px-[18px]">
-      {/* Render the Magic iframe! */}
-      <magic.Relayer />
+
       <Modal visible={showModal} transparent={true} animationType="fade">
         <AlertMessage
           message={errorMessage}
@@ -242,6 +294,7 @@ const AuthSignUp = () => {
       <View className="w-full mt-4 pb-4">
         <AuthHeader />
       </View>
+    
       <ScrollView
         className="flex-1"
         showsVerticalScrollIndicator={false}
@@ -249,11 +302,15 @@ const AuthSignUp = () => {
           flexGrow: 1,
         }}
       >
+          <KeyboardAwareScrollView 
+          >
         <View className="flex flex-col gap-y-2 items-start justify-center mt-[30px] mb-[32px]">
           <Text className="text-gray-950 text-2xl font-semibold font-['General Sans Variable'] leading-loose">
             Create Account
           </Text>
         </View>
+    
+            
         {/* first name start */}
         <View className="w-full mt-4">
           <View className="items-start space-y-[10px] w-full">
@@ -270,7 +327,7 @@ const AuthSignUp = () => {
               }}
               render={({ field: { onChange, onBlur, value } }) => (
                 <View
-                  className="w-full h-[52px] px-2 text-white  flex-row items-center justify-between space-x-2 
+                  className="w-full h-[42px] px-2 text-white  flex-row items-center justify-between space-x-2 
                    bg-white rounded-[30px] shadow border border-gray-300 
                  "
                 >
@@ -295,7 +352,7 @@ const AuthSignUp = () => {
               name={"firstName"}
             />
 
-            <View className="w-[327px]">
+            <View className="w-full">
               {errors.firstName && (
                 <Text
                   className="text-red-500
@@ -310,7 +367,7 @@ const AuthSignUp = () => {
         {/* first name end */}
 
         {/* last name start */}
-        <View className="w-full mt-4">
+        <View className="w-full mt-2">
           <View className="items-start space-y-[10px] w-full">
             <View className="items-start mb-2">
               <Text className="text-black text-sm font-normal font-['Noto Sans']">
@@ -325,7 +382,7 @@ const AuthSignUp = () => {
               }}
               render={({ field: { onChange, onBlur, value } }) => (
                 <View
-                  className="w-full h-[52px] px-2 text-white  flex-row items-center justify-between space-x-2 
+                  className="w-full h-[42px] px-2 text-white  flex-row items-center justify-between space-x-2 
                  bg-white rounded-[30px] shadow border border-gray-300 "
                 >
                   <TextInput
@@ -364,7 +421,7 @@ const AuthSignUp = () => {
         {/* last name end */}
 
         {/* user name start */}
-        <View className="w-full mt-4">
+        <View className="w-full mt-2">
           <View className="items-start space-y-[10px] w-full">
             <View className="items-start mb-2">
               <Text className="text-black text-sm font-normal font-['Noto Sans']">
@@ -379,7 +436,7 @@ const AuthSignUp = () => {
               }}
               render={({ field: { onChange, onBlur, value } }) => (
                 <View
-                  className="w-full h-[52px] px-2 text-white  flex-row items-center justify-between space-x-2 
+                  className="w-full h-[42px] px-2 text-white  flex-row items-center justify-between space-x-2 
                  bg-white rounded-[30px] shadow border border-gray-300 "
                 >
                   <TextInput
@@ -417,9 +474,10 @@ const AuthSignUp = () => {
         </View>
         {/* user name end */}
 
+       
         {/* email start */}
 
-        <View className="w-full mt-4">
+        <View className="w-full mt-2">
           <View className="items-start space-y-[10px] w-full">
             <View className="items-start mb-2">
               <Text className="text-black text-sm font-normal font-['Noto Sans']">
@@ -434,7 +492,7 @@ const AuthSignUp = () => {
               }}
               render={({ field: { onChange, onBlur, value } }) => (
                 <View
-                  className="w-full h-[52px] px-2 text-white  flex-row items-center justify-between space-x-2 
+                  className="w-full h-[42px] px-2 text-white  flex-row items-center justify-between space-x-2 
                  bg-white rounded-[30px] shadow border border-gray-300 "
                 >
                   <TextInput
@@ -475,9 +533,9 @@ const AuthSignUp = () => {
 
         {/* Region  start*/}
 
-        <View className="w-full mt-4">
+        <View className="w-full mt-2">
           <View className="items-start space-y-[10px] w-full">
-            <View className="items-start mb-2">
+            <View className="items-start">
               <Text className="text-black text-sm font-normal font-['Noto Sans']">
                 {"Region"}
               </Text>
@@ -487,8 +545,8 @@ const AuthSignUp = () => {
               onPress={() => {
                 setShowCountryPickerModal(true);
               }}
-              className="w-full h-[52px] px-2 text-white  flex-row items-center justify-between space-x-2 
-                 bg-white rounded-[30px] shadow border border-gray-300 "
+              className="w-full h-[42px] px-2 text-white  flex-row items-center justify-between space-x-2 
+                 bg-white rounded-[30px] shadow border border-gray-300  "
             >
               <View className="flex-row items-center">
                 <CountryCodePicker
@@ -505,7 +563,7 @@ const AuthSignUp = () => {
         </View>
 
         {/* Region end */}
-
+      
         {/* phoneNumber start */}
 
         <View className="w-full mt-4 ">
@@ -527,8 +585,8 @@ const AuthSignUp = () => {
               }}
               render={({ field: { onChange, onBlur, value } }) => (
                 <View
-                  className="w-full h-[52px]  text-white  flex-row items-center justify-between space-x-2 
-                 bg-white rounded-[30px] shadow border border-gray-300 "
+                  className="w-full h-[42px] text-white  flex-row items-center justify-between space-x-2 
+                 bg-white rounded-[30px] shadow border border-gray-300 bg-red-400  "
                 >
                   <PhoneNumberScreen
                     setPhoneValue={setPhoneValue}
@@ -544,19 +602,27 @@ const AuthSignUp = () => {
               name={"phoneNumber"}
             />
 
-            <View className="w-[327px]">
-              {errors.phoneNumber && (
+            <View className="w-full">
+              
+              {errors.phoneNumber ?  
+              (
                 <Text
-                  className="text-red-500
-                   font-bold "
+                className="text-red-500
+                font-bold "
                 >
                   {errors.phoneNumber.message}
                 </Text>
-              )}
+              ) :  !isPhoneNumberValid && form.phoneNumber ?  <Text
+              className="text-red-500
+              font-bold"
+              >
+              Invalid phone number
+              </Text> : ""}
             </View>
           </View>
         </View>
 
+             
         {/* phoneNumber ends */}
 
         {/* app button start */}
@@ -577,9 +643,11 @@ const AuthSignUp = () => {
           }
           </Text>
         </TouchableOpacity>
+        </KeyboardAwareScrollView >
 
         {/* APP BUTTON END */}
       </ScrollView>
+     
     </SafeAreaView>
   );
 };

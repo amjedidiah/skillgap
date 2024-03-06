@@ -98,7 +98,7 @@ const formOptions = { resolver: yupResolver(  validationSchemaArenaCreateContest
       } = useForm(formOptions);
     
       const onSubmit = (data: string) => {
-        console.log(data)
+        console.log("this is the final data"<data)
       
       };
     

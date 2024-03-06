@@ -1,4 +1,4 @@
-import { FlatList, Image, Modal, Text, TouchableOpacity, View } from "react-native"
+import { Alert, FlatList, Image, Modal, Text, TouchableOpacity, View } from "react-native"
 import { BlockUserModalCompPropTypes, UserProfileHomeSubMenuPropType } from "../types"
 import AppTextHeading from "./AppTextHeading"
 import AppTextContent from "./AppTextContent"
@@ -6,10 +6,15 @@ import AppButton from "./AppButton"
 import { PersonaliseSettingModalCompData, listOfBlockedUsers } from "utils/data"
 import { MaterialIcons } from "@expo/vector-icons"
 import { useNavigation } from "@react-navigation/native"
+import { Magic } from "@magic-sdk/react-native-expo"
+import AsyncStorage from "@react-native-async-storage/async-storage"
+import { useDispatch } from "react-redux"
+import { logOutAction } from "redux/slices/authSlice"
 
-export const UserProfileHomeSubMenuComp = ({icon, heading, content, imgType, setShowDeleteModal, showDeleteModal, personaliseSettingModal, setPersonaliseSettingModal}: UserProfileHomeSubMenuPropType) => {
+export const UserProfileHomeSubMenuComp = ({icon, heading, content, imgType, setShowDeleteModal,setShowLogOutModal, showDeleteModal, personaliseSettingModal, setPersonaliseSettingModal}: UserProfileHomeSubMenuPropType) => {
   const navigation = useNavigation() 
   
+
   return <TouchableOpacity 
     onPress={() => {
       if(heading === "Delete Account"){
@@ -17,6 +22,9 @@ export const UserProfileHomeSubMenuComp = ({icon, heading, content, imgType, set
       }  
       if(heading === "Personalized Setting"){
         setPersonaliseSettingModal(true)
+      }
+      if(heading === "Log Out"){
+        setShowLogOutModal(true)
       }
       if(heading === "Account Settings"){
           navigation.navigate("profileSettingsScreen")
@@ -77,6 +85,66 @@ transparent={true}
 
     </Modal>
 }
+
+
+export const LogOutModalComp = ({showLogOutModal, setShowLogOutModal}) => {
+  
+  const magic = new Magic("pk_live_AF0A2FCCABF5C8EF");
+  const dispatch = useDispatch()
+  
+  return <Modal
+  visible={showLogOutModal}
+animationType="slide"
+transparent={true}
+
+  >
+      <View className="flex-1 justify-center items-center" style={{
+          backgroundColor:"rgba(29, 155, 240, 0.5)"
+      }}>
+          <View className="rounded-md bg-white px-4 w-4/5  items-center py-6">
+                 <Image 
+                 source={require("../../../assets/images/deleteAccount.png")}
+                 className="w-[80px] h-[80px]"
+                 />
+                 <AppTextHeading text="Wait a minute" classText="text-center mt-4" />
+                 <AppTextContent  text="Are you sure you want to logout?" classText="text-center  w-[300px] mt-4" />
+                 <View className="flex-row items-center justify-between  w-full mt-4">
+                  
+
+                 <AppButton handleOnpress={async() => {
+             try {
+
+                    // check if a user has already logged in
+    // const userData =    await AsyncStorage.getItem("userLoginToken");
+    // console.log("this is the login data", userData)
+    // if(userData){
+    //  // logout existing user if exist
+    //  await AsyncStorage.setItem("userLoginToken", "");
+    //  console.log("ran here 99")
+   
+    // }
+    dispatch(logOutAction())
+    await magic.user?.logout();
+    console.log("logged out successfull")
+    setShowLogOutModal(false)
+             } catch(error) {
+              Alert.alert("Server Error", "Failed to logout, Please check your internet connection and try again")
+                         }
+               }} text="Yes" 
+                 
+                 ButtonViewStyle="w-[120px] bg-white border-red-500 border" ButtonTextStyle="text-red-500" />
+                  <AppButton handleOnpress={() => {
+                      setShowLogOutModal(false)
+                  }} text="No" ButtonViewStyle="w-[120px] bg-red-500"   />
+                 
+                 </View>
+          </View>
+          
+      </View>
+
+  </Modal>
+}
+
 
 
 export const PersonaliseSettingModalComp = ({personaliseSettingModal, setPersonaliseSettingModal}) => {

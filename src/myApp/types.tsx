@@ -647,7 +647,8 @@ icon: ImageSourcePropType,
 heading: string,
 content?: string,
 imgType?:boolean,
-showDeleteModal?:boolean
+showDeleteModal?:boolean,
+setShowLogOutModal:React.Dispatch<React.SetStateAction<boolean>>,
 setShowDeleteModal:React.Dispatch<React.SetStateAction<boolean>>,
 personaliseSettingModal: boolean,
 setPersonaliseSettingModal:React.Dispatch<React.SetStateAction<boolean>>

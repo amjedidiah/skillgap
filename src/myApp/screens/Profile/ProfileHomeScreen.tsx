@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import AppTextHeading from '@/myApp/components/AppTextHeading'
 import AppTextContent from '@/myApp/components/AppTextContent'
 import { UserProfileHomeSubMenuData1, UserProfileHomeSubMenuData2 } from 'utils/data'
-import { DeleteAccountModalComp, PersonaliseSettingModalComp, UserProfileHomeSubMenuComp } from '@/myApp/components/UserProfileComp'
+import { DeleteAccountModalComp, LogOutModalComp, PersonaliseSettingModalComp, UserProfileHomeSubMenuComp } from '@/myApp/components/UserProfileComp'
 
 
 
@@ -12,7 +12,7 @@ const ProfileHomeScreen = () => {
 
   const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
   const [personaliseSettingModal, setPersonaliseSettingModal] = useState<boolean>(false);
-
+const [showLogOutModal, setShowLogOutModal] =useState<boolean>(false)
   const [translate, setTranslate] = useState(false);
   const [translate2, setTranslate2] = useState(false);
   const toggleSwitch = () => setIsEnabled(previousState => !previousState);
@@ -20,6 +20,7 @@ const ProfileHomeScreen = () => {
     const deviceWidth = (Dimensions.get("window").width)/2 - 50
   return (
     <View className='flex-1 bg-neutral-100'>
+      <LogOutModalComp showLogOutModal={showLogOutModal} setShowLogOutModal={setShowLogOutModal}  />
      <DeleteAccountModalComp showDeleteModal={showDeleteModal} setShowDeleteModal={setShowDeleteModal} />
 
      <PersonaliseSettingModalComp personaliseSettingModal={personaliseSettingModal}
@@ -209,6 +210,7 @@ const ProfileHomeScreen = () => {
   key={item.key}
   showDeleteModal={showDeleteModal}
   setShowDeleteModal={setShowDeleteModal}
+  setShowLogOutModal={setShowLogOutModal}
   
   
   />)

@@ -1,9 +1,10 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios"
 
-
-const baseUrl22 = "http://192.168.57.3:7000"
-const baseUrl = "https://skillgap-api-1fc27db9f77b.herokuapp.com"
+// 192.168.216.3
+// 192.168.150.3
+const baseUrl = "http://192.168.150.3:7000"
+const baseUrl22 = "https://skillgap-api-1fc27db9f77b.herokuapp.com"
 // 192.168.139.3
 
 
@@ -11,8 +12,8 @@ const baseUrl = "https://skillgap-api-1fc27db9f77b.herokuapp.com"
 
 // http://localhost:7000/api/v1/user/register
 
-export const registerApi = async (data) => { 
-  console.log("this is the data", data)
+export const registerApi = async (data:any) => { 
+ 
     const response =  await axios.post(`${baseUrl}/api/v1/user/register`, data, {
       withCredentials: true
     });
@@ -22,7 +23,7 @@ export const registerApi = async (data) => {
  }
 
 
- export const validateMagicApi = async (data) => { 
+ export const validateMagicApi = async (data:any) => { 
   console.log("this is the validate", data)
   const response =  await axios.post(`${baseUrl}/api/v1/user/validate-magicToken`, data, {
     withCredentials: true
@@ -36,7 +37,13 @@ export const registerApi = async (data) => {
   console.log("login api ran")
    console.log(data)
     const response = await axios.post(`${baseUrl}/api/v1/user/login`, data, {withCredentials: true})
-    return response
+    return response.data
+ }
+
+ export const validateEmail = async (data: any) => {
+  console.log("validateEmail api ran", data)
+    const response = await axios.post(`${baseUrl}/api/v1/user/validate-email`, data, {withCredentials: true})
+    return response.data
  }
 
 //  const jwt = await AsyncStorage.getItem("userLoginToken")

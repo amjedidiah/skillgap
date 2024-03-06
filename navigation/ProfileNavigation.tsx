@@ -13,7 +13,7 @@ function ProfileNavigation() {
 
   return (
     <Stack.Navigator
-      initialRouteName="profileSettingsScreen"
+      initialRouteName="profileHomeScreen"
       screenOptions={{
         animation: "slide_from_left",
       }}

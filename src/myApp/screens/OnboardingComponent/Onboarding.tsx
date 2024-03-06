@@ -9,7 +9,8 @@ import AppSplashScreen from "@/myApp/screens/OnboardingComponent/AppSplashScreen
 import { onboardingArray } from "utils/data";
 import { useNavigation } from "@react-navigation/native";
 import { HomeScreenNavigationProps } from "type";
-import OnboardingNavigation from "navigation/OnboardingNavigation";
+import OnboardingSliderScreen from "../onboarding/OnboardingSliderScreen";
+
 
 const Onboarding = ({
   img,
@@ -91,7 +92,7 @@ const Onboarding = ({
       animate ?  <AppOnboardingComp handleOnboardingFunc={handleOnboardingFunc } {...onboardingArray[showOnboarding]}   /> : <AppSplashScreen />
      } */}
      {
-      animate ?  <OnboardingNavigation  /> : <AppSplashScreen />
+      animate ?  <OnboardingSliderScreen  /> : <AppSplashScreen />
      }
     </View>
   );
