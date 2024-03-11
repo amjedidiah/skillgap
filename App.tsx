@@ -13,6 +13,7 @@ import { useEffect, useState } from "react";
 import ButtonTapNavigation from "navigation/ButtomNavigation";
 import AuthNavigtion from "navigation/AuthNavigation";
 import RouthPage from "navigation/RoutePage";
+import Toast from 'react-native-toast-message';
 
 
 
@@ -67,6 +68,7 @@ useEffect(() =>{
     <QueryClientProvider client={queryClient}>
    <NavigationContainer>
     <RouthPage />
+    <Toast />
     </NavigationContainer>
     </QueryClientProvider>
     </Provider>

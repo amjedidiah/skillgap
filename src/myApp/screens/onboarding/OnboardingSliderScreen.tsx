@@ -57,7 +57,7 @@ const handleSnapToItem = (index) =>
         </View>
       </View>
 
-      <View className="flex-row items-center bg-white  justify-between w-full px-8 absolute bottom-4">
+      <View className="flex-row items-center bg-white  justify-between w-full px-8 absolute bottom-4 pb-6">
         <View className="flex-row space-x-2">
         {
             item.progressArray.map(k => {

@@ -35,7 +35,7 @@ const HomeScreen = () => {
   const [showModal, setShowModal] = useState(false)
 const appUserStore = useSelector(data => data?.authReducer?.user)
 const appUserStore2 = useSelector(data => data?.authReducer)
-console.log("this is appState", appUserStore2)
+// console.log("this is appState", appUserStore2)
 // authReducer": {"user":
 
 const [userData, setUserData] = useState(null)
@@ -64,7 +64,7 @@ setUserData(appUserStore)
         {/* header starts */}
           <View className='flex-row items-center space-x-2'>
             <Image
-            source={require("../../../../assets/images/splashIcon.png")}
+            source={require("../../../../assets/images/skillGapLogo.png")}
             className="w-[24px] h-[24px]"
             />
             <AppTextHeading
@@ -93,7 +93,7 @@ setUserData(appUserStore)
           </View>
 
       {/* balance start */}
-          <View className="w-full h-[110px] mt-[12px] flex-row justify-center ">
+          <View className="w-full h-[110px] mt-[12px] flex-row justify-center  ">
           <Image
             source={require("../../../../assets/images/WalletPic.png")}
             className="w-full h-[110px] rounded-md"
@@ -111,16 +111,17 @@ setUserData(appUserStore)
           <View className="h-full items-center justify-between">
               <Text className="text-white text-[8px] font-medium font-['GeneralSans-Regular'] leading-non items-center">Wallet Balance</Text>
                
-            <View className="flex-row  items-end">
-            <Text className="text-white text-[28px] font-bold font-['SpaceGrotesk-Regular'] leading-[28px]">$600.
-           
-            </Text>
-          
-            <Text className="text-white text-sm font-bold font-['Space Grotesk  leading-[10px]']">
-            24
-            </Text>
-           
-            </View>
+         
+            <View  style={{
+   alignSelf: 'flex-start'
+}} className=' h-[32px]  flex-row mt-2'  >
+<Text style={{
+  fontFamily:"SpaceGrotesk-Regular"
+}} className="text-white  text-[32px] font-bold font-['Space Grotesk'] leading-[32px]">$600</Text>
+<Text style={{
+  fontFamily:"SpaceGrotesk-Regular"
+}} className="text-white  text-[16px] font-bold font-['Space Grotesk'] leading-loose  absolute  -right-[23px] top-[5px]">.24</Text>
+</View>
 
             <Text className="text-white text-[10px] font-medium font-['General Sans Variable'] underline leading-none">
             Transaction History
@@ -157,7 +158,7 @@ setUserData(appUserStore)
             data={homeCategoryData}
               ItemSeparatorComponent={() => <View
                 
-                className='w-[20px] h-full'/>}
+                className='w-[15px] h-full'/>}
 
             renderItem={({item}) => {
             

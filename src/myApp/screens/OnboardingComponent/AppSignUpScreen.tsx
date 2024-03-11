@@ -23,7 +23,7 @@ const deviceHeight = Dimensions.get("window").height
         }}>
         
           <Image
-            source={require("../../../../assets/images/Onboarding4.png")}
+            source={require("../../../../assets/images/onboardingDefault.png")}
             className="w-full h-full"
             resizeMode="cover"
           />
@@ -38,7 +38,7 @@ const deviceHeight = Dimensions.get("window").height
            
           </View>
           <View className="text-center">
-          <AppTextContent classText="text-center text-neutral-400 text-2xl font-medium font-['SpaceGrotesk-Regular'] leading-loose"  text={"Win cash completing bets in your favourite skill"} />
+          <AppTextContent fontFamily="SpaceGrotesk-Medium" classText="text-center text-neutral-400 text-2xl font-medium font-['SpaceGrotesk-Regular'] leading-loose"  text={"Win cash completing bets in your favourite skill"} />
           </View>
         
       <View className="mt-4 space-y-4">
@@ -54,7 +54,7 @@ const deviceHeight = Dimensions.get("window").height
       <View className="mt-4">
   
 <AppButton  
-    text="Login In"
+    text="Sign In"
     handleOnpress={() => {
       navigation.navigate("loginScreen");
     }}

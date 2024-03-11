@@ -29,6 +29,7 @@ import { useDispatch } from "react-redux";
 import { loginAction } from "redux/slices/authSlice";
 import { loginApi, validateEmail } from "@/api/authApi";
 import { SafeAreaView } from "react-native-safe-area-context";
+import Toast from "react-native-toast-message";
 
 
 
@@ -40,6 +41,7 @@ const AuthLogin = () => {
   const [errorType, setErrorType] = useState(null);
   const [errorMessage, setErrorMessage] = useState("");
   const [loading, setLoading] = useState(false);
+
 
   const [email, setEmail] = useState("");
   const [update, setUpdate] = useState(false);
@@ -62,7 +64,7 @@ const AuthLogin = () => {
   })
 
 
-  //destructure propertie from validateEmailMutation 
+  //destructure propertis from validateEmailMutation 
 
   const { data:emailMutationData, error: emailMutationErrorMessage, isError: emailMutationError, isPending:emailMutationPending, isSuccess:emailMutationSuccess } = validateEmailMutation
 
@@ -107,12 +109,32 @@ const AuthLogin = () => {
     const handleState = async () => {
       // console.log("ran useEffect");
       if (isError   && update) {
-        setShowModal(true);
-        setLoading(!loading)
-        setErrorType("error");
+       setShowModal(false);
+        setLoading(false)
+         setErrorType(null);
         const errorMessage = error?.response?.data.message ||  
-        setErrorMessage(errorMessage);
-      
+        setErrorMessage("");
+        Toast.show({
+          type:"error",
+          text1:"Sign In Error",
+          text2:errorMessage,
+          visibilityTime: 4000,
+          position:"top",
+          topOffset: 30,
+          text1Style: {
+            fontSize: 14,
+            fontWeight: 'bold',
+            color:"red"
+          },
+          text2Style: {
+            fontSize: 12,
+            fontWeight: 'bold',
+            color:"gray"
+          },
+         
+        })
+      setUpdateEmailMutation(false)
+      setUpdate(false)
         // console.log("ran error");
       }
       if (isPending  && update) {
@@ -127,7 +149,6 @@ const AuthLogin = () => {
         setShowModal(true);
         setErrorType("success");
         setErrorMessage("");
-        // await AsyncStorage.setItem("userLoginToken", appData?.data?.jwt);
         reset();
        setTimeout(() => {
         setShowModal(false);
@@ -145,12 +166,32 @@ const AuthLogin = () => {
   useEffect(() => {
     const handleEmailValidtion = () => {
       if (emailMutationError   && updateEmailMutation) {
-        console.log("ran email muation error");
-        setShowModal(true);
+      
+         setShowModal(false);
         setLoading(false);
-        setErrorType("error");
+       setErrorType(null);
         const errorMessage = emailMutationErrorMessage?.response?.data.message ||  emailMutationErrorMessage?.data
-        setErrorMessage(errorMessage);
+         setErrorMessage("");
+        Toast.show({
+          type:"error",
+          text1:"Sign In Error",
+          text2:errorMessage,
+          visibilityTime: 4000,
+          position:"top",
+          topOffset: 30,
+          text1Style: {
+            fontSize: 14,
+            fontWeight: 'bold',
+            color:"red"
+          },
+          text2Style: {
+            fontSize: 12,
+            fontWeight: 'bold',
+            color:"gray"
+          },
+         
+        })
+        setUpdateEmailMutation(false)
       
         // console.log("ran error");
       }
@@ -178,7 +219,7 @@ const AuthLogin = () => {
 
   const onSubmit = async (data: { email: string }) => {
     try {
-      setLoading(!loading);
+      setLoading(true);
        //check if a user has already logged in
      
     // setUpdate(true)
@@ -225,10 +266,9 @@ const AuthLogin = () => {
   };
 }
 
-// console.log("this is showModal:",showModal,"this is erorMessage:",errorMessage, "this is errorType:",errorType,"this is the isError:", isError, "this is the isPending:",isPending,"isSuccess", isSuccess)
 
-console.log("this is emailMutationPending:",emailMutationPending,"this is emailMutationError:",emailMutationError, "this is emailMuttionSuccess:",emailMutationSuccess)
- 
+
+
 
   // showEmailModal, setShowEmailModal
   return (
@@ -252,7 +292,7 @@ console.log("this is emailMutationPending:",emailMutationPending,"this is emailM
       >
         <View className="flex flex-col gap-y-2 items-start justify-center mt-[30px] mb-[32px]">
           <Text className="text-gray-950 text-2xl font-semibold font-['General Sans-Regular'] leading-loose">
-            Log In
+            Sign In
           </Text>
         </View>
 
@@ -273,8 +313,8 @@ console.log("this is emailMutationPending:",emailMutationPending,"this is emailM
               }}
               render={({ field: { onChange, onBlur, value } }) => (
                 <View
-                  className="w-full h-[42px] px-2 text-white  flex-row items-center justify-between space-x-2 
-                    bg-white rounded-[30px] shadow border border-gray-300"
+                  className={`w-full h-[42px] px-4 text-white  flex-row items-center justify-between space-x-2 
+                  bg-white rounded-[30px] shadow border border-gray-300 `}
                 >
                   <TextInput
                     onChangeText={(data) => {
@@ -289,8 +329,12 @@ console.log("this is emailMutationPending:",emailMutationPending,"this is emailM
                     placeholderTextColor={"gray"}
                     cursorColor={"gray"}
                     className="flex-1 text-gary-900"
-                    onBlur={onBlur}
+                    onBlur={() => {
+                      onBlur()
+                    
+                    }}
                     keyboardType={"email-address"}
+                   
                   />
                 </View>
               )}

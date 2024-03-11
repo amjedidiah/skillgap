@@ -109,8 +109,8 @@ export const homeCategoryData = [{
     key: 1,
     img: require("../assets/images/betImage.png"),
     heading:"Sport",
-    numOfBets: 2345,
-    numOfUsers: 245,
+    numOfBets:2345,
+    numOfUsers:245,
  
 },
 {

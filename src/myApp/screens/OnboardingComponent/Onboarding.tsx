@@ -80,7 +80,7 @@ const Onboarding = ({
 
   if (appIsReady) {
     setTimeout(() => {
-      setAnimate(true);
+       setAnimate(true);
     }, 6500)
   }
 
@@ -88,9 +88,7 @@ const Onboarding = ({
 
   return (
     <View className="w-full h-full pb-12 " onLayout={onLayoutRootView}>
-     {/* {
-      animate ?  <AppOnboardingComp handleOnboardingFunc={handleOnboardingFunc } {...onboardingArray[showOnboarding]}   /> : <AppSplashScreen />
-     } */}
+    
      {
       animate ?  <OnboardingSliderScreen  /> : <AppSplashScreen />
      }

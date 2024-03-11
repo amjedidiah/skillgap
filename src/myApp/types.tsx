@@ -4,7 +4,8 @@ import { ImageSourcePropType } from "react-native"
 
 export type AppTextProp =  {
    text: string,
-   classText?: string
+   classText?: string,
+   fontFamily?: string
 }
 
 

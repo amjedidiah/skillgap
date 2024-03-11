@@ -10,6 +10,7 @@ export default function LotieLoadingAnimation({url}) {
         autoPlay
         loop={true}
         style={{ width: 200, height: 200 }}
+        speed={2}
         
       />
     </View>

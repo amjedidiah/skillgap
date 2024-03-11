@@ -9,7 +9,7 @@ import PhoneInput from "react-native-phone-number-input";
 
 
 const PhoneNumberScreen: React.FC = ({
-    setFormattedValue, setIsPhoneNumberValid, phoneValue, setForm, form, onChange, setPhoneValue
+    setFormattedValue,  setIsPhoneNumberValid, phoneValue, setForm, form, onChange, setPhoneValue
 }) => {
 
   const phoneInput = useRef<PhoneInput>(null);
@@ -25,10 +25,11 @@ const PhoneNumberScreen: React.FC = ({
             onChangeText={(text) => {
                 setPhoneValue(text);
                 const checkValid = phoneInput.current?.isValidNumber(text);
-                setIsPhoneNumberValid(checkValid ? checkValid : false);
+                setIsPhoneNumberValid(checkValid && text.length === 10 ? checkValid : false);
             }}
             value={phoneValue}
             onChangeFormattedText={(text) => {
+             
               setFormattedValue(text);
               setForm({
                 ...form, 
@@ -36,6 +37,7 @@ const PhoneNumberScreen: React.FC = ({
             })
             onChange(text)
             }}
+            
 
             textContainerStyle={{ 
                  flexDirection: "row",
@@ -58,7 +60,7 @@ const PhoneNumberScreen: React.FC = ({
                   height:"100%",
                   justifyContent:"center",
                   alignItems:"center",
-                   paddingTop: 10,
+                   paddingTop: 9,
                   textAlignVertical:"center"
             
                       }}

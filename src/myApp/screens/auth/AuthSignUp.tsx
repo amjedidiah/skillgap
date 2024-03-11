@@ -10,6 +10,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   Alert,
+  TouchableWithoutFeedback,
 } from "react-native";
 import React, { useEffect, useState, useCallback } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -27,12 +28,14 @@ import AuthHeader from "@/myApp/components/AuthHeader";
 import CountryCodePicker from "@/myApp/components/CountryCode";
 import { Entypo } from "@expo/vector-icons";
 import { useMutation } from "@tanstack/react-query";
-import { registerApi, validateMagicApi } from "@/api/authApi";
+import { doesEmailExist, registerApi, validateEmail, validateMagicApi } from "@/api/authApi";
 import AlertMessage from "@/myApp/components/AlertMessage";
 import { validationSchemaSignUp } from "utils/YubValidation";
 import PhoneNumberScreen from "@/myApp/components/PhoneNumber";
 import { loginAction } from "redux/slices/authSlice";
 import { useDispatch } from "react-redux";
+import Toast from 'react-native-toast-message';
+import PhoneNumber2 from "@/myApp/components/PhoneNumber2";
 // imports  from app ends
 
 const AuthSignUp = () => {
@@ -42,9 +45,10 @@ const AuthSignUp = () => {
   const [errorType, setErrorType] = useState(null);
   const [formData, setFormData] = useState(null);
   const [errorMessage, setErrorMessage] = useState("");
-  const [updateRegister, setUpdateRegister] = useState(false);
   const  [disableButton, setDisableButton] = useState(false)
  
+
+  const [updateEmailMutation, setUpdateEmailMutation] = useState(false)
   
   // phoneNumber state
   const [phoneValue, setPhoneValue] = useState("");
@@ -78,7 +82,7 @@ const AuthSignUp = () => {
 
 
 
-  // controling when to display indicating for isPending, isError and success
+
 
   // the set update state controls when to set comIsPending state, compIsError state and setCompIsSuccess state
   const [update, setUpdate] = useState(false);
@@ -107,7 +111,7 @@ const AuthSignUp = () => {
   const handleRegister = async () => {
    
       const region = JSON.stringify(country);
-    console.log("this is the region", {...formData,"region":region,"jwt":magicData?.jwt});
+   
     setUpdate(true)
       await registerMutation.mutateAsync({
         ...formData,
@@ -119,15 +123,7 @@ const AuthSignUp = () => {
 
 
 
-  console.log(
-    "this are the data from magic api",
-    magicData,
-    magicError,
-    magicIsError,
-    magicIsPending,
-    magicIsSuccess
-  );
-  // form state data
+
   const [form, setForm] = useState<authSignupCompProps>({
     firstName: "",
     lastName: "",
@@ -147,20 +143,25 @@ const AuthSignUp = () => {
     formState: { errors },
   } = useForm(formOptions);
   // onSubmit function for submiting forms
+ 
   const onSubmit = async (data: any) => {
     try {
+      console.log("form data", data)
       if(!isPhoneNumberValid){
-        console.log("this is the inner data",data)
+      
         return
       }
-       setDisableButton(!disableButton)
+       setDisableButton(true)
+      console.log("form data", data)
        setFormData(data)
+
+       setUpdateEmailMutation(true)
+       await validateEmailMutation.mutateAsync({email:data?.email})
       
       // verify email from magic.link
 
    
-     console.log("this is the auth",magic.auth)
-       magic.user.logout()
+    
       const magicToken = await magic.auth.loginWithEmailOTP({
         email: data?.email,
       });
@@ -200,16 +201,40 @@ const AuthSignUp = () => {
 
   // useEffect for controlling loading, error, success state of the form
   useEffect(() => {
+  
+   const handleStateFunc = async () => {
     if (isError  && update) {
-      setShowModal(true);
-      setErrorType("error");
+      setShowModal(false);
+      // setErrorType("error");
       const errorMessage = error?.response?.data.message || error?.message;
-    
-      setErrorMessage(errorMessage);
+      // setErrorType("error")
+      // setErrorMessage(errorMessage)
       setValidateMagicData(false)
       setUpdate(false)
       setDisableButton(false);
+      setUpdateEmailMutation(false)
+      Toast.show({
+        type:"error",
+        text1:"Signup Error",
+        text2:errorMessage,
+        visibilityTime: 8000,
+        position:"top",
+        topOffset: 30,
+        text1Style: {
+          fontSize: 14,
+          fontWeight: 'bold',
+          color:"red"
+        },
+        text2Style: {
+          fontSize: 12,
+          fontWeight: 'bold',
+          color:"gray"
+        },
+       
+      })
+      // setErrorMessage(errorMessage);
      
+      await magic.user?.logout();
     }
     if (isPending  && update) {
       setShowModal(true);
@@ -236,6 +261,8 @@ const AuthSignUp = () => {
       }, 500);
 
     }
+   }
+   handleStateFunc()
   }, [
     isError,
     isPending,
@@ -243,6 +270,8 @@ const AuthSignUp = () => {
    
   ]);
 
+
+  
   useEffect(() => {
    
     const handleEmailValidtion = () => {
@@ -250,11 +279,34 @@ const AuthSignUp = () => {
         console.log("ran email muation error");
         setShowModal(true);
         // setLoading(false);
-        setErrorType("error");
-        const errorMessage = magicError?.response?.data.message ||  magicError?.data
-        setErrorMessage(errorMessage? errorMessage : "Internal server error");
+        
+        // setErrorType("error");
+        const errorMessage = magicError?.response?.data.message ||  magicError?.messgage
+        // setErrorMessage(errorMessage? errorMessage : "Internal server error");
+        setErrorType(null)
+        setErrorMessage("")
+        Toast.show({
+          type:"error",
+          text1:"Signup Error",
+          text2:errorMessage,
+          visibilityTime: 8000,
+          position:"top",
+          topOffset: 30,
+          text1Style: {
+            fontSize: 18,
+            fontWeight: 'bold',
+            color:"red"
+          },
+          text2Style: {
+            fontSize: 16,
+            fontWeight: 'bold',
+            color:"gray"
+          },
+         
+        })
       setDisableButton(false)
       setValidateMagicData(false)
+      setUpdateEmailMutation(false)
         // console.log("ran error");
       }
       if (magicIsPending  && validateMagicData) {
@@ -279,7 +331,78 @@ const AuthSignUp = () => {
   // check when phoneNumber is valid
 
 
-  // console.log("isPhoneNumberValid:", isPhoneNumberValid, "erros:", errors, "form:", form, "phoneNumber", form.phoneNumber)
+ // valaidte email mutation
+
+ const validateEmailMutation = useMutation({
+  mutationKey:["does-email-exit"],
+  mutationFn: doesEmailExist 
+})
+
+
+ //destructure propertis from validateEmailMutation 
+
+const { data:emailMutationData, error: emailMutationErrorMessage, isError: emailMutationError, isPending:emailMutationPending, isSuccess:emailMutationSuccess } = validateEmailMutation
+
+
+// for email verification
+useEffect(() => {
+  const handleEmailValidtion = () => {
+    if (emailMutationError   && updateEmailMutation) {
+    
+       setShowModal(false);
+      setDisableButton(false)
+     setErrorType(null);
+      const errorMessage = emailMutationErrorMessage?.response?.data.message ||  emailMutationErrorMessage?.data
+       setErrorMessage("");
+      Toast.show({
+        type:"error",
+        text1:"Sign In Error",
+        text2:errorMessage,
+        visibilityTime: 4000,
+        position:"top",
+        topOffset: 30,
+        text1Style: {
+          fontSize: 14,
+          fontWeight: 'bold',
+          color:"red"
+        },
+        text2Style: {
+          fontSize: 12,
+          fontWeight: 'bold',
+          color:"gray"
+        },
+       
+      })
+      setUpdateEmailMutation(false)
+    
+      // console.log("ran error");
+    }
+    if (emailMutationPending  && updateEmailMutation) {
+      console.log("ran email muation pending");
+      setShowModal(true);
+      setErrorType("loading");
+      setErrorMessage("");
+      // console.log("ran loading");
+    }
+    if (emailMutationSuccess && updateEmailMutation) {
+     
+      setUpdateEmailMutation(false);
+      setShowModal(false);
+      setErrorType(null);
+      setErrorMessage("");
+      setUpdateEmailMutation(false)
+   
+    console.log("email confirmtion from server successful");
+    
+    }
+ 
+  }
+  handleEmailValidtion()
+
+},[emailMutationPending, emailMutationSuccess, emailMutationError])
+
+
+
   return (
     <SafeAreaView className="bg-white flex-1 py-[13px] px-[18px]">
 
@@ -301,6 +424,9 @@ const AuthSignUp = () => {
           flexGrow: 1,
         }}
       >
+       
+          
+       
           <KeyboardAwareScrollView 
           >
         <View className="flex flex-col gap-y-2 items-start justify-center mt-[30px] mb-[32px]">
@@ -326,9 +452,8 @@ const AuthSignUp = () => {
               }}
               render={({ field: { onChange, onBlur, value } }) => (
                 <View
-                  className="w-full h-[42px] px-2 text-white  flex-row items-center justify-between space-x-2 
-                   bg-white rounded-[30px] shadow border border-gray-300 
-                 "
+                  className={`w-full h-[42px] px-4 text-white  flex-row items-center justify-between space-x-2 
+                  bg-white rounded-[30px] shadow border border-gray-300 `}
                 >
                   <TextInput
                     onChangeText={(data) => {
@@ -343,8 +468,9 @@ const AuthSignUp = () => {
                     placeholderTextColor={"gray"}
                     cursorColor={"gray"}
                     className="flex-1 text-gary-900"
-                    onBlur={onBlur}
+                   
                     keyboardType={"default"}
+                  
                   />
                 </View>
               )}
@@ -381,8 +507,8 @@ const AuthSignUp = () => {
               }}
               render={({ field: { onChange, onBlur, value } }) => (
                 <View
-                  className="w-full h-[42px] px-2 text-white  flex-row items-center justify-between space-x-2 
-                 bg-white rounded-[30px] shadow border border-gray-300 "
+                className={`w-full h-[42px] px-4 text-white  flex-row items-center justify-between space-x-2 
+                bg-white rounded-[30px] shadow border border-gray-300 `}
                 >
                   <TextInput
                     onChangeText={(data) => {
@@ -397,8 +523,9 @@ const AuthSignUp = () => {
                     placeholderTextColor={"gray"}
                     cursorColor={"gray"}
                     className="flex-1 text-gary-900"
-                    onBlur={onBlur}
+                   
                     keyboardType={"default"}
+                   
                   />
                 </View>
               )}
@@ -435,8 +562,8 @@ const AuthSignUp = () => {
               }}
               render={({ field: { onChange, onBlur, value } }) => (
                 <View
-                  className="w-full h-[42px] px-2 text-white  flex-row items-center justify-between space-x-2 
-                 bg-white rounded-[30px] shadow border border-gray-300 "
+                className={`w-full h-[42px] px-4 text-white  flex-row items-center justify-between space-x-2 
+                bg-white rounded-[30px] shadow border border-gray-300 `}
                 >
                   <TextInput
                     onChangeText={(data) => {
@@ -451,8 +578,9 @@ const AuthSignUp = () => {
                     placeholderTextColor={"gray"}
                     cursorColor={"gray"}
                     className="flex-1 text-gary-900"
-                    onBlur={onBlur}
+                  
                     keyboardType={"default"}
+                  
                   />
                 </View>
               )}
@@ -491,8 +619,8 @@ const AuthSignUp = () => {
               }}
               render={({ field: { onChange, onBlur, value } }) => (
                 <View
-                  className="w-full h-[42px] px-2 text-white  flex-row items-center justify-between space-x-2 
-                 bg-white rounded-[30px] shadow border border-gray-300 "
+                className={`w-full h-[42px] px-4 text-white  flex-row items-center justify-between space-x-2 
+                bg-white rounded-[30px] shadow border border-gray-300`}
                 >
                   <TextInput
                     onChangeText={(data) => {
@@ -507,7 +635,7 @@ const AuthSignUp = () => {
                     placeholderTextColor={"gray"}
                     cursorColor={"gray"}
                     className="flex-1 text-gary-900"
-                    onBlur={onBlur}
+                   
                     keyboardType={"email-address"}
                   />
                 </View>
@@ -584,8 +712,8 @@ const AuthSignUp = () => {
               }}
               render={({ field: { onChange, onBlur, value } }) => (
                 <View
-                  className="w-full h-[42px] text-white  flex-row items-center justify-between space-x-2 
-                 bg-white rounded-[30px] shadow border border-gray-300 bg-red-400  "
+                  className={`w-full h-[42px] text-white  flex-row items-center justify-between space-x-2 
+                  bg-white rounded-[30px] shadow border border-gray-300`}
                 >
                   <PhoneNumberScreen
                     setPhoneValue={setPhoneValue}
@@ -595,6 +723,7 @@ const AuthSignUp = () => {
                     setForm={setForm}
                     form={form}
                     onChange={onChange}
+               
                   />
                 </View>
               )}
@@ -643,7 +772,7 @@ const AuthSignUp = () => {
           </Text>
         </TouchableOpacity>
         </KeyboardAwareScrollView >
-
+       
         {/* APP BUTTON END */}
       </ScrollView>
      

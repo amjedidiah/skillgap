@@ -1,14 +1,14 @@
 {
   "expo": {
-    "name": "Skill Gap",
+    "name": "Skillgap",
     "slug": "skillgap",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon88.png",
+    "icon": "./assets/images/app_icon.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/images/splash.png",
-      "resizeMode": "contain",
+      "image": "./assets/images/Splash_Screen.png",
+      "resizeMode": "cover",
       "backgroundColor": "#ffffff"
     },
     "assetBundlePatterns": [

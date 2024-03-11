@@ -4,10 +4,14 @@ import { AppTextProp } from '../types'
 
 
 
-const AppTextContent = ({text, classText} : AppTextProp) => {
+const AppTextContent = ({text, classText, fontFamily = "GeneralSans-Regular"} : AppTextProp) => {
   return (
     <View>
-      <Text className={`w-[327px] text-neutral-400 text-base font-normal font-['GeneralSans-Regular'] leading-snug ${classText && classText}`}>{text}</Text>
+      <Text 
+      style={{
+        fontFamily
+      }}
+      className={`w-[327px] text-neutral-400 text-base font-normal leading-snug ${classText && classText}`}>{text}</Text>
     </View>
   )
 }
