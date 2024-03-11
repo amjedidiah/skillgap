@@ -43,7 +43,7 @@ export const onboardingArray = [
     {
         key: 3,
         heading:"Gain Points!",
-        content:"Refer friend to earn unique skillgap coins and other rewards",
+        content:"Refer a friend to earn unique skillgap coins and other rewards",
         img: require("../assets/images/Onboarding3.jpg"),
         progressArray: [
             {
