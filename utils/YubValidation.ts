@@ -96,6 +96,7 @@ import * as Yup from "yup";
   export const validationSchemaArenaCreateContest = Yup.object().shape({
     skillGapTag: Yup.string().required("Skill gap tag is required."),
     stake: Yup.string().required("Stake amount is required."),
+    category: Yup.string().required("Category is required."),
     termsAndDescription: Yup.string().required("Contest terms and conditions is required."),
   })
 

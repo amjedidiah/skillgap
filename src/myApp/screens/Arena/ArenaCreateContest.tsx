@@ -1,27 +1,48 @@
-import { View, Text, Image, TouchableOpacity, TextInput, ScrollView } from 'react-native'
+import { View, Text, Image, TouchableOpacity, TextInput, ScrollView, StatusBar, Modal } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import AppTextHeading from '@/myApp/components/AppTextHeading'
-import { ArenaCategoryModalDataList, arenaContestHeadingData, personalSettingHeadingData } from 'utils/data'
+import { ArenaCategoryModalDataList, arenaContestHeadingData } from 'utils/data'
 import { Controller, useForm } from 'react-hook-form'
-import { validationSchemaArenaCreateContest, validationSchemaBlockUser } from 'utils/YubValidation'
+import { validationSchemaArenaCreateContest} from 'utils/YubValidation'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { BlockUserModalComp, PersonalSettingBlockUserListComp } from '@/myApp/components/UserProfileComp'
-import { ArenaCreateContestFormTypes, BlockUserModalCompPropTypes } from '@/myApp/types'
+import {useSelector} from "react-redux"
+
+import { ArenaCreateContestFormTypes } from '@/myApp/types'
 import { useNavigation } from '@react-navigation/native'
 import AppTextContent from '@/myApp/components/AppTextContent'
 import { Entypo, Ionicons } from '@expo/vector-icons'
 import { ArenaCategoryModal } from '@/myApp/components/ArenaComponents'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import { useMutation } from '@tanstack/react-query'
+import { createContestApi } from '@/api/contestApi'
+import Toast from 'react-native-toast-message'
+import AlertMessage from '@/myApp/components/AlertMessage'
 
 
 const ArenaCreateContestScreen= () => {
 
+  
 
     const [onlineStatus, setOnlineStatus] = useState<{
         id: number,
         text:string,
         active:boolean
     }[]>(arenaContestHeadingData)
+
+
+
+
+    // hashTags update
+    const [hashTagList, setHashTagList] = useState<any[] | []>([])
+    const [hashTagListUpate, setHashTagListUpate] = useState<any[]>([])
+    const [runUseEffect, setRunUseEffect] = useState<boolean>(false)
+    const [loading, setLoading] = useState<boolean>(false)
+    const [errorType, setErrorType] = useState<null | string>(null)
+    const [errorMessage, setErrorMessage] = useState<string>("")
+  
+  
+  
 
   // category state
   const [choosedCategory, setChoosedCategory] = useState({
@@ -34,11 +55,28 @@ const ArenaCreateContestScreen= () => {
     }
   })
 
+  // obtaining app state
+  const {userEmail: email} = useSelector(data => data?.authReducer?.user)
+  // console.log("createContest app state", email)
+
 // spliting the hashTagDataArray into sub arrays with a maximum of 3 entries each
 
 
+
+console.log("modified hashTagListUpdate",hashTagListUpate)
 const handleSplitHashTagArrayFunc = () => {
+if(choosedCategory.categoryData.categoryfilterByHashTag.length > 0){
+    const formatedHashTag: any[] = []
+  choosedCategory.categoryData.categoryfilterByHashTag.forEach(item => {
+    formatedHashTag.push(`#${item?.text}`)
+  })
+  setHashTagListUpate([...formatedHashTag])
+}
+
   const hashTagArray = choosedCategory.categoryData.categoryfilterByHashTag
+  if(choosedCategory?.isCategorySet){
+     setValue("category", "true")
+  }
   const newArray = []
   while (hashTagArray.length) {
    if(hashTagArray.length == 3 || hashTagArray.length < 3){
@@ -51,6 +89,7 @@ const handleSplitHashTagArrayFunc = () => {
    }
 
   }
+  setHashTagList([...newArray])
   console.log("this is the hash tag array final", newArray)
 }
 
@@ -58,11 +97,14 @@ const handleSplitHashTagArrayFunc = () => {
 
 useEffect(() =>{
   handleSplitHashTagArrayFunc()
+
 },[choosedCategory])
 
 
-  console.log("this is the list of hashTags",  choosedCategory.categoryData.categoryfilterByHashTag)
-  console.log("final category from main: " + JSON.stringify(choosedCategory))
+
+// console.log("hashTagList", hashTagList)
+// console.log("choosedCategory", choosedCategory)
+// createContestAp
 
 
  const [translate, setTranslate] = useState(false);
@@ -89,26 +131,145 @@ useEffect(() =>{
   
   
     
+      const createContestMutation = useMutation({
+        mutationKey:["create-contest"],
+        mutationFn: createContestApi
+      })
     
 const formOptions = { resolver: yupResolver(  validationSchemaArenaCreateContest) };
      const {
         control,
         handleSubmit,
+        setValue,
         formState: { errors },
       } = useForm(formOptions);
     
-      const onSubmit = (data: string) => {
-        console.log("this is the final data"<data)
+      const onSubmit = async(data: ArenaCreateContestFormTypes) => {
+        try{
+          const {subCategoryHeadingMajor,subCategoryHeadingMinor,categoryHeading} = choosedCategory?.categoryData
+          const { 
+            skillGapTag,
+             stake,
+         termsAndDescription
+          } = data
+         
+
+   const contest =       {
+            isOnline: true,
+            email,
+          opponentSkillGapTag:[skillGapTag],
+          category:{
+              categoryMain:categoryHeading,
+              categoryHeading:subCategoryHeadingMajor,
+              categorySub:subCategoryHeadingMinor
+          },
+          stake,
+        hashTags:[...hashTagListUpate],
+          termsAndDescription
+      }
+
+          console.log("this is the data sent", data)
+          setRunUseEffect(true)
+          console.log("this is the final data", contest)
+    await createContestMutation.mutateAsync(contest)
+        }catch(error){
+           console.log(error)
+        }
       
       };
     
+// console.log("this is the data for hashTag",choosedCategory?.categoryData?.categoryfilterByHashTag)
 
 const navigation = useNavigation()
 const [showModal, setShowModal] = useState(false)
+
+
+
+
+const {data, isSuccess, isError, isPending, error} = createContestMutation
+
+
+useEffect(() => {
+  const handleCreateContestApi = () => {
+    if (isError   && runUseEffect) {
+      setRunUseEffect(false)
+  setLoading(false);
+  setErrorMessage("");
+     setErrorType(null);
+      const errorMessage = error?.response?.data.message ||  error?.message
+      setLoading(false)
+      Toast.show({
+        type:"error",
+        text1:"Create contest Error",
+        text2:errorMessage,
+        visibilityTime: 4000,
+        position:"top",
+        topOffset: StatusBar.currentHeight,
+        text1Style: {
+          fontSize: 14,
+          fontWeight: 'bold',
+          color:"red"
+        },
+        text2Style: {
+          fontSize: 12,
+          fontWeight: 'bold',
+          color:"gray"
+        },
+       
+      })
+   
+    
+   
+    }
+    if (isPending  && runUseEffect) {
+      setLoading(true);
+      setErrorType("loading");
+      setErrorMessage("");
+     
+    }
+    if (isSuccess && runUseEffect) {
+     
+      setRunUseEffect(false)
+      setLoading(false);
+      setErrorType(null)
+      Toast.show({
+        type:"success",
+        text1:"Contest created successfully",
+        text2:errorMessage,
+        visibilityTime: 4000,
+        position:"top",
+        topOffset: StatusBar.currentHeight,
+        text1Style: {
+          fontSize: 14,
+          fontWeight: 'bold',
+          color:"red"
+        },
+        text2Style: {
+          fontSize: 12,
+          fontWeight: 'bold',
+          color:"gray"
+        },
+       
+      })
+      navigation.navigate("arenaHomeScreen")
+    
+    }
+
+  }
+  handleCreateContestApi()
+
+},[isError,isPending, isSuccess])
+
+// console.log("data received", data, "isSuccess", isSuccess, "isPending", isPending, "isError",isError, )
+
   return (
-   <SafeAreaView className='px-[16px] py-[12px]  flex-1' 
+   <SafeAreaView className='px-[16px] py-[12px] ' 
    >
-    <ScrollView  showsVerticalScrollIndicator={false}>
+    <ScrollView  
+    showsVerticalScrollIndicator={false}>
+      <Modal visible={loading} transparent={true} animationType="fade">   
+    <AlertMessage message={errorMessage} type={errorType} setShowModal = {setLoading} />
+    </Modal>
     {
       showModal && <ArenaCategoryModal
       choosedCategory={choosedCategory}
@@ -118,12 +279,15 @@ const [showModal, setShowModal] = useState(false)
         />
       }
     {/* header section starts */}
+    <KeyboardAwareScrollView
+    showsVerticalScrollIndicator={false}
+    >
     <View className='w-full flex-row items-center justify-center'>
         <TouchableOpacity
         onPress={() => {
          navigation.goBack()
         }}
-        className='absolute left-0'>
+        className='absolute left-0  z-10 p-2'>
         <Image 
       source={require("../../../../assets/images/arrow-left.png")}
       className='w-[24px] h-[24px]'
@@ -158,7 +322,7 @@ const [showModal, setShowModal] = useState(false)
   }}
      key={item.id}
     className={`flex-1 flex-row space-x-1 h-[34px]   justify-center items-center   rounded-[40px] ${item.active && "bg-white"}`}>
-  <Text className="text-[12px] font-medium font-['Generalans-Regular'] leading-none text-neutral-400 capitalize">{item.text}</Text>
+  <Text className="text-[12px] font-medium font-['GeneralSans-Regular'] leading-none text-neutral-400 capitalize">{item.text}</Text>
   </TouchableOpacity>)
 }
 
@@ -204,7 +368,7 @@ const [showModal, setShowModal] = useState(false)
                   required: true,
                 }}
                 render={({ field: { onChange, onBlur, value } }) => (
-                  <View className="w-full h-[52px] px-2 text-white  flex-row items-center justify-between space-x-2 
+                  <View className="w-full h-[42px] px-4 text-white  flex-row items-center justify-between space-x-2 
                     bg-white rounded-[30px] shadow border border-gray-300 
                   ">
                     <TextInput
@@ -250,7 +414,8 @@ const [showModal, setShowModal] = useState(false)
 <View>
 {
    !choosedCategory.isCategorySet ?  
-   <TouchableOpacity
+ <View>
+    <TouchableOpacity
    onPress={() => {
      setChoosedCategory({
        isCategorySet:false,
@@ -274,14 +439,26 @@ const [showModal, setShowModal] = useState(false)
      <Entypo name="chevron-thin-down" size={20} color="black" />
  
    </TouchableOpacity>
-      :  <View className="rounded-[20px] bg-white py-10 mt-4  px-4">
+   <View className="w-full mt-2">
+                {errors.category && (
+                  <Text
+                    className="text-red-500
+                    font-bold "
+                  >
+                    {errors.category.message}
+                  </Text>
+                )}
+              </View>
+ </View>
+      : 
+       <View className="rounded-[20px] bg-white py-10 mt-4  px-4">
        <TouchableOpacity activeOpacity={0.4} onPress={() => {
          setShowModal(true)
-       }} className="absolute top-4 right-6">
+       }} className="absolute top-2 right-4 p-2">
        <Image source={require("../../../../assets/images/edit.png")}
        className='w-4 h-4' />
        </TouchableOpacity>
-     <View className='mb-6 '>
+                <View className='mb-6 '>
                   <AppTextHeading text='Selected Categories' classText='text-[18px]' />
                   <AppTextContent text='All result from your selections ranging from main to sub categories' classText='text-[11px] w-full leading-[13px]' />
                 </View>
@@ -301,7 +478,7 @@ const [showModal, setShowModal] = useState(false)
                   <View className="w-[30px] h-[0px] origin-top-left rotate-[123.66deg] border border-neutral-400"></View>
   
                    <View
-                  style={{
+                    style={{
                     borderStyle:"dashed",
                     borderWidth: 2,
                     borderColor:"#2A9D0D"
@@ -319,35 +496,38 @@ const [showModal, setShowModal] = useState(false)
                     borderColor:"#DBBC1C"
                   
                   }}
-                   className="w-[80px] h-8 rounded-2xl items-center  justify-center bg-yellow-50  ">
+                   className="w-[80px] h-8 rounded-2xl items-center  justify-center bg-yellow-50">
                     <Text className="text-yellow-500  text-[10px] font-medium font-['GeneralSans-Regular'] leading-[18px]">{choosedCategory.categoryData.subCategoryHeadingMinor}</Text>
                   </View>
                 </View>
                 {/* filter list ends */}
                 {/* list of selected hashTags starts */}
              {
-              choosedCategory.categoryData.categoryfilterByHashTag.length &&  <View className="mt-4">
-              <AppTextHeading text='Hashtags' classText='text-[16px]'  />
+              hashTagList.length > 0  && 
+               <View className="mt-4">
+              <AppTextHeading text='Hashtags' classText='text-[16px]'/>
               <View>
                 {
-                  choosedCategory.categoryData.categoryfilterByHashTag.map(item=> 
-                  <TouchableOpacity key={item.id}>
-                     <View
-                  style={{
-                    borderStyle:"dashed",
-                    borderWidth: 2,
-                    borderColor:"#6700D6"
-                  
-                  }}
-                   className="w-[80px] h-8 rounded-2xl items-center  justify-center bg-purple-100 ">
-                    <Text className="text-violet-700 text-[10px] font-medium font-['GeneralSans-Regular'] leading-[18px] ">{item.text}</Text>
-                  </View>
+                 hashTagList?.map((i, k)=> <View className='flex-row mb-2 justify-around' key={k}>
+                  {
+                    i.map((item,x) =>  <View key={x}   style={{
+                      borderStyle:"dashed",
+                      borderWidth: 2,
+                      borderColor:"#6700D6"
+                    }}
+                    className="w-[100px] h-8 rounded-2xl items-center  justify-center bg-purple-100"> 
+                       <Text className="text-violet-700 text-[10px] font-medium font-['GeneralSans-Regular'] leading-[18px] ">{item?.text}</Text> 
+                    </View> 
+                    )
+                  }
 
-                  </TouchableOpacity>)
+                 </View>
+
+                  )
                 }
               </View>
               </View>
-             }
+             }   
 
                 {/* list of selected hashTags ends */}
      </View>
@@ -356,15 +536,13 @@ const [showModal, setShowModal] = useState(false)
 }
 </View>
   
-
-
    {/* stake and termsOfDescription starts */}
  <View className='rounded-[20px] bg-white py-5 mt-4  px-4'>
       
       {/* stake start */}
       <View className={`w-full  "bg-slate-200 opacity-20"}`}>
             <View className="items-start space-y-[10px] w-full">
-              <View className="items-start mb-2 w-full ">
+              <View className="items-start mb-4 w-full ">
                 <Text className="text-gray-950 text-sm font-normal font-['Noto Sans'] w-full">
                   {"Stake"}
                 </Text>
@@ -376,8 +554,8 @@ const [showModal, setShowModal] = useState(false)
                   required: true,
                 }}
                 render={({ field: { onChange, onBlur, value } }) => (
-                  <View className="w-full h-[52px] px-2 text-white  flex-row items-center justify-between space-x-2 
-                    bg-white rounded-[30px] shadow border border-gray-300 
+                  <View className="w-full h-[42px] px-2 text-white  flex-row items-center justify-between space-x-2 
+                    bg-white rounded-[30px]  shadow border border-gray-300 
                   ">
                     <TextInput
                       onChangeText={(data)=> {
@@ -392,7 +570,7 @@ const [showModal, setShowModal] = useState(false)
                       placeholder={"e.g $500"}
                       placeholderTextColor={"gray"}
                       cursorColor={"gray"}
-                      className="flex-1 text-gary-900"
+                      className="flex-1 text-gary-900 px-4"
                       onBlur={onBlur}
                       keyboardType={"phone-pad"}
                     />
@@ -431,7 +609,7 @@ const [showModal, setShowModal] = useState(false)
                   required: true,
                 }}
                 render={({ field: { onChange, onBlur, value } }) => (
-                  <View className="w-full h-40 px-2 py-2 text-white  flex-row items-start justify-start space-x-2 
+                  <View className="w-full h-40 px-3 py-2 text-white  flex-row items-start justify-start space-x-2 
                     bg-white rounded-[20px] shadow border border-gray-300 overflow-hidden 
                   ">
                     <TextInput
@@ -450,7 +628,7 @@ const [showModal, setShowModal] = useState(false)
                       placeholder={""}
                       placeholderTextColor={"gray"}
                       cursorColor={"gray"}
-                      className="flex-1 text-gray-900 h-39 items-start"
+                      className="flex-1 text-gray-900  h-full items-start"
                       onBlur={onBlur}
                       keyboardType={"default"}
                       multiline
@@ -494,6 +672,7 @@ const [showModal, setShowModal] = useState(false)
             Done
             </Text>
           </TouchableOpacity>
+          </KeyboardAwareScrollView>
     {/* done utton ends */}
 
 {/*stake and termsOfDescription ends  */}

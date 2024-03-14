@@ -4,16 +4,14 @@ import {
   StyleSheet,
   TextInput,
   ScrollView,
-  Platform,
-  Image,
   TouchableOpacity,
   Modal,
   Alert,
+  StatusBar
 } from "react-native";
 import React, { useCallback, useEffect, useState } from "react";
 import { Magic, RPCError, RPCErrorCode } from "@magic-sdk/react-native-expo";
 import { useInternetConnection } from "@magic-sdk/react-native-expo";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm, Controller } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
@@ -69,8 +67,7 @@ const AuthLogin = () => {
   const { data:emailMutationData, error: emailMutationErrorMessage, isError: emailMutationError, isPending:emailMutationPending, isSuccess:emailMutationSuccess } = validateEmailMutation
 
 
-   console.log("email validation", "data", emailMutationData, "error", emailMutationErrorMessage?.response?.data?.message, "isError",emailMutationError, "isPending", emailMutationPending)
-  
+
 
   const connected = useInternetConnection();
 
@@ -120,7 +117,7 @@ const AuthLogin = () => {
           text2:errorMessage,
           visibilityTime: 4000,
           position:"top",
-          topOffset: 30,
+          topOffset: StatusBar.currentHeight,
           text1Style: {
             fontSize: 14,
             fontWeight: 'bold',
@@ -178,7 +175,7 @@ const AuthLogin = () => {
           text2:errorMessage,
           visibilityTime: 4000,
           position:"top",
-          topOffset: 30,
+          topOffset: StatusBar.currentHeight,
           text1Style: {
             fontSize: 14,
             fontWeight: 'bold',
@@ -219,6 +216,7 @@ const AuthLogin = () => {
 
   const onSubmit = async (data: { email: string }) => {
     try {
+      console.log("just pressed")
       setLoading(true);
        //check if a user has already logged in
      
@@ -265,10 +263,6 @@ const AuthLogin = () => {
     }
   };
 }
-
-
-
-
 
   // showEmailModal, setShowEmailModal
   return (
@@ -317,6 +311,7 @@ const AuthLogin = () => {
                   bg-white rounded-[30px] shadow border border-gray-300 `}
                 >
                   <TextInput
+                  // onSubmitEditing={() =>handleSubmit(onSubmit)}
                     onChangeText={(data) => {
                       setForm({
                         ...form,
@@ -363,14 +358,14 @@ const AuthLogin = () => {
         {/* app button start */}
 
         <TouchableOpacity
-           disabled={loading}
+          //  disabled={loading}
           activeOpacity={0.5}
           onPress={handleSubmit(onSubmit)}
           className={`w-full px-2.5 py-4 ${loading ? "bg-sky-400" : "bg-sky-500"} rounded-[40px] justify-center items-center mt-4`}
         >
           <Text className="text-center text-white text-sm font-medium font-['GeneralSans-Regular'] leading-normal">
            {
-            loading ?  "Loading..." : " Log In"
+            loading ?  "Loading..." : "Sign In"
            }
           </Text>
         </TouchableOpacity>

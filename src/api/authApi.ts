@@ -1,11 +1,9 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 
-// 192.168.216.3
-// 192.168.150.3
+
 const baseUrl22 = "http://192.168.251.3:7000";
 const baseUrl = "https://skillgap-api-1fc27db9f77b.herokuapp.com";
-// 192.168.139.3
+
 
 // http://localhost:7000
 
@@ -33,8 +31,6 @@ export const validateMagicApi = async (data: any) => {
 };
 
 export const loginApi = async (data: any) => {
-  console.log("login api ran");
-  console.log(data);
   const response = await axios.post(`${baseUrl}/api/v1/user/login`, data, {
     withCredentials: true,
   });
@@ -42,7 +38,6 @@ export const loginApi = async (data: any) => {
 };
 
 export const validateEmail = async (data: any) => {
-  console.log("validateEmail api ran", data);
   const response = await axios.post(
     `${baseUrl}/api/v1/user/validate-email`,
     data,
@@ -62,7 +57,6 @@ export const doesEmailExist = async (data: any) => {
 
 
 export const logOutApi = async (data: any) => {
-  console.log("this is the data from log out", data)
   const response = await axios.post(`${baseUrl}/api/v1/user/logOut`, data, {
     withCredentials: true,
   });

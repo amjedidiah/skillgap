@@ -1,16 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import * as Notifications from 'expo-notifications';
 
 
 
-import Onboarding from "@/myApp/screens/OnboardingComponent/Onboarding";
+
 import AppSignUpScreen from "@/myApp/screens/OnboardingComponent/AppSignUpScreen";
 import AuthSignUp from "@/myApp/screens/auth/AuthSignUp";
 import AuthLogin from "@/myApp/screens/auth/AuthLogin";
-import ButtonTapNavigation from "./ButtomNavigation";
 import { HomeStackNavigatorParamList } from "type";
-import OnboardingSliderScreen from "@/myApp/screens/onboarding/OnboardingSliderScreen";
+
 import { useSelector } from "react-redux";
 
 

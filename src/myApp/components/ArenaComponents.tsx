@@ -112,14 +112,14 @@ const [showFilterModal, setShowFilterModal] = useState(false)
 const [filteredByHashTagData, setFilteredByHashTagData] = useState(filterByHashTagArenaArray)
 
 // Sets of category data start
-const [categoryData, setCategoryData] = useState("")
+const [categoryData, setCategoryData] = useState("")// done
 const [filterData, setFilterData] = useState([])
 const [subCategoryHeading1Data, setSubCategoryHeading1Data] = useState("")
 const [subCategoryHeading2Data, setSubCategoryHeading2Data] = useState("")
 
 // Sets of category data end
 
-console.log("this is the choosed category",categoryData, subCategoryHeading1Data,subCategoryHeading2Data, filterData)
+
 
 const handleSubCategoryDataFunc= (i:number) => {
   const newData = subCategoryData.filter( item => {
@@ -162,13 +162,13 @@ const clearAllFilteredDataByHashTagData = () =>{
 }
 
 useEffect(() => {
-  console.log("ran")
+
   const selectedHashTag = filterByHashTagArenaArray.filter(item => item.active == true);
   setFilterData(selectedHashTag)
 
 },[filteredByHashTagData])
 
-console.log("final category: " + JSON.stringify(choosedCategory))
+
 
     return <Modal
     animationType="slide" transparent={true} visible={showModal}
@@ -177,7 +177,11 @@ console.log("final category: " + JSON.stringify(choosedCategory))
 
       {
         showFilterModal ? 
-        <View className="h-screen bg-stone-600 opacity-80 justify-end">
+        <View 
+        style={{
+          backgroundColor:"rgba(29,155,240,0.4)"
+         }}
+        className="h-screen bg-stone-600 justify-end">
            <View className='px-[16px] pt-[20px] pb-[10px]  w-full bg-white  rounded-t-[30px]  opacity-100'>
              <View className='items-center justify-center w-full  bg-opacity-100 opacity-100 mt-[10px] mb-8'>
        <TouchableOpacity
@@ -298,7 +302,7 @@ console.log("final category: " + JSON.stringify(choosedCategory))
                 categoryfilterByHashTag:[...filterData]
                 } })
                 
-                setShowModal(false)
+                 setShowModal(false)
                
                 }}
                 ButtonViewStyle='w-[216px] bg-sky-500' />
@@ -307,8 +311,13 @@ console.log("final category: " + JSON.stringify(choosedCategory))
               {/* filter by # tag section ends */}
           </View>
           
-           </View> :  showSubCategory ? 
-           <View className="h-screen bg-stone-600 opacity-80 justify-end">
+           </View> :  
+           showSubCategory ? 
+           <View
+           style={{
+            backgroundColor:"rgba(29,155,240,0.4)"
+           }}
+           className="h-screen  justify-end">
         <View className='px-[16px] pt-[20px] pb-[10px]  w-full bg-white  rounded-t-[30px]  opacity-100'>
         <View className='items-center justify-center w-full  bg-opacity-100 opacity-100 mt-[10px] mb-[20px]'>
        <TouchableOpacity
@@ -350,7 +359,8 @@ console.log("final category: " + JSON.stringify(choosedCategory))
 
             </TouchableOpacity>
            
-            ): subCategoryData
+            ):
+             subCategoryData
             .map((item) => 
              <TouchableOpacity
             onPress={() => {
@@ -359,7 +369,7 @@ console.log("final category: " + JSON.stringify(choosedCategory))
              handleSubCategoryDataFunc(item.key)
             }}
             activeOpacity={0.8}
-            key={item.key} className='flex-row h-[41.5px]  items-center space-x-2'>
+            key={item.key} className='flex-row h-[41.5px]  items-center space-x-2 '>
              <Image
              source={item.img}
              className='w-[61px] h-[41.5px]'
@@ -384,7 +394,10 @@ console.log("final category: " + JSON.stringify(choosedCategory))
       </View>
      </View> : 
        <View
-     className="h-screen bg-stone-600 opacity-80 justify-end">
+       style={{
+        backgroundColor:"rgba(29,155,240,0.4)"
+       }}
+     className="h-screen justify-end ">
       <View className='px-[16px] pt-[20px] pb-[10px]  w-full bg-white  rounded-t-[30px]  opacity-100'>
         <View className='items-center justify-center w-full  bg-opacity-100 opacity-100 mt-[10px] mb-[20px]'>
        <TouchableOpacity

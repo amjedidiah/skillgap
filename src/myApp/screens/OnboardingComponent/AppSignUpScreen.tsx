@@ -38,7 +38,7 @@ const deviceHeight = Dimensions.get("window").height
            
           </View>
           <View className="text-center">
-          <AppTextContent fontFamily="SpaceGrotesk-Medium" classText="text-center text-neutral-400 text-2xl font-medium font-['SpaceGrotesk-Regular'] leading-loose"  text={"Win cash completing bets in your favourite skill"} />
+          <AppTextContent fontFamily="SpaceGrotesk-Medium" classText="text-center text-neutral-400 text-2xl font-medium font-['SpaceGrotesk-Regular'] leading-loose  w-full"  text={"Win cash completing bets in your favourite skill"} />
           </View>
         
       <View className="mt-4 space-y-4">

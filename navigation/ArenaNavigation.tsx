@@ -11,7 +11,7 @@ function ArenaNavigation() {
 
   return (
     <Stack.Navigator
-      initialRouteName="arenaChatScreen"
+      initialRouteName="arenaHomeScreen"
       screenOptions={{
         animation: "slide_from_left",
       }}

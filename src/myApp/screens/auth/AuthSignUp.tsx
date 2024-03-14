@@ -11,6 +11,7 @@ import {
   Platform,
   Alert,
   TouchableWithoutFeedback,
+  StatusBar,
 } from "react-native";
 import React, { useEffect, useState, useCallback } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -291,7 +292,7 @@ const AuthSignUp = () => {
           text2:errorMessage,
           visibilityTime: 8000,
           position:"top",
-          topOffset: 30,
+          topOffset: StatusBar.currentHeight,
           text1Style: {
             fontSize: 18,
             fontWeight: 'bold',
@@ -767,7 +768,7 @@ useEffect(() => {
           }}
           className="text-center text-white text-sm font-medium  leading-normal">
           {
-            disableButton ? "Loading..." : "SignUp"
+            disableButton ? "Loading..." : "Sign Up"
           }
           </Text>
         </TouchableOpacity>

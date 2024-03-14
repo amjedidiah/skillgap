@@ -19,7 +19,8 @@ export type AppButtonProp =  {
    text: string,
    ButtonTextStyle?: string,
    ButtonViewStyle?:string,
-   handleOnpress: (url?: string) => void
+   handleOnpress: (url?: string) => void,
+   disabled?: boolean
 }
 
 export type AppModalProp =  {

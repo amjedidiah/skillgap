@@ -3,6 +3,7 @@ import {
   FlatList,
   Image,
   Modal,
+  StatusBar,
   Text,
   TouchableOpacity,
   View,
@@ -125,6 +126,7 @@ export const LogOutModalComp = ({ showLogOutModal, setShowLogOutModal }) => {
   const [errorMessageLogOut, setErrorMesageLogOut] = useState("");
   const [errorTypeLogOut, setErrorTypeLogOut] = useState(null);
   const [runUseEffect, setRunUseEffect] = useState(false);
+  const [disableButton, setDisableButton] = useState(false);
 
   const magic = new Magic("pk_live_AF0A2FCCABF5C8EF");
   const dispatch = useDispatch();
@@ -147,12 +149,7 @@ export const LogOutModalComp = ({ showLogOutModal, setShowLogOutModal }) => {
     isSuccess: logOutSuccess,
   } = logOutUserMutation;
 
-  console.log(
-    "result from logOutMuatation",
-    logOutData,
-    logOutErrorData,
-    logOutPending
-  );
+
   useEffect(() => {
     const handleState = async () => {
       console.log("use Efffet ran");
@@ -161,6 +158,7 @@ export const LogOutModalComp = ({ showLogOutModal, setShowLogOutModal }) => {
         setShowModalLogOut(false);
 
         setErrorTypeLogOut(null);
+        setDisableButton(false)
         const errorMessage =
           logOutErrorData?.response?.data.message || logOutErrorData?.message;
         setErrorMesageLogOut("");
@@ -170,7 +168,7 @@ export const LogOutModalComp = ({ showLogOutModal, setShowLogOutModal }) => {
           text2: errorMessage,
           visibilityTime: 4000,
           position: "top",
-          topOffset: 30,
+          topOffset: StatusBar.currentHeight,
           text1Style: {
             fontSize: 14,
             fontWeight: "bold",
@@ -186,16 +184,18 @@ export const LogOutModalComp = ({ showLogOutModal, setShowLogOutModal }) => {
 
         // console.log("ran error");
       }
+
       if (logOutPending && runUseEffect) {
         setShowModalLogOut(true);
         setErrorTypeLogOut("loading");
         setErrorMesageLogOut("");
       }
-      if (logOutSuccess && runUseEffect) {
-        setShowModalLogOut(true);
-        setErrorTypeLogOut("success");
-        setErrorMesageLogOut("");
 
+      if (logOutSuccess && runUseEffect) {
+        setShowModalLogOut(false);
+        setErrorTypeLogOut(null);
+        setErrorMesageLogOut("");
+        setDisableButton(false)
         setTimeout(async () => {
           setRunUseEffect(false);
           dispatch(logOutAction());
@@ -203,36 +203,16 @@ export const LogOutModalComp = ({ showLogOutModal, setShowLogOutModal }) => {
           console.log("logged out successfull");
           setShowLogOutModal(false);
           setShowModalLogOut(false);
-       
         
-
         
-          Toast.show({
-            type: "success",
-            text1: "Success",
-            text2: "User logged out successfully",
-            visibilityTime: 4000,
-            position: "top",
-            topOffset: 30,
-            text1Style: {
-              fontSize: 14,
-              fontWeight: "bold",
-              color: "red",
-            },
-            text2Style: {
-              fontSize: 12,
-              fontWeight: "bold",
-              color: "gray",
-              backgroundColor: "white",
-            },
-          });
+          
         }, 500);
       }
     };
     handleState();
   }, [logOutSuccess, logOutPending, logOutError]);
 
-  // console.log("app state from logOut", userEmail, jwt)
+  /// console.log("app state from logOut", userEmail, jwt)
   return (
     <Modal visible={showLogOutModal} animationType="slide" transparent={true}>
       <Modal visible={showModalLogOut} transparent={true} animationType="fade">
@@ -245,7 +225,7 @@ export const LogOutModalComp = ({ showLogOutModal, setShowLogOutModal }) => {
       <View
         className="flex-1 justify-center items-center"
         style={{
-          backgroundColor: "rgba(29, 155, 240, 0.5)",
+          backgroundColor: "rgba(29, 155, 240, 0.2)",
         }}
       >
         <View className="rounded-md bg-white px-4 w-4/5  items-center py-6">
@@ -260,9 +240,11 @@ export const LogOutModalComp = ({ showLogOutModal, setShowLogOutModal }) => {
           />
           <View className="flex-row items-center justify-between  w-full mt-4">
             <AppButton
+            disabled={disableButton}
               handleOnpress={async () => {
              try {
               console.log("ran in submit")
+              setDisableButton(true)
               setRunUseEffect(true);
               await logOutUserMutation.mutateAsync({
                 email: userEmail,
@@ -272,12 +254,15 @@ export const LogOutModalComp = ({ showLogOutModal, setShowLogOutModal }) => {
               console.log(error)
              }
               }}
-              text="Yes"
+              text={disableButton ? "Loading..." : "Yes"}
               ButtonViewStyle="w-[120px] bg-white border-red-500 border"
               ButtonTextStyle="text-red-500"
             />
             <AppButton
+             disabled={disableButton}
               handleOnpress={() => {
+                setRunUseEffect(false)
+                setDisableButton(false)
                 setShowLogOutModal(false);
               }}
               text="No"

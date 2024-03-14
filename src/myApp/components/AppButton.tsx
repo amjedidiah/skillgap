@@ -4,9 +4,10 @@ import { AppButtonProp } from '../types'
 
 
 
-const AppButton = ({text,handleOnpress, ButtonTextStyle, ButtonViewStyle} : AppButtonProp) => {
+const AppButton = ({text,handleOnpress, ButtonTextStyle, ButtonViewStyle, disabled = false} : AppButtonProp) => {
   return (
     <TouchableOpacity
+    disabled={disabled}
     className={`w-full  px-2.5 py-4 bg-neutral-900 rounded-[40px] justify-center items-center ${ButtonViewStyle && ButtonViewStyle}`}
     onPress={handleOnpress}
     activeOpacity={0.8}

@@ -211,8 +211,6 @@ const [showLogOutModal, setShowLogOutModal] =useState<boolean>(false)
   showDeleteModal={showDeleteModal}
   setShowDeleteModal={setShowDeleteModal}
   setShowLogOutModal={setShowLogOutModal}
-  
-  
   />)
 }
     </View>
