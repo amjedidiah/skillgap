@@ -195,10 +195,14 @@ export const LogOutModalComp = ({ showLogOutModal, setShowLogOutModal }) => {
         // setShowModalLogOut(false);
         // setErrorTypeLogOut(null);
         // setErrorMesageLogOut("");
-        dispatch(logOutAction());
+        await magic.user?.logout();
         setDisableButton(false)
         setRunUseEffect(false);
-        await magic.user?.logout();
+        dispatch(logOutAction());
+
+      
+        
+       
          
          
          
