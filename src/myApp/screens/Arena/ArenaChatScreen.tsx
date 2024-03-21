@@ -1,10 +1,11 @@
-import { View, Text, Image, Dimensions, ScrollView } from 'react-native'
+import { View, Text, Image, Dimensions, ScrollView, TouchableOpacity } from 'react-native'
 import React from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import AuthHeader from '@/myApp/components/AuthHeader'
 import { AntDesign } from '@expo/vector-icons'
 import { ArenaMessageComp } from '@/myApp/components/ArenaComponents'
 import { ArenaChatMessageList } from 'utils/data'
+import { useNavigation } from '@react-navigation/native'
 
 
 const ArenaChatScreen = () => {
@@ -18,8 +19,23 @@ const messageData = {
 
 
     const deviceWidth = Dimensions.get("window").width - 32
+const navigation = useNavigation()
+
   return (
     <SafeAreaView className='flex-1 w-full py-[12px] bg-white' >
+      
+      <TouchableOpacity
+      activeOpacity={0.4}
+      onPress={() =>{
+
+        navigation.navigate("Arena",
+        {
+          screen: "arenaCreateContestScreen"
+         }
+        )
+        }} className="w-12 h-12 px-2.5 py-2 bg-sky-500 rounded-[40px] shadow justify-center items-center absolute bottom-[50px] right-[20px] z-10 ">
+        <AntDesign name="plus" size={24} color="white" />
+        </TouchableOpacity>
         <ScrollView>
        <View className='px-[16px] mb-4'>
        <AuthHeader  />

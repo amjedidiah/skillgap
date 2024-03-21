@@ -207,7 +207,9 @@ export const homeContestData = [{
     cont1Name:"quipigs",
     cont2Name:"Wisdom",
     heading:"Table tennis",
-  active:true
+  active:true,
+  amount: 500,
+  isPending: false
  
 },{
     key: 2,
@@ -216,7 +218,10 @@ export const homeContestData = [{
     cont1Name:"john",
     cont2Name:"Wisdom",
     heading:"Football tennis",
-  active:true
+  active:true,
+  amount: 100,
+  isPending: true
+ 
  
 },
 {
@@ -226,7 +231,10 @@ export const homeContestData = [{
     cont1Name:"quipigs",
     cont2Name:"Sam",
     heading:"Table tennis",
-  active:true
+  active:true,
+  amount: 500,
+  isPending: false
+ 
  
 },
 {
@@ -236,7 +244,10 @@ export const homeContestData = [{
     cont1Name:"ifeanyi",
     cont2Name:"Wisdom",
     heading:"Table tennis",
-  active:true
+  active:true,
+  amount: 500,
+  isPending: false
+ 
  
 },
 {
@@ -246,7 +257,10 @@ export const homeContestData = [{
     cont1Name:"quipigs",
     cont2Name:"Wisdom",
     heading:"Table tennis",
-  active:true
+  active:true,
+  amount: 500,
+  isPending: false
+ 
  
 },
 {
@@ -256,7 +270,10 @@ export const homeContestData = [{
     cont1Name:"quipigs",
     cont2Name:"Wisdom",
     heading:"Table tennis",
-  active:true
+  active:true,
+  amount: 500,
+  isPending: false
+ 
  
 }
 ,
@@ -267,7 +284,10 @@ export const homeContestData = [{
     cont1Name:"quipigs",
     cont2Name:"Wisdom",
     heading:"Table tennis",
-  active:true
+  active:false,
+  amount: 20,
+  isPending: false
+ 
  
 }
 ,
@@ -278,7 +298,10 @@ export const homeContestData = [{
     cont1Name:"quipigs",
     cont2Name:"Wisdom",
     heading:"Table tennis",
-  active:true
+  active:true,
+  amount: 500,
+  isPending: false
+ 
  
 }
 

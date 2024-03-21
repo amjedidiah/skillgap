@@ -6,8 +6,7 @@ import { ArenaCategoryModalDataList, arenaContestHeadingData } from 'utils/data'
 import { Controller, useForm } from 'react-hook-form'
 import { validationSchemaArenaCreateContest} from 'utils/YubValidation'
 import { yupResolver } from '@hookform/resolvers/yup'
-import {useSelector} from "react-redux"
-
+import {createCreatestAction} from "../../../../redux/slices/userSlice"
 import { ArenaCreateContestFormTypes } from '@/myApp/types'
 import { useNavigation } from '@react-navigation/native'
 import AppTextContent from '@/myApp/components/AppTextContent'
@@ -17,12 +16,17 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { useMutation } from '@tanstack/react-query'
 import { createContestApi } from '@/api/contestApi'
 import Toast from 'react-native-toast-message'
+import {useDispatch, useSelector} from "react-redux"
 import AlertMessage from '@/myApp/components/AlertMessage'
+import { updateUserBalanceAction } from 'redux/slices/authSlice'
 
 
 const ArenaCreateContestScreen= () => {
-
   
+  const dispatch = useDispatch()
+
+  const appUserStore = useSelector(data => data?.authReducer?.user)
+
 
     const [onlineStatus, setOnlineStatus] = useState<{
         id: number,
@@ -63,7 +67,7 @@ const ArenaCreateContestScreen= () => {
 
 
 
-console.log("modified hashTagListUpdate",hashTagListUpate)
+
 const handleSplitHashTagArrayFunc = () => {
 if(choosedCategory.categoryData.categoryfilterByHashTag.length > 0){
     const formatedHashTag: any[] = []
@@ -142,6 +146,7 @@ const formOptions = { resolver: yupResolver(  validationSchemaArenaCreateContest
         handleSubmit,
         setValue,
         formState: { errors },
+        reset
       } = useForm(formOptions);
     
       const onSubmit = async(data: ArenaCreateContestFormTypes) => {
@@ -217,9 +222,6 @@ useEffect(() => {
         },
        
       })
-   
-    
-   
     }
     if (isPending  && runUseEffect) {
       setLoading(true);
@@ -228,10 +230,21 @@ useEffect(() => {
      
     }
     if (isSuccess && runUseEffect) {
-     
+     console.log("coming from response",data)
+
+     dispatch(updateUserBalanceAction(data?.balance))
+     dispatch(createCreatestAction(data))
       setRunUseEffect(false)
       setLoading(false);
       setErrorType(null)
+      setChoosedCategory({
+        isCategorySet:false,
+        categoryData: {
+          categoryHeading: "",
+          subCategoryHeadingMajor:"",
+          subCategoryHeadingMinor:"",
+          categoryfilterByHashTag:[""]
+        }})
       Toast.show({
         type:"success",
         text1:"Contest created successfully",
@@ -242,7 +255,7 @@ useEffect(() => {
         text1Style: {
           fontSize: 14,
           fontWeight: 'bold',
-          color:"red"
+          color:"blue"
         },
         text2Style: {
           fontSize: 12,
@@ -251,7 +264,10 @@ useEffect(() => {
         },
        
       })
-      navigation.navigate("arenaHomeScreen")
+      reset()
+      navigation.navigate("Home", {
+           screen:"onboarding"
+      })
     
     }
 
@@ -263,13 +279,26 @@ useEffect(() => {
 // console.log("data received", data, "isSuccess", isSuccess, "isPending", isPending, "isError",isError, )
 
   return (
-   <SafeAreaView className='px-[16px] py-[12px] ' 
+   <SafeAreaView className='px-[16px] py-[12px]' 
+  
    >
+    {
+      loading && <View className='h-sreen w-screen z-10'
+      style={{
+        backgroundColor: loading ? "rgba(100, 100, 100,0.1)" : "white",
+        position:"absolute",
+        top:0,
+        left:0,
+        right:0,
+        bottom:0
+      }}
+      />
+    }
     <ScrollView  
     showsVerticalScrollIndicator={false}>
-      <Modal visible={loading} transparent={true} animationType="fade">   
+      {/* <Modal visible={loading} transparent={true} animationType="fade">   
     <AlertMessage message={errorMessage} type={errorType} setShowModal = {setLoading} />
-    </Modal>
+    </Modal> */}
     {
       showModal && <ArenaCategoryModal
       choosedCategory={choosedCategory}
@@ -376,7 +405,7 @@ useEffect(() => {
                        setForm({
                         ...form, skillGapTag: data
                        })
-                        onChange(data)
+                        onChange(data.trim())
           
                       }}
 
@@ -516,7 +545,7 @@ useEffect(() => {
                       borderColor:"#6700D6"
                     }}
                     className="w-[100px] h-8 rounded-2xl items-center  justify-center bg-purple-100"> 
-                       <Text className="text-violet-700 text-[10px] font-medium font-['GeneralSans-Regular'] leading-[18px] ">{item?.text}</Text> 
+                       <Text className="text-violet-700 text-[10px] font-medium font-['GeneralSans-Regular'] leading-[18px] ">#{item?.text}</Text> 
                     </View> 
                     )
                   }
@@ -540,7 +569,7 @@ useEffect(() => {
  <View className='rounded-[20px] bg-white py-5 mt-4  px-4'>
       
       {/* stake start */}
-      <View className={`w-full  "bg-slate-200 opacity-20"}`}>
+      <View className={`w-full  "bg-slate-200 opacity-20"} `}>
             <View className="items-start space-y-[10px] w-full">
               <View className="items-start mb-4 w-full ">
                 <Text className="text-gray-950 text-sm font-normal font-['Noto Sans'] w-full">
@@ -562,7 +591,7 @@ useEffect(() => {
                        setForm({
                         ...form, stake: data
                        })
-                        onChange(data)
+                        onChange(data.trim())
           
                       }}
 
@@ -578,7 +607,16 @@ useEffect(() => {
                 )}
                 name={"stake"}
               />
-
+              {/* <div><span style="text-neutral-400 text-[11px] font-normal font-['General Sans Variable'] leading-none">Balance:</span><span style="text-neutral-400 text-[11px] font-normal font-['General Sans Variable'] leading-none"> </span><span style="text-gray-950 text-[11px] font-normal font-['General Sans Variable'] leading-none">$300</span></div> */}
+     <View className="items-start mb-4 w-full flex-row ">
+                <Text className="text-neutral-400 text-[11px] font-normal font-['General Sans Variable'] leading-none text-right w-full italic" >
+                Balance:{" "}
+                <Text className="text-gray-950 text-[11px] font-normal font-['General Sans Variable'] leading-non"  >
+                ₦{appUserStore?.balance}
+                </Text>
+                </Text>
+               
+              </View>
               <View className="w-full">
                 {errors.stake && (
                   <Text
@@ -614,7 +652,7 @@ useEffect(() => {
                   ">
                     <TextInput
                       onChangeText={(data)=> {
-                         if(form.termsAndDescription.length <= 50){
+                         if(form.termsAndDescription.length <= 250){
                             setForm({
                                 ...form, termsAndDescription: data
                                })
@@ -633,7 +671,7 @@ useEffect(() => {
                       keyboardType={"default"}
                       multiline
                       textAlignVertical="top"
-                      maxLength={50}
+                      maxLength={250}
                     />
                   </View>
                 )}
@@ -641,8 +679,8 @@ useEffect(() => {
               />
 
               <View className="w-full ">
-               <Text className={`text-right  text-base font-normal font-['GeneralSans-Regular'] leading-snug ${form.termsAndDescription.length == 50 ? "text-red-400" :"text-neutral-400"}`}>
-                  {form.termsAndDescription ? form.termsAndDescription.length : 0}/50 characters
+               <Text className={`text-right  text-base font-normal font-['GeneralSans-Regular'] leading-snug ${form.termsAndDescription.length == 250 ? "text-red-400" :"text-neutral-400"}`}>
+                  {form.termsAndDescription ? form.termsAndDescription.length : 0}/250 characters
                </Text>
               </View>
               <View className="w-full">
@@ -669,7 +707,9 @@ useEffect(() => {
             className={`w-full px-2.5 py-4 bg-sky-500 rounded-[40px] justify-center items-center mt-8`}
           >
             <Text className="text-center text-white text-sm font-medium font-['GeneralSans-Regular'] leading-normal">
-            Done
+            {
+              loading ? "Loading..." : "Done"
+            }
             </Text>
           </TouchableOpacity>
           </KeyboardAwareScrollView>

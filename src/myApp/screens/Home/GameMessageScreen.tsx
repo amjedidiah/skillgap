@@ -37,8 +37,6 @@
 
 // const calcSliderWidth = (getDeviceWidth - 76 )/2
 
-// console.log("this is the slider width: " + calcSliderWidth, getDeviceWidth)
-
 
 
 //   return (

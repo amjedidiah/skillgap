@@ -4,7 +4,7 @@ import axios from "axios";
 
 
 
-const baseUrl22 = "http://192.168.251.3:7000";
+const baseUrl22 = "http://192.168.253.3:7000";
 const baseUrl = "https://skillgap-api-1fc27db9f77b.herokuapp.com";
 // 192.168.139.3
 
@@ -16,6 +16,15 @@ export const createContestApi = async (data: any) => {
   const response = await axios.post(`${baseUrl}/api/v1/contest/create-contest`, data, {
     withCredentials: true,
   });
-  console.log("this is the response", response);
   return response.data;
 };
+
+
+
+export const getAllUserContest = async(data: any) => {
+
+  const response = await axios.post(`${baseUrl}/api/v1/contest/get-all-user-contest`, data, {
+    withCredentials: true,
+  });
+  return response.data;
+}

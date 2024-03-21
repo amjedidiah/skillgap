@@ -33,7 +33,7 @@ const handleSnapToItem = (index) =>
       className={`flex-1 w-full`}
     >
       <View className={`w-full  mb-0 pb-0  mx-auto  justify-center items-center `} style={{
-        height: deviceHeight * 3.5 / 5 
+        height: deviceHeight * 3.7 / 5 
       }}>
       
         <Image
@@ -146,7 +146,7 @@ const handleSnapToItem = (index) =>
     </View>
     }
   return (
-    <View className='h-screen w-full'>
+    <View className='flex-1 w-full'>
     <Carousel
         ref={isCarousel}
         data={onboardingArray}
@@ -160,7 +160,6 @@ const handleSnapToItem = (index) =>
         layout={'stack'}
         layoutCardOffset={18}
         onSnapToItem={handleSnapToItem}
-
       />
  
     </View>

@@ -1,4 +1,4 @@
-import { View, Text, Image, ScrollView, Modal, TouchableOpacity, Dimensions } from 'react-native'
+import { View, Text, Image, ScrollView, Modal, TouchableOpacity, Dimensions, TouchableWithoutFeedback } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { ArenaCategoryModalPropTypes, ArenaMessageCompPropTypes, ContestModalCompPropTypes, HeighestStakeListArenaComponentPropTypes, gameComponentPropType } from '../types'
 import AppTextHeading from './AppTextHeading'
@@ -177,12 +177,16 @@ useEffect(() => {
 
       {
         showFilterModal ? 
-        <View 
+        <TouchableOpacity 
+        activeOpacity={1}
+        onPress= {() => {
+          setShowModal(false)
+        }} 
         style={{
           backgroundColor:"rgba(29,155,240,0.4)"
          }}
-        className="h-screen bg-stone-600 justify-end">
-           <View className='px-[16px] pt-[20px] pb-[10px]  w-full bg-white  rounded-t-[30px]  opacity-100'>
+        className="h-screen bg-stone-600 justify-end ">
+           <View className='px-[16px] pt-[20px] pb-[10px]  w-full bg-white  rounded-t-[30px]  z-10'>
              <View className='items-center justify-center w-full  bg-opacity-100 opacity-100 mt-[10px] mb-8'>
        <TouchableOpacity
        onPress={() => {
@@ -311,14 +315,18 @@ useEffect(() => {
               {/* filter by # tag section ends */}
           </View>
           
-           </View> :  
+           </TouchableOpacity> :  
            showSubCategory ? 
-           <View
-           style={{
+           <TouchableOpacity
+           activeOpacity={1}
+        onPress= {() => {
+          setShowModal(false)
+        }} 
+          style={{
             backgroundColor:"rgba(29,155,240,0.4)"
            }}
            className="h-screen  justify-end">
-        <View className='px-[16px] pt-[20px] pb-[10px]  w-full bg-white  rounded-t-[30px]  opacity-100'>
+        <View className='px-[16px] pt-[20px] pb-[10px]  w-full bg-white  rounded-t-[30px]  z-10'>
         <View className='items-center justify-center w-full  bg-opacity-100 opacity-100 mt-[10px] mb-[20px]'>
        <TouchableOpacity
        onPress={() => {
@@ -327,7 +335,7 @@ useEffect(() => {
        className='left-0 absolute z-10'>
        <MaterialIcons name="keyboard-arrow-left" size={30} color="black" />
        </TouchableOpacity>
-      <AppTextHeading text='Sub Categories' classText='text-center text--[18px]' />
+      <AppTextHeading text={"Sub Category"} classText='text-center text-[18px]' />
         </View>
         <ScrollView
         style={{
@@ -392,13 +400,17 @@ useEffect(() => {
           }
         </ScrollView>
       </View>
-     </View> : 
-       <View
+     </TouchableOpacity> : 
+       <TouchableOpacity
+       activeOpacity={1}
+       onPress={() => {
+        setShowModal(false)
+       }}
        style={{
         backgroundColor:"rgba(29,155,240,0.4)"
        }}
      className="h-screen justify-end ">
-      <View className='px-[16px] pt-[20px] pb-[10px]  w-full bg-white  rounded-t-[30px]  opacity-100'>
+      <View className='px-[16px] pt-[20px] pb-[10px]  w-full bg-white  rounded-t-[30px] z-10'>
         <View className='items-center justify-center w-full  bg-opacity-100 opacity-100 mt-[10px] mb-[20px]'>
        <TouchableOpacity
        onPress={() => {
@@ -441,7 +453,7 @@ useEffect(() => {
         </ScrollView>
       </View>
 
-  </View>
+  </TouchableOpacity>
        
         
       }  

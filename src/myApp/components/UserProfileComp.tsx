@@ -130,7 +130,7 @@ export const LogOutModalComp = ({ showLogOutModal, setShowLogOutModal }) => {
 
   const magic = new Magic("pk_live_AF0A2FCCABF5C8EF");
   const dispatch = useDispatch();
-  const  userEmail = useSelector((data) => data?.authReducer?.user?.userEmail);
+  const  userEmail = useSelector((data) => data?.authReducer?.user?.userEmail) || "";
   const  jwt  = useSelector((data) => data?.authReducer?.user?.jwt);
 
 
@@ -155,20 +155,20 @@ export const LogOutModalComp = ({ showLogOutModal, setShowLogOutModal }) => {
       console.log("use Efffet ran");
       // console.log("ran useEffect");
       if (logOutError && runUseEffect) {
-        setShowModalLogOut(false);
+        // setShowModalLogOut(false);
 
-        setErrorTypeLogOut(null);
+        // setErrorTypeLogOut(null);
         setDisableButton(false)
         const errorMessage =
           logOutErrorData?.response?.data.message || logOutErrorData?.message;
-        setErrorMesageLogOut("");
+        // setErrorMesageLogOut("");
         Toast.show({
           type: "error",
           text1: "LogOut Error",
           text2: errorMessage,
           visibilityTime: 4000,
           position: "top",
-          topOffset: StatusBar.currentHeight,
+          topOffset: StatusBar?.currentHeight + 16,
           text1Style: {
             fontSize: 14,
             fontWeight: "bold",
@@ -186,27 +186,23 @@ export const LogOutModalComp = ({ showLogOutModal, setShowLogOutModal }) => {
       }
 
       if (logOutPending && runUseEffect) {
-        setShowModalLogOut(true);
-        setErrorTypeLogOut("loading");
-        setErrorMesageLogOut("");
+        // setShowModalLogOut(true);
+        // setErrorTypeLogOut("loading");
+        // setErrorMesageLogOut("");
       }
 
       if (logOutSuccess && runUseEffect) {
-        setShowModalLogOut(false);
-        setErrorTypeLogOut(null);
-        setErrorMesageLogOut("");
+        // setShowModalLogOut(false);
+        // setErrorTypeLogOut(null);
+        // setErrorMesageLogOut("");
+        dispatch(logOutAction());
         setDisableButton(false)
-        setTimeout(async () => {
-          setRunUseEffect(false);
-          dispatch(logOutAction());
-          await magic.user?.logout();
-          console.log("logged out successfull");
-          setShowLogOutModal(false);
-          setShowModalLogOut(false);
-        
-        
-          
-        }, 500);
+        setRunUseEffect(false);
+        await magic.user?.logout();
+         
+         
+         
+     
       }
     };
     handleState();
@@ -215,13 +211,13 @@ export const LogOutModalComp = ({ showLogOutModal, setShowLogOutModal }) => {
   /// console.log("app state from logOut", userEmail, jwt)
   return (
     <Modal visible={showLogOutModal} animationType="slide" transparent={true}>
-      <Modal visible={showModalLogOut} transparent={true} animationType="fade">
+      {/* <Modal visible={showModalLogOut} transparent={true} animationType="fade">
         <AlertMessage
           message={errorMessageLogOut}
           type={errorTypeLogOut}
           setShowModal={setShowModalLogOut}
         />
-      </Modal>
+      </Modal> */}
       <View
         className="flex-1 justify-center items-center"
         style={{
@@ -243,7 +239,6 @@ export const LogOutModalComp = ({ showLogOutModal, setShowLogOutModal }) => {
             disabled={disableButton}
               handleOnpress={async () => {
              try {
-              console.log("ran in submit")
               setDisableButton(true)
               setRunUseEffect(true);
               await logOutUserMutation.mutateAsync({

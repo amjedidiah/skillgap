@@ -32,15 +32,19 @@ const ButtonTapNavigation = () => (
 
         },
         tabBarItemStyle:{
-            margin:5,
-          paddingBottom: 5,
-          backgroundColor:"white"
+            marginHorizontal:5,
+          paddingVertical: 5,
+          // backgroundColor:"red",
+          justifyContent:"space-between"
         
         },
         tabBarLabelStyle:{
             fontSize:12,
-            width:"100%"
-        }
+            width:"100%",
+            marginTop:5
+
+        },
+      
 
         
 

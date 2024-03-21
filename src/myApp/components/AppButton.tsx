@@ -9,7 +9,7 @@ const AppButton = ({text,handleOnpress, ButtonTextStyle, ButtonViewStyle, disabl
     <TouchableOpacity
     disabled={disabled}
     className={`w-full  px-2.5 py-4 bg-neutral-900 rounded-[40px] justify-center items-center ${ButtonViewStyle && ButtonViewStyle}`}
-    onPress={handleOnpress}
+    onPress={() => handleOnpress()}
     activeOpacity={0.8}
     >
       <Text

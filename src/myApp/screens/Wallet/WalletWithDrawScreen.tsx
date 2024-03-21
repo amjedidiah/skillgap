@@ -26,6 +26,7 @@ const WithdrawTypeList = [{
 }]
 
 const WalletWithDrawScreen = () => {
+  const navigation = useNavigation()
 
   
 const [widthDrawType, setWithDrawType] = useState(WithdrawTypeList)
@@ -50,6 +51,19 @@ const handleWithdrawTypeActiveState = (i:number) => {
 
   return (
     <SafeAreaView className='flex-1'>
+      
+      <TouchableOpacity
+      activeOpacity={0.4}
+      onPress={() =>{
+
+        navigation.navigate("Arena",
+        {
+          screen: "arenaCreateContestScreen"
+         }
+        )
+        }} className="w-12 h-12 px-2.5 py-2 bg-sky-500 rounded-[40px] shadow justify-center items-center absolute bottom-[50px] right-[20px] z-10 ">
+        <AntDesign name="plus" size={24} color="white" />
+        </TouchableOpacity>
     <ScrollView className='px-[16px] py-[12px] flex-1 bg-neutral-100'>
   
       <AuthHeader  />

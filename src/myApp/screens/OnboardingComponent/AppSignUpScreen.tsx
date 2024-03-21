@@ -16,9 +16,9 @@ const deviceHeight = Dimensions.get("window").height
 
   return (
       <View
-        className={`h-screen w-screen bg-red-400 `}
+        className={`flex-1 w-screen `}
       >
-        <View className={`w-full bg-white mb-0 pb-0  mx-auto  justify-center items-center`} style={{
+        <View className={`w-full bg-white mb-0 pb-0  mx-auto  justify-center items-center `} style={{
           height: deviceHeight * 3.1 / 5 
         }}>
         
@@ -28,9 +28,9 @@ const deviceHeight = Dimensions.get("window").height
             resizeMode="cover"
           />
         </View>
-        <View className={`bg-white rounded-tl-2xl p-8  rounded-tr-2xl  absolute bottom-0  w-full   `} 
+        <View className={`bg-white rounded-tl-2xl px-8 pt-8 pb-4  rounded-tr-2xl  absolute bottom-0   w-full justify-end`} 
         style={{
-          height: deviceHeight * 1.9 / 5  + 10
+          height: deviceHeight * 1.9 / 5  + 30
         }}
         > 
         <View className=" justify-center  text-center items-center mb-2 ">

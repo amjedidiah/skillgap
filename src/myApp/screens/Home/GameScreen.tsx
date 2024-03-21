@@ -11,7 +11,7 @@ import {
   Modal,
 } from "react-native";
 import React, { useEffect, useState } from "react";
-import { EvilIcons, Ionicons, MaterialIcons } from "@expo/vector-icons";
+import { AntDesign, EvilIcons, Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 
 import GameComponent from "@/myApp/components/GameComponent";
@@ -67,6 +67,17 @@ const GameScreen = () => {
 
   return (
     <View className="flex-1 w-full">
+        <TouchableOpacity 
+        activeOpacity={0.9}
+        onPress={() =>{
+        navigation.navigate("Arena",
+        {
+          screen: "arenaCreateContestScreen"
+         }
+        )
+        }} className="w-12 h-12 px-2.5 py-2 bg-sky-500 rounded-[40px] shadow justify-center items-center absolute bottom-[50px] right-[20px] z-10 ">
+        <AntDesign name="plus" size={24} color="white" />
+        </TouchableOpacity>
       {showModal && (
         <Modal animationType="slide" transparent={true} visible={showModal}>
           <View className="flex-1 justify-end ">

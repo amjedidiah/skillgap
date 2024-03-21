@@ -14,7 +14,7 @@ const AppSplashScreen = ({}) => {
   const opacity = useState(new Animated.Value(1))[0];
   
   return (
-    <View className='h-screen w-screen flex  justify-center items-center bg-sky-600'>
+    <View className='flex-1 w-screen flex  justify-center items-center bg-sky-600'>
        <View className="items-center">
        <Image
         source={require("../../../../assets/images/skillGapLogo.png")}

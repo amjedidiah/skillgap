@@ -5,7 +5,7 @@ import { View, Text, TouchableOpacity, ScrollView, Image} from 'react-native'
 
 import { transactionHomeData, transactionTypeListData } from 'utils/data'
 import { WalletTransactionComponent } from '@/myApp/components/WalletComponents'
-import { MaterialIcons } from '@expo/vector-icons'
+import { AntDesign, MaterialIcons } from '@expo/vector-icons'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import AppTextContent from '@/myApp/components/AppTextContent'
 import AppTextHeading from '@/myApp/components/AppTextHeading'
@@ -19,9 +19,28 @@ import { HomeScreenNavigationProps } from 'type'
 
 
 const WalletHomeScreen = () => {
-  const naviagtion = useNavigation<HomeScreenNavigationProps>()
+  const navigation = useNavigation<HomeScreenNavigationProps>()
+
   return (
    <SafeAreaView className='flex-1 bg-gray-100'>
+      {/* add button start */}
+
+
+    
+      <TouchableOpacity
+      activeOpacity={0.4}
+      onPress={() =>{
+
+        navigation.navigate("Arena",
+        {
+          screen: "arenaCreateContestScreen"
+         }
+        )
+        }} className="w-12 h-12 px-2.5 py-2 bg-sky-500 rounded-[40px] shadow justify-center items-center absolute bottom-[50px] right-[20px] z-10 ">
+        <AntDesign name="plus" size={24} color="white" />
+        </TouchableOpacity>
+
+        {/* add button end */}
 
 <View className="px-[20px] flex-1 py-4">
   <TouchableOpacity onPress={() => naviagtion.goBack()}>

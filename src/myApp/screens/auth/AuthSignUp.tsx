@@ -29,14 +29,13 @@ import AuthHeader from "@/myApp/components/AuthHeader";
 import CountryCodePicker from "@/myApp/components/CountryCode";
 import { Entypo } from "@expo/vector-icons";
 import { useMutation } from "@tanstack/react-query";
-import { doesEmailExist, registerApi, validateEmail, validateMagicApi } from "@/api/authApi";
+import {doesEmailPhoneNumberUserNameExist, registerApi, validateEmail, validateMagicApi } from "@/api/authApi";
 import AlertMessage from "@/myApp/components/AlertMessage";
 import { validationSchemaSignUp } from "utils/YubValidation";
 import PhoneNumberScreen from "@/myApp/components/PhoneNumber";
 import { loginAction } from "redux/slices/authSlice";
 import { useDispatch } from "react-redux";
 import Toast from 'react-native-toast-message';
-import PhoneNumber2 from "@/myApp/components/PhoneNumber2";
 // imports  from app ends
 
 const AuthSignUp = () => {
@@ -147,17 +146,15 @@ const AuthSignUp = () => {
  
   const onSubmit = async (data: any) => {
     try {
-      console.log("form data", data)
-      if(!isPhoneNumberValid){
-      
+      if(!isPhoneNumberValid){  
         return
       }
        setDisableButton(true)
-      console.log("form data", data)
+  
        setFormData(data)
 
        setUpdateEmailMutation(true)
-       await validateEmailMutation.mutateAsync({email:data?.email})
+       await validateEmailMutation.mutateAsync({email:data?.email, phoneNumber: data?.phoneNumber, userName: data?.userName})
       
       // verify email from magic.link
 
@@ -244,22 +241,13 @@ const AuthSignUp = () => {
       console.log("ran loading in second");
     }
     if (isSuccess && update) {
-      // dispatch(loginAction(appData?.data));
-      setShowModal(true);
-      setDisableButton(false)
-      setErrorType("success");
-      setErrorMessage("");
-      setPhoneValue("")
-
-      setTimeout(() => {
-        setShowModal(false);
-        setUpdate(false);
-        setValidateMagicData(false)
-        setErrorType(null);
-        reset();
-        dispatch(loginAction(data))
-      
-      }, 500);
+      reset();
+      dispatch(loginAction(data))
+      // setDisableButton(false)
+      setUpdate(false);
+      setValidateMagicData(false)
+      setErrorType(null);
+    
 
     }
    }
@@ -277,7 +265,7 @@ const AuthSignUp = () => {
    
     const handleEmailValidtion = () => {
       if (magicIsError   && validateMagicData) {
-        console.log("ran email muation error");
+        // console.log("ran email muation error");
         setShowModal(true);
         // setLoading(false);
         
@@ -292,7 +280,7 @@ const AuthSignUp = () => {
           text2:errorMessage,
           visibilityTime: 8000,
           position:"top",
-          topOffset: StatusBar.currentHeight,
+          topOffset: StatusBar.currentHeight + 16,
           text1Style: {
             fontSize: 18,
             fontWeight: 'bold',
@@ -335,8 +323,8 @@ const AuthSignUp = () => {
  // valaidte email mutation
 
  const validateEmailMutation = useMutation({
-  mutationKey:["does-email-exit"],
-  mutationFn: doesEmailExist 
+  mutationKey:["does-email-phoneNumber-userName-exit"],
+  mutationFn: doesEmailPhoneNumberUserNameExist 
 })
 
 
@@ -361,7 +349,7 @@ useEffect(() => {
         text2:errorMessage,
         visibilityTime: 4000,
         position:"top",
-        topOffset: 30,
+        topOffset: StatusBar?.currentHeight + 16,
         text1Style: {
           fontSize: 14,
           fontWeight: 'bold',
@@ -393,8 +381,7 @@ useEffect(() => {
       setErrorMessage("");
       setUpdateEmailMutation(false)
    
-    console.log("email confirmtion from server successful");
-    
+
     }
  
   }
@@ -407,13 +394,13 @@ useEffect(() => {
   return (
     <SafeAreaView className="bg-white flex-1 py-[13px] px-[18px]">
 
-      <Modal visible={showModal} transparent={true} animationType="fade">
+      {/* <Modal visible={showModal} transparent={true} animationType="fade">
         <AlertMessage
           message={errorMessage}
           type={errorType}
           setShowModal={setShowModal}
         />
-      </Modal>
+      </Modal> */}
       <View className="w-full mt-4 pb-4">
         <AuthHeader />
       </View>
@@ -429,6 +416,7 @@ useEffect(() => {
           
        
           <KeyboardAwareScrollView 
+          showsVerticalScrollIndicator={false}
           >
         <View className="flex flex-col gap-y-2 items-start justify-center mt-[30px] mb-[32px]">
           <Text className="text-gray-950 text-2xl font-semibold font-['General Sans Variable'] leading-loose">
@@ -441,7 +429,10 @@ useEffect(() => {
         <View className="w-full mt-4">
           <View className="items-start space-y-[10px] w-full">
             <View className="items-start mb-2">
-              <Text className="text-gray-950 text-sm font-normal font-['Noto Sans']">
+              <Text  style={{
+                fontFamily:"GeneralSans-Regular"
+              }}
+              className="text-black text-sm font-normal" >
                 {"First Name"}
               </Text>
             </View>
@@ -460,15 +451,15 @@ useEffect(() => {
                     onChangeText={(data) => {
                       setForm({
                         ...form,
-                        firstName: data,
+                        firstName: data.trim(),
                       });
-                      onChange(data);
+                      onChange(data.trim());
                     }}
                     value={value}
                     placeholder={"Wisdome"}
                     placeholderTextColor={"gray"}
                     cursorColor={"gray"}
-                    className="flex-1 text-gary-900"
+                    className="flex-1 font-['GeneralSans-Regular'] text-black text-sm font-normal"
                    
                     keyboardType={"default"}
                   
@@ -496,7 +487,10 @@ useEffect(() => {
         <View className="w-full mt-2">
           <View className="items-start space-y-[10px] w-full">
             <View className="items-start mb-2">
-              <Text className="text-black text-sm font-normal font-['Noto Sans']">
+              <Text  style={{
+                fontFamily:"GeneralSans-Regular"
+              }}
+              className="text-black text-sm font-normal">
                 {"Last Name"}
               </Text>
             </View>
@@ -515,15 +509,15 @@ useEffect(() => {
                     onChangeText={(data) => {
                       setForm({
                         ...form,
-                        lastName: data,
+                        lastName: data.trim(),
                       });
-                      onChange(data);
+                      onChange(data.trim());
                     }}
                     value={value}
                     placeholder={"Enter user name"}
                     placeholderTextColor={"gray"}
                     cursorColor={"gray"}
-                    className="flex-1 text-gary-900"
+                    className="flex-1 font-['GeneralSans-Regular'] text-black text-sm font-normal"
                    
                     keyboardType={"default"}
                    
@@ -551,7 +545,10 @@ useEffect(() => {
         <View className="w-full mt-2">
           <View className="items-start space-y-[10px] w-full">
             <View className="items-start mb-2">
-              <Text className="text-black text-sm font-normal font-['Noto Sans']">
+              <Text  style={{
+                fontFamily:"GeneralSans-Regular"
+              }}
+              className="text-black text-sm font-normal">
                 {"User Name"}
               </Text>
             </View>
@@ -570,15 +567,15 @@ useEffect(() => {
                     onChangeText={(data) => {
                       setForm({
                         ...form,
-                        userName: data,
+                        userName: data.trim(),
                       });
-                      onChange(data);
+                      onChange(data.trim());
                     }}
                     value={value}
                     placeholder={"Enter user name"}
                     placeholderTextColor={"gray"}
                     cursorColor={"gray"}
-                    className="flex-1 text-gary-900"
+                    className="flex-1 font-['GeneralSans-Regular'] text-black text-sm font-normal"
                   
                     keyboardType={"default"}
                   
@@ -608,7 +605,10 @@ useEffect(() => {
         <View className="w-full mt-2">
           <View className="items-start space-y-[10px] w-full">
             <View className="items-start mb-2">
-              <Text className="text-black text-sm font-normal font-['Noto Sans']">
+              <Text  style={{
+                fontFamily:"GeneralSans-Regular"
+              }}
+              className="text-black text-sm font-normal">
                 {"Email"}
               </Text>
             </View>
@@ -627,15 +627,14 @@ useEffect(() => {
                     onChangeText={(data) => {
                       setForm({
                         ...form,
-                        email: data,
+                        email: data.trim(),
                       });
-                      onChange(data);
+                      onChange(data.trim());
                     }}
                     value={value}
                     placeholder={"qubicx72@gmail.com"}
                     placeholderTextColor={"gray"}
-                    cursorColor={"gray"}
-                    className="flex-1 text-gary-900"
+                    cursorColor={"gray"}  className="flex-1 font-['GeneralSans-Regular'] text-black text-sm font-normal"
                    
                     keyboardType={"email-address"}
                   />
@@ -664,7 +663,10 @@ useEffect(() => {
         <View className="w-full mt-2">
           <View className="items-start space-y-[10px] w-full">
             <View className="items-start">
-              <Text className="text-black text-sm font-normal font-['Noto Sans']">
+              <Text  style={{
+                fontFamily:"GeneralSans-Regular"
+              }}
+              className="text-black text-sm font-normal">
                 {"Region"}
               </Text>
             </View>
@@ -683,7 +685,10 @@ useEffect(() => {
                   setCountry={setCountry}
                   country={country}
                 />
-                <Text className="relative -left-1">{country?.name}</Text>
+                <Text  style={{
+                fontFamily:"GeneralSans-Regular"
+              }}
+              className="text-black text-sm font-normal">{country?.name}</Text>
               </View>
               <Entypo name="chevron-thin-down" size={24} color="black" />
             </TouchableOpacity>

@@ -10,7 +10,8 @@ import AuthNavigtion from "./AuthNavigation";
 import { Magic } from "@magic-sdk/react-native-expo";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import OnboardingNavigtion from "./OnboardingNvigation";
-
+import { TouchableOpacity } from "react-native";
+import { AntDesign } from '@expo/vector-icons';
 
 
 
@@ -59,7 +60,8 @@ const magic = new Magic("pk_live_AF0A2FCCABF5C8EF");
 <magic.Relayer
 />
      {
-      isAuthenticated ? <ButtonTapNavigation /> : appLoaded ? <AuthNavigtion /> :<OnboardingNavigtion />
+      isAuthenticated ? 
+        <ButtonTapNavigation /> : appLoaded ? <AuthNavigtion /> :<OnboardingNavigtion />
      }
   </SafeAreaProvider>
   ;

@@ -87,7 +87,7 @@ const Onboarding = ({
 
 
   return (
-    <View className="w-full h-full pb-12 " onLayout={onLayoutRootView}>
+    <View className="w-full flex-1" onLayout={onLayoutRootView}>
     
      {
       animate ?  <OnboardingSliderScreen  /> : <AppSplashScreen />

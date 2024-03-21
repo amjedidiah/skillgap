@@ -103,6 +103,7 @@ type progressType = {
  amount:number,
  active: boolean,
  showModal: boolean,
+ ranking: number
  } 
 
  
@@ -112,7 +113,9 @@ type progressType = {
   cont1Name: string,
   cont2Name: string,
  heading:string
- active: boolean
+ active: boolean,
+ amount: number,
+ contestStatus: string
  } 
 
 

@@ -8,7 +8,7 @@ const AppTextHeading = ({text, classText} : AppTextProp) => {
   return (
     <View className='w-full'>
       <Text style={{
-        fontFamily:"SpaceGrotesk-Bold"
+        
       }} className={`text-gray-950 text-2xl font-bold   w-full leading-loose ${classText}`}>{text}</Text>
     </View>
   )

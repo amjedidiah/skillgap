@@ -16,7 +16,7 @@ const CountryCodePicker = ({country, setCountry, showCountryPickerModal, setShow
     const onSelect = (country: Country) => {
       setCountryCode(country.cca2)
       setCountry(country)
-      console.log("this is the country", country)
+  
     }
     console.log(country?.callingCode[0])
     return (
@@ -30,13 +30,13 @@ const CountryCodePicker = ({country, setCountry, showCountryPickerModal, setShow
             withAlphaFilter,
             withCallingCode,
             withEmoji,
-            onSelect,
+            onSelect
           }}
           visible = {showCountryPickerModal}
           onClose={() => {
             setShowCountryPickerModal(false)
           }}
-
+        
         />
       </View>
   )

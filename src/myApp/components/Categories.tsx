@@ -1,9 +1,15 @@
-import { View, Text, Image, TouchableOpacity, Platform } from 'react-native'
+import { View, Text, Image, TouchableOpacity, Platform, Dimensions } from 'react-native'
 import React from 'react'
 import { homeCategoryPropType } from '../types'
 import { useNavigation } from '@react-navigation/native'
 
 const Categories = ({heading, img, numOfBets, numOfUsers}:homeCategoryPropType) => {
+
+
+  const deviceWidth = Dimensions.get("window").width
+
+const categoryItemWidth = (deviceWidth - 16)/3
+const categoryItemHeight = categoryItemWidth * 1.02
 
     const navigation = useNavigation()
   return (
@@ -11,10 +17,17 @@ const Categories = ({heading, img, numOfBets, numOfUsers}:homeCategoryPropType) 
     onPress={() => {
       navigation.navigate("gameScreen")
     }}
-    className={`${Platform.OS === "ios" ? "w-[115px]" : "w-[138px]"}`}>
+    style={{
+      width: categoryItemWidth
+    }}
+   >
       <Image
       source={img}
-      className={`${Platform.OS === "ios" ? "w-[115px] h-[115.89px] " : "w-[138px] h-[138.89px] rounded-md"} rounded-md`}
+      style={{
+        width:categoryItemWidth,
+        height: 72
+      }}
+      className={`w-[${categoryItemWidth}]px h-[${80}]px rounded-md`}
       />
       <View className='space-y-[2px] mt-1'>
         <Text className="text-gray-950 text-xs font-medium font-['General Sans Variable'] leading-[18px]">{heading}</Text>

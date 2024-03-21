@@ -106,18 +106,18 @@ const AuthLogin = () => {
     const handleState = async () => {
       // console.log("ran useEffect");
       if (isError   && update) {
-       setShowModal(false);
+      //  setShowModal(false);
         setLoading(false)
-         setErrorType(null);
-        const errorMessage = error?.response?.data.message ||  
-        setErrorMessage("");
+        //  setErrorType(null);
+        const errorMessage = error?.response?.data.message ||  error?.message
+        // setErrorMessage("");
         Toast.show({
           type:"error",
           text1:"Sign In Error",
           text2:errorMessage,
           visibilityTime: 4000,
           position:"top",
-          topOffset: StatusBar.currentHeight,
+          topOffset: StatusBar.currentHeight + 16,
           text1Style: {
             fontSize: 14,
             fontWeight: 'bold',
@@ -135,22 +135,24 @@ const AuthLogin = () => {
         // console.log("ran error");
       }
       if (isPending  && update) {
-        setShowModal(true);
-        setErrorType("loading");
-        setErrorMessage("");
+        // setShowModal(true);
+        // setErrorType("loading");
+        // setErrorMessage("");
         // console.log("ran loading");
       }
       if (isSuccess && update) {
-        dispatch(loginAction(appData?.data));
-        setLoading(false);
-        setShowModal(true);
-        setErrorType("success");
-        setErrorMessage("");
+        console.log("this is the app data from login", appData)
         reset();
-       setTimeout(() => {
-        setShowModal(false);
         dispatch(loginAction(appData))
-       }, 500)
+        setLoading(false);
+        // setShowModal(true);
+        // setErrorType("success");
+        // setErrorMessage("");
+     
+      //  setTimeout(() => {
+      //   setShowModal(false);
+    
+      //  }, 500)
 
       
       
@@ -164,18 +166,18 @@ const AuthLogin = () => {
     const handleEmailValidtion = () => {
       if (emailMutationError   && updateEmailMutation) {
       
-         setShowModal(false);
+        //  setShowModal(false);
         setLoading(false);
-       setErrorType(null);
+      //  setErrorType(null);
         const errorMessage = emailMutationErrorMessage?.response?.data.message ||  emailMutationErrorMessage?.data
-         setErrorMessage("");
+        //  setErrorMessage("");
         Toast.show({
           type:"error",
           text1:"Sign In Error",
           text2:errorMessage,
           visibilityTime: 4000,
           position:"top",
-          topOffset: StatusBar.currentHeight,
+          topOffset: StatusBar.currentHeight + 16,
           text1Style: {
             fontSize: 14,
             fontWeight: 'bold',
@@ -194,18 +196,18 @@ const AuthLogin = () => {
       }
       if (emailMutationPending  && updateEmailMutation) {
         console.log("ran email muation pending");
-        setShowModal(true);
-        setErrorType("loading");
-        setErrorMessage("");
+        // setShowModal(true);
+        // setErrorType("loading");
+        // setErrorMessage("");
         // console.log("ran loading");
       }
       if (emailMutationSuccess && updateEmailMutation) {
        
         setUpdateEmailMutation(false)
-        setShowModal(false);
-        setErrorType(null)
+        // setShowModal(false);
+        // setErrorType(null)
      
-      console.log("email confirmtion from server successful");
+   
       
       }
    
@@ -216,7 +218,7 @@ const AuthLogin = () => {
 
   const onSubmit = async (data: { email: string }) => {
     try {
-      console.log("just pressed")
+   
       setLoading(true);
        //check if a user has already logged in
      
@@ -266,11 +268,15 @@ const AuthLogin = () => {
 
   // showEmailModal, setShowEmailModal
   return (
-    <SafeAreaView className="bg-white flex-1 py-[13px] px-[18px]">
+    <SafeAreaView
+    style={{
+      backgroundColor: loading ? "rgba(100, 100, 100,0.1)" : "white"
+    }}
+    className="flex-1 py-[13px] px-[18px]">
       
-      <Modal visible={showModal} transparent={true} animationType="fade">   
+      {/* <Modal visible={showModal} transparent={true} animationType="fade">   
     <AlertMessage message={errorMessage} type={errorType} setShowModal = {setShowModal} />
-    </Modal>
+    </Modal> */}
     
       
 
@@ -295,7 +301,10 @@ const AuthLogin = () => {
         <View className="w-full mt-4">
           <View className="items-start space-y-[10px] w-full">
             <View className="items-start mb-2">
-              <Text className="text-black text-sm font-normal font-['Noto Sans']">
+              <Text style={{
+                fontFamily:"GeneralSans-Regular"
+              }}
+              className="text-black text-sm font-normal">
                 {"Email"}
               </Text>
             </View>
@@ -310,6 +319,7 @@ const AuthLogin = () => {
                   className={`w-full h-[42px] px-4 text-white  flex-row items-center justify-between space-x-2 
                   bg-white rounded-[30px] shadow border border-gray-300 `}
                 >
+              
                   <TextInput
                   // onSubmitEditing={() =>handleSubmit(onSubmit)}
                     onChangeText={(data) => {
@@ -323,7 +333,7 @@ const AuthLogin = () => {
                     placeholder={"qubicx72@gmail.com"}
                     placeholderTextColor={"gray"}
                     cursorColor={"gray"}
-                    className="flex-1 text-gary-900"
+                    className="flex-1 text-black text-sm font-normal font-[GeneralSans-Regular]"
                     onBlur={() => {
                       onBlur()
                     

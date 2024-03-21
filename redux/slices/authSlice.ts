@@ -20,7 +20,6 @@ const authSlice = createSlice({
     },
 
   loginAction : (state, action) => {
-    console.log("ran at action", action.payload)
      state.user = action.payload;
      state.isLoggedIn = true
      state.isLoaded = true
@@ -28,10 +27,15 @@ const authSlice = createSlice({
   },
   navigateAuthAction : (state, action) => {
     state.isLoaded = true
+  },
+  updateUserBalanceAction: (state, action) => {
+  state.user = {
+    ...state.user, balance: action.payload
+  } 
   }
   },
 });
 
-export const { isAuthenticated, logOutAction, loginAction, navigateAuthAction } = authSlice.actions;
+export const { updateUserBalanceAction,isAuthenticated, logOutAction, loginAction, navigateAuthAction } = authSlice.actions;
 
 export const authReducer = authSlice.reducer;
