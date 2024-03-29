@@ -28,7 +28,7 @@ const ButtonTapNavigation = () => (
           height:60,
           flexDirection: "row",
           borderTopWidth:0.5,
-          borderTopColor:"lightgray",
+          borderColor:"lightgray",
 
         },
         tabBarItemStyle:{

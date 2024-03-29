@@ -1,25 +1,42 @@
-import { View, Text, Image } from 'react-native'
+import { View, Text, Image, TouchableOpacity } from 'react-native'
 import React from 'react'
 import { homeContestantPropType } from '../types'
 import { AntDesign } from '@expo/vector-icons'
+import { useNavigation } from '@react-navigation/native'
+import { useSelector } from 'react-redux'
 
-const ContestantComp = ({content1Img, content2Img, cont1Name, cont2Name, active, heading, amount, contestStatus}:homeContestantPropType ) => {
+const ContestantComp = ({content1Img, content2Img, cont1Name, cont2Name, active, heading, amount, contestStatus, allItem, contestType, opponentProfilePicAndSkillGapTagArray}:homeContestantPropType ) => {
 
-
+  const appUserStore = useSelector(data => data?.authReducer?.user)
+console.log("allIten from inner now", allItem)
+const data = {allItem}
+const navigation = useNavigation()
   return (
-    <View className='w-full flex-row justify-between items-center mt-4 '>
+    <TouchableOpacity onPress={() => {
+      navigation.navigate("Arena",
+      {
+        screen: "arenaContestScreen",
+        params: {data}
+       }
+      )
+    }} className='w-full flex-row justify-between items-center mt-4 '>
      <View className="flex-row  justify-start items-center space-x-2">
       <View className='flex-row items-center'>
 <View className="w-[54px] h-[54px] z-10 relative -right-[10px] ">
 <Image 
-source={content1Img || require("../../../assets/images/contest1.png")}
-className="w-full h-full"
+source={appUserStore?.profilePic ? {
+ uri: appUserStore.profilePic
+}:require("../../../assets/images/contest1.png")}
+className="w-full h-full rounded-[500px] "
 />
 </View>
 {
-  contestStatus === "pending" ?  <View className="w-[44px] h-[44px]  text-center bg-gray-200 text-base font-normal font-['GeneralSans-Regular'] leading-normal rounded-full justify-center items-center">
+  contestType == "public" ?  <View className="w-[54px] h-[54px]  text-center bg-gray-200 text-base font-normal font-['GeneralSans-Regular'] leading-normal rounded-full justify-center items-center">
   <AntDesign name="question" size={24} color="black" />
-  </View> : <Image 
+  </View> : contestType == "private" ? <Image 
+source={{uri: opponentProfilePicAndSkillGapTagArray[0]?.profilePic} || require("../../../assets/images/contest2.png")}
+className="w-[54px] h-[54px] rounded-[500px] "
+/> : <Image 
 source={content2Img || require("../../../assets/images/contest2.png")}
 className="w-[54px] h-[54px] "
 />
@@ -37,7 +54,10 @@ className="w-[54px] h-[54px] "
         <View className='flex-row space-x-1 w-full'>
           <Text className="text-neutral-400 text-[12px] font-medium font-['GeneralSans-Regular'] leading-[12px]">@{cont1Name}</Text>
           <Text className="text-black text-[12px] font-medium font-['GeneralSans-Regular'] leading-[12px]">vs</Text>
-          <Text className="text-neutral-400 text-[12px] font-medium font-['General Sans Variable'] leading-[12px] flex-1">@{cont2Name}</Text>
+          <Text className="text-neutral-400 text-[12px] font-medium font-['General Sans Variable'] leading-[12px] flex-1">{
+          contestType == "private" ? "@" + opponentProfilePicAndSkillGapTagArray[0]?.userName : contestType == "public" ? "?" : "Group"
+          
+          }</Text>
         </View>
       </View>
       </View>
@@ -49,7 +69,7 @@ className="w-[54px] h-[54px] "
         </View>
     
 
-    </View>
+    </TouchableOpacity>
   )
 }
 

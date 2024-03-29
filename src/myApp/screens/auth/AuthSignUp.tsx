@@ -204,7 +204,7 @@ const AuthSignUp = () => {
     if (isError  && update) {
       setShowModal(false);
       // setErrorType("error");
-      const errorMessage = error?.response?.data.message || error?.message;
+      const errorMessage = error?.response?.data.message || "Network error, Please retry.";
       // setErrorType("error")
       // setErrorMessage(errorMessage)
       setValidateMagicData(false)
@@ -247,8 +247,6 @@ const AuthSignUp = () => {
       setUpdate(false);
       setValidateMagicData(false)
       setErrorType(null);
-    
-
     }
    }
    handleStateFunc()

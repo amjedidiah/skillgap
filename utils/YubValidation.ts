@@ -99,7 +99,12 @@ import * as Yup from "yup";
     category: Yup.string().required("Category is required."),
     termsAndDescription: Yup.string().required("Contest terms and conditions is required."),
   })
-
-
+  export const validationSchemaArenaCreateContest2 = Yup.object().shape({
+    stake: Yup.string().required("Stake amount is required."),
+    category: Yup.string().required("Category is required."),
+    termsAndDescription: Yup.string().required("Contest terms and conditions is required."),
+  })
+  
+  
 // arena section ends
   

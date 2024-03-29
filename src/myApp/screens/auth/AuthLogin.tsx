@@ -144,7 +144,7 @@ const AuthLogin = () => {
         console.log("this is the app data from login", appData)
         reset();
         dispatch(loginAction(appData))
-        setLoading(false);
+        // setLoading(false);
         // setShowModal(true);
         // setErrorType("success");
         // setErrorMessage("");

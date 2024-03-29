@@ -10,9 +10,9 @@ const LeaderComp = ({amount,img,name, active, setShowModal, showModal, ranking}:
        <TouchableOpacity onPress={() =>{
         setShowModal(!showModal)
        }} className={`w-[80px] items-center space-y-[8px] mt-2`}>
-      <View className='w-4 h-4 absolute -top-[1px] left-[40px] z-10 -translate-x-[8px] justify-center items-center'>
+      <View className='w-4 h-4 absolute -top-[1px] left-[40px] z-10 -translate-x-[6px] justify-center items-center '>
      
-      <Text className="text-white  text-center  absolute left-[3px] top-[2px] z-10 text-[10px] font-medium font-['General Sans Variable'] leading-[14px]"> {ranking}</Text>
+      <Text className="text-white  text-center z-10 text-[10px] font-medium font-['General Sans Variable'] leading-[10px]">{ranking}</Text>
 
       <Image 
       source={require("../../../assets/images/leaderRanking.png")}

@@ -5,12 +5,15 @@ import AuthHeader from '@/myApp/components/AuthHeader'
 import { AntDesign } from '@expo/vector-icons'
 import { ArenaMessageComp } from '@/myApp/components/ArenaComponents'
 import { ArenaChatMessageList } from 'utils/data'
-import { useNavigation } from '@react-navigation/native'
+import { useNavigation, useRoute } from '@react-navigation/native'
 
 
 const ArenaChatScreen = () => {
 
 
+const route = useRoute()
+
+console.log("this is the route", route)
 const messageData = {
     time:"12th Oct, 2023 | 8:04pm",
     content:"Contest was created by @qubigs On 22nd Nov, 2023 | 12:24pm 32 Views 12th Oct, 2023 | 8:04pm Bank (Amount, bank, account no) crypto (Network, address, scan QR code, amount, available balance, fee per $ ) Preview  Yesterday | 10:42am Bank (Amount, bank, account no) crypto (Network, Today | 1:37pm Bank (Amount, bank, account no) crypto (Network, address, scan QR code, amount, available balance, fee per $ ) Preview Type your thoughts about this contest here",

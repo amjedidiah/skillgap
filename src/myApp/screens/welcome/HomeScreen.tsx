@@ -18,6 +18,7 @@ import { getAllUserContest } from '@/api/contestApi';
 import { getAllContestAction } from 'redux/slices/userSlice';
 import Toast from 'react-native-toast-message';
 import { useMutation } from '@tanstack/react-query';
+import SkeletonLoader from '@/myApp/components/SkeletonLoader';
 
 
 
@@ -27,6 +28,7 @@ const HomeScreen = () => {
  const dispatch = useDispatch()
 
  const [isContestReady, setIsContestReady] = useState(false)
+ const [isContestLoading, setIsContestLoading] = useState(false)
 
 
 
@@ -37,7 +39,8 @@ const appUserStore = useSelector(data => data?.authReducer?.user)
 const appUserContest = useSelector(data => data?.userReducer?.contest)
   // removing back naviagtion when pressing the back button
 
-
+// console.log("this is the appDataStore", appUserStore)
+// console.log("this are the  contest", appUserContest)
   const getAllContestMutation = useMutation({
     mutationKey:["getAll-contest"],
     mutationFn: getAllUserContest
@@ -63,11 +66,13 @@ const appUserContest = useSelector(data => data?.userReducer?.contest)
 
   useEffect(() => {
      if(isSuccess){
+     setIsContestLoading(false);
       setIsContestReady(true)
       dispatch(getAllContestAction(data?.allContest))
      }
      if(isError){
       console.log("ran error");
+      setIsContestLoading(false)
       const errorMessage = error?.response?.data.message ||  error?.message
       Toast.show({
         type:"error",
@@ -89,6 +94,10 @@ const appUserContest = useSelector(data => data?.userReducer?.contest)
        
       })
      }
+     if(isPending){
+      
+     setIsContestLoading(true)
+     }
   }, [isSuccess, isError, isPending])
 
   useEffect(() => {
@@ -97,7 +106,7 @@ const appUserContest = useSelector(data => data?.userReducer?.contest)
   try {
 
      await getAllContestMutation.mutateAsync({email: appUserStore?.userEmail})
-  
+    
   } catch (error) {
     console.log("ran in errror")
     const errorMessage = error?.response?.data?.message ||  error?.message
@@ -137,7 +146,7 @@ useEffect(() => {
 
 setUserData(appUserStore)
 }, [appUserStore])
-console.log("appUserStore", appUserStore)
+
 
   return (
     <SafeAreaView className='flex-1 bg-neutral-100'>
@@ -155,7 +164,7 @@ console.log("appUserStore", appUserStore)
         </TouchableOpacity>
 
         {/* add button end */}
-      <ScrollView className="py-4 ">
+      <ScrollView className="py-4" showsVerticalScrollIndicator={false}>
         {/* header starts */}
           <View className='flex-row items-center space-x-2 px-6 '>
             <Image
@@ -171,9 +180,12 @@ console.log("appUserStore", appUserStore)
           <View className="bg-white rounded-md px-6 py-2 my-4">
                   <View className='flex-row items-center  w-full mt-[14px] space-x-2 bg-white'>
 
-                  <View className='items-center rounded-full w-[32px] h-[32px] '>
+                  <View className='items-center rounded-full w-[32px] h-[32px]'>
+                
                   <Image
-                    source={require("../../../../assets/images/userProfile.png")}
+                    source={ appUserStore?.profilePic ? {
+                      uri: appUserStore?.profilePic
+                    } : require("../../../../assets/images/userProfile.png")}
                     className="w-[32px] h-[32px]"
                     resizeMode='contain'
                     />
@@ -324,10 +336,9 @@ console.log("appUserStore", appUserStore)
 
           <View className="mt-2">
             {
-            appUserContest.length > 0 ?   appUserContest?.map((item)=> {
-              
-            
+              isContestLoading ? <SkeletonLoader /> :  appUserContest.length > 0 ?   appUserContest?.map((item)=> {
                 return <ContestantComp
+                allItem = {item}
                 active={item.isOnline}
                 cont1Name={item.userSkillGapTag}
                cont2Name={item.opponentSkillGapTag || null}
@@ -337,7 +348,8 @@ console.log("appUserStore", appUserStore)
                key={item.id}
                amount={item.stake}
                contestStatus={item.contestStatus}
-          
+               contestType = {item.contestType}
+               opponentProfilePicAndSkillGapTagArray = {item.opponentProfilePicAndSkillGapTagArray}
                  />
               } ) : <View className="items-center justify-center  h-[200px]">
                   <Text className="text-gray-950 text-[16px] font-medium font-['General Sans Variable'] leading-normal">

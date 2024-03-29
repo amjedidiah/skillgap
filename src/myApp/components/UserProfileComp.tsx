@@ -129,10 +129,11 @@ export const LogOutModalComp = ({ showLogOutModal, setShowLogOutModal }) => {
   const [disableButton, setDisableButton] = useState(false);
 
   const magic = new Magic("pk_live_AF0A2FCCABF5C8EF");
+ 
   const dispatch = useDispatch();
-  const  userEmail = useSelector((data) => data?.authReducer?.user?.userEmail) || "";
+  const  userEmailData = useSelector((data) => data?.authReducer?.user?.userEmail) || "";
+  const userEmail = userEmailData ? userEmailData : ""
   const  jwt  = useSelector((data) => data?.authReducer?.user?.jwt);
-
 
   // valaidte email mutation
 
@@ -192,13 +193,19 @@ export const LogOutModalComp = ({ showLogOutModal, setShowLogOutModal }) => {
       }
 
       if (logOutSuccess && runUseEffect) {
+        console.log("logOut data", logOutData)
         // setShowModalLogOut(false);
         // setErrorTypeLogOut(null);
         // setErrorMesageLogOut("");
+        console.log("ran at success")
+       
+        console.log("ran 22 at success")
         await magic.user?.logout();
+        dispatch(logOutAction());
         setDisableButton(false)
         setRunUseEffect(false);
-        dispatch(logOutAction());
+       
+       
 
       
         

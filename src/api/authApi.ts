@@ -1,9 +1,10 @@
 import axios from "axios";
 
-// 
-const baseUrl22 = "http://192.168.253.3:7000";
 
-const baseUrl = "https://skillgap-api-1fc27db9f77b.herokuapp.com";
+// 192.168.2.3
+const baseUrl = "http://192.168.2.3:7000";
+
+const baseUrl22 = "https://skillgap-api-1fc27db9f77b.herokuapp.com";
 
 
 

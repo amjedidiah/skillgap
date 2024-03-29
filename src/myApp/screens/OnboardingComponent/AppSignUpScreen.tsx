@@ -28,7 +28,7 @@ const deviceHeight = Dimensions.get("window").height
             resizeMode="cover"
           />
         </View>
-        <View className={`bg-white rounded-tl-2xl px-8 pt-8 pb-4  rounded-tr-2xl  absolute bottom-0   w-full justify-end`} 
+        <View className={`bg-white rounded-tl-2xl px-8 pt-8 pb-8  rounded-tr-2xl  absolute bottom-0   w-full justify-end`} 
         style={{
           height: deviceHeight * 1.9 / 5  + 30
         }}

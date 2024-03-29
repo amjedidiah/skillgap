@@ -7,7 +7,7 @@ const userSlice = createSlice({
   },
   reducers: {
  createCreatestAction : (state, action) => {
-  state.contest = [...state.contest, action.payload]
+  state.contest = [action.payload,...state.contest]
  },
 getAllContestAction: (state, action) => {
   state.contest = [ ...action.payload]

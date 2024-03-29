@@ -112,10 +112,16 @@ type progressType = {
    content2Img: ImageSourcePropType,
   cont1Name: string,
   cont2Name: string,
- heading:string
+ heading:string,
+ opponentProfilePicAndSkillGapTagArray: {
+  profilePic: string,
+  userName: string
+ }[],
  active: boolean,
  amount: number,
- contestStatus: string
+ contestStatus: string,
+ allItem: any,
+ contestType: "public" | "private" | "group"
  } 
 
 
@@ -195,6 +201,8 @@ export type WalletPaymentModalPropTypes ={
     divStyle?: string
   }
 
+
+  // arena prop types start
   export type HeighestStakeListArenaComponentPropTypes = {
       userName:string,
       userImage: ImageSourcePropType,
@@ -231,10 +239,24 @@ export type WalletPaymentModalPropTypes ={
   }>>
   }
  export type ArenaCreateContestFormTypes = {   skillGapTag: string,
-  stake: string,
+  stake: number,
   termsAndDescription:string
 }
 
+
+export type ArenaContestantPropTypeScreen = {
+hostSkillGapTag: string,
+hostImg:ImageSourcePropType,
+opponentImg:ImageSourcePropType,
+stake:number,
+constestType: string,
+opponentSkillGapTag?: string,
+description: string,
+dateAndTime: string,
+contestId: string
+}
+
+//  arena prop types ends
   // wallet transfer proptypes starts
 
   export type walletTransaferPropTypes= {

@@ -12,39 +12,18 @@ import { HomeScreenNavigationProps } from "type";
 import OnboardingSliderScreen from "../onboarding/OnboardingSliderScreen";
 
 
-const Onboarding = ({
-  img,
-  heading,
-  content,
-  progressArray,
-}: onboardingType) => {
+const Onboarding = () => {
 
-
-  const { width, height } = Dimensions.get("window");
-
+  SplashScreen.preventAutoHideAsync();
 
   const navigation = useNavigation<HomeScreenNavigationProps>()
   // Keep the splash screen visible while we fetch resources
-  SplashScreen.preventAutoHideAsync();
+
 
   const [appIsReady, setAppIsReady] = useState(false);
   const [animate, setAnimate] = useState(false);
   const [showOnboarding, setShowOnboarding] = useState(0);
 
-
-  const  handleOnboardingFunc = (i:string) => {
-    console.log(i)
-   if(i === "previous" && showOnboarding > 0){
-          setShowOnboarding(showOnboarding - 1)
-   }
-  if(showOnboarding === 2){
-    navigation.navigate("appSignUp")
-  }
-
-   if( i === "next" && showOnboarding < 2){
-    setShowOnboarding(showOnboarding + 1)
-   }
-  }
 
 
   useEffect(() => {
@@ -52,14 +31,15 @@ const Onboarding = ({
       try {
         // Pre-load fonts, make any API calls you need to do here
           await loadFont();
+          console.log("font loaded sucessfully");
         // Artificially delay for two seconds to simulate a slow loading
         // experience. Please remove this if you copy and paste the code!
-         await new Promise((resolve) => setTimeout(resolve, 2000));
+          // await new Promise((resolve) => setTimeout(resolve, 2000));
       } catch (e) {
         console.warn(e);
       } finally {
         // Tell the application to render
-        console.log("font loaded");
+        // console.log("font loaded");
         setAppIsReady(true);
       }
     }
@@ -80,7 +60,7 @@ const Onboarding = ({
 
   if (appIsReady) {
     setTimeout(() => {
-       setAnimate(true);
+      //  setAnimate(true);
     }, 6500)
   }
 
@@ -88,10 +68,10 @@ const Onboarding = ({
 
   return (
     <View className="w-full flex-1" onLayout={onLayoutRootView}>
-    
-     {
+     <OnboardingSliderScreen  /> 
+     {/* {
       animate ?  <OnboardingSliderScreen  /> : <AppSplashScreen />
-     }
+     } */}
     </View>
   );
 };

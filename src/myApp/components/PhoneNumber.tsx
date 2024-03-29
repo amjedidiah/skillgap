@@ -48,31 +48,35 @@ const PhoneNumberScreen: React.FC = ({
                  }}
                   codeTextStyle={{ fontSize: 16, 
                      width: 50,
-                  lineHeight:16,
+                     
+                  lineHeight:18,
                   height:"100%",
                   justifyContent:"center",
                   alignItems:"center",
-                  paddingVertical: 12,
+                
                   textAlignVertical:"center",
-                  flexDirection:"column",
+                  flexDirection:"row",
+                  paddingVertical: 12,
                   fontWeight:"normal",
-                  fontFamily:"GeneralSans-Regular"
+                  fontFamily:"GeneralSans-Regular",
+                
                 }}
                  textInputStyle={{ fontSize: 16, 
-               lineHeight:16,
+               lineHeight:18,
                height:"100%",
-               paddingVertical: 12,
                justifyContent:"center",
                alignItems:"center",
                textAlignVertical:"center",
                flexDirection:"column",
-               fontFamily:"GeneralSans-Regular"
+               fontFamily:"GeneralSans-Regular",
+                backgroundColor:"white",
                       }}
             withDarkTheme
           
             
             containerStyle={{
-                 borderWidth: 1, borderColor: "#D1D5DB", 
+                 borderWidth: 1,
+                  borderColor: "#D1D5DB", 
                  borderRadius: 30 ,
                  width:"100%",
                  height:42,

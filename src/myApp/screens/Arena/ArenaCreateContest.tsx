@@ -4,7 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import AppTextHeading from '@/myApp/components/AppTextHeading'
 import { ArenaCategoryModalDataList, arenaContestHeadingData } from 'utils/data'
 import { Controller, useForm } from 'react-hook-form'
-import { validationSchemaArenaCreateContest} from 'utils/YubValidation'
+import { validationSchemaArenaCreateContest, validationSchemaArenaCreateContest2} from 'utils/YubValidation'
 import { yupResolver } from '@hookform/resolvers/yup'
 import {createCreatestAction} from "../../../../redux/slices/userSlice"
 import { ArenaCreateContestFormTypes } from '@/myApp/types'
@@ -17,7 +17,6 @@ import { useMutation } from '@tanstack/react-query'
 import { createContestApi } from '@/api/contestApi'
 import Toast from 'react-native-toast-message'
 import {useDispatch, useSelector} from "react-redux"
-import AlertMessage from '@/myApp/components/AlertMessage'
 import { updateUserBalanceAction } from 'redux/slices/authSlice'
 
 
@@ -36,14 +35,17 @@ const ArenaCreateContestScreen= () => {
 
 
 
-
     // hashTags update
     const [hashTagList, setHashTagList] = useState<any[] | []>([])
     const [hashTagListUpate, setHashTagListUpate] = useState<any[]>([])
     const [runUseEffect, setRunUseEffect] = useState<boolean>(false)
+    const [hashTagFilterList, setHashTagFilterList] = useState<any[]>(false)
     const [loading, setLoading] = useState<boolean>(false)
     const [errorType, setErrorType] = useState<null | string>(null)
     const [errorMessage, setErrorMessage] = useState<string>("")
+    const [updateHashTag, setUpdateHashTag] = useState<boolean>(false)
+    const [isBalanceSufficient, setIsBalanceSufficent] = useState<boolean>(true)
+    const [balanceErrorMessage, setBalanceErrorMessage] = useState<string>("")
   
   
   
@@ -59,6 +61,18 @@ const ArenaCreateContestScreen= () => {
     }
   })
 
+
+ 
+console.log("updated hashList",choosedCategory.categoryData.categoryfilterByHashTag)
+
+
+
+const handleDeleteHashTag = (index: number) => {
+    const newHashTag = hashTagFilterList.filter(i => i.id  !== index)
+    console.log("newHashTag",newHashTag)
+    choosedCategory.categoryData.categoryfilterByHashTag = newHashTag
+    setUpdateHashTag(!updateHashTag)
+} 
   // obtaining app state
   const {userEmail: email} = useSelector(data => data?.authReducer?.user)
   // console.log("createContest app state", email)
@@ -69,11 +83,15 @@ const ArenaCreateContestScreen= () => {
 
 
 const handleSplitHashTagArrayFunc = () => {
+  const arrayForFilter = []
 if(choosedCategory.categoryData.categoryfilterByHashTag.length > 0){
     const formatedHashTag: any[] = []
   choosedCategory.categoryData.categoryfilterByHashTag.forEach(item => {
     formatedHashTag.push(`#${item?.text}`)
+    arrayForFilter.push(item)
   })
+ 
+  setHashTagFilterList([...arrayForFilter])
   setHashTagListUpate([...formatedHashTag])
 }
 
@@ -94,7 +112,7 @@ if(choosedCategory.categoryData.categoryfilterByHashTag.length > 0){
 
   }
   setHashTagList([...newArray])
-  console.log("this is the hash tag array final", newArray)
+  // console.log("this is the hash tag array final", newArray)
 }
 
 
@@ -102,9 +120,9 @@ if(choosedCategory.categoryData.categoryfilterByHashTag.length > 0){
 useEffect(() =>{
   handleSplitHashTagArrayFunc()
 
-},[choosedCategory])
+},[choosedCategory, updateHashTag])
 
-
+console.log("my hashTag list", hashTagFilterList)
 
 // console.log("hashTagList", hashTagList)
 // console.log("choosedCategory", choosedCategory)
@@ -129,28 +147,47 @@ useEffect(() =>{
     
     const [form, setForm] = useState<ArenaCreateContestFormTypes>({
       skillGapTag: "",
-      stake:"",
+      stake:0,
       termsAndDescription:""
       });
   
-  
+      // console.log("hashTagItem", hashTagList)  
     
       const createContestMutation = useMutation({
         mutationKey:["create-contest"],
         mutationFn: createContestApi
       })
     
-const formOptions = { resolver: yupResolver(  validationSchemaArenaCreateContest) };
+
+// check if balance is sufficient
+
+
+const formOptions = { resolver: yupResolver( translate ? validationSchemaArenaCreateContest2 : validationSchemaArenaCreateContest ) };
      const {
         control,
         handleSubmit,
         setValue,
         formState: { errors },
-        reset
+        reset,
+        setError
       } = useForm(formOptions);
     
+      
+      useEffect(() => {
+        if(appUserStore?.balance < form?.stake){
+        setBalanceErrorMessage("Insufficient balance")
+         setIsBalanceSufficent(false)
+        }else{
+          setIsBalanceSufficent(true)
+          setBalanceErrorMessage("")
+        }
+        },[form?.stake])
+
       const onSubmit = async(data: ArenaCreateContestFormTypes) => {
         try{
+          if(!isBalanceSufficient){
+             return
+          }
           const {subCategoryHeadingMajor,subCategoryHeadingMinor,categoryHeading} = choosedCategory?.categoryData
           const { 
             skillGapTag,
@@ -162,7 +199,7 @@ const formOptions = { resolver: yupResolver(  validationSchemaArenaCreateContest
    const contest =       {
             isOnline: true,
             email,
-          opponentSkillGapTag:[skillGapTag],
+          opponentSkillGapTag: skillGapTag ? [skillGapTag] : [],
           category:{
               categoryMain:categoryHeading,
               categoryHeading:subCategoryHeadingMajor,
@@ -173,9 +210,8 @@ const formOptions = { resolver: yupResolver(  validationSchemaArenaCreateContest
           termsAndDescription
       }
 
-          console.log("this is the data sent", data)
           setRunUseEffect(true)
-          console.log("this is the final data", contest)
+          // console.log("this is the final data", contest)
     await createContestMutation.mutateAsync(contest)
         }catch(error){
            console.log(error)
@@ -183,6 +219,10 @@ const formOptions = { resolver: yupResolver(  validationSchemaArenaCreateContest
       
       };
     
+      
+
+
+
 // console.log("this is the data for hashTag",choosedCategory?.categoryData?.categoryfilterByHashTag)
 
 const navigation = useNavigation()
@@ -279,7 +319,7 @@ useEffect(() => {
 // console.log("data received", data, "isSuccess", isSuccess, "isPending", isPending, "isError",isError, )
 
   return (
-   <SafeAreaView className='px-[16px] py-[12px]' 
+   <SafeAreaView className='px-[16px] py-[12px] ' 
   
    >
     {
@@ -423,7 +463,8 @@ useEffect(() => {
                 name={"skillGapTag"}
               />
 
-              <View className="w-[327px]">
+              {
+                !translate && <View className="w-full">
                 {errors.skillGapTag && (
                   <Text
                     className="text-red-500
@@ -433,6 +474,7 @@ useEffect(() => {
                   </Text>
                 )}
               </View>
+              }
             </View>
           </View>
           {/*skillgap tag  end */}
@@ -501,7 +543,7 @@ useEffect(() => {
                     borderColor:"#6700D6"
                   
                   }}
-                   className="w-[80px] h-8 rounded-2xl items-center  justify-center bg-purple-100 ">
+                   className="w-[85px] h-8 rounded-2xl items-center  justify-center bg-purple-100  ">
                     <Text className="text-violet-700 text-[10px] font-medium font-['GeneralSans-Regular'] leading-[18px] ">{choosedCategory.categoryData.categoryHeading}</Text>
                   </View>
                   <View className="w-[30px] h-[0px] origin-top-left rotate-[123.66deg] border border-neutral-400"></View>
@@ -513,7 +555,7 @@ useEffect(() => {
                     borderColor:"#2A9D0D"
                   
                   }}
-                   className="w-[80px] h-8 rounded-2xl items-center  justify-center bg-green-100 ">
+                   className="w-[85px] h-8 rounded-2xl items-center  justify-center bg-green-100 px-1">
                     <Text className="text-lime-700 text-[10px] font-medium font-['GeneralSans-Regular'] leading-[18px]">{choosedCategory.categoryData.subCategoryHeadingMajor}</Text>
                   </View>
                   <View className="w-[30px] h-[0px] origin-top-left rotate-[123.66deg] border border-neutral-400"></View>
@@ -525,8 +567,8 @@ useEffect(() => {
                     borderColor:"#DBBC1C"
                   
                   }}
-                   className="w-[80px] h-8 rounded-2xl items-center  justify-center bg-yellow-50">
-                    <Text className="text-yellow-500  text-[10px] font-medium font-['GeneralSans-Regular'] leading-[18px]">{choosedCategory.categoryData.subCategoryHeadingMinor}</Text>
+                   className="w-[85px] h-8 rounded-2xl items-center  justify-center bg-yellow-50 px-1">
+                    <Text className="text-yellow-500  text-[10px] font-medium font-['GeneralSans-Regular'] leading-[18px] p-1">{choosedCategory.categoryData.subCategoryHeadingMinor}</Text>
                   </View>
                 </View>
                 {/* filter list ends */}
@@ -539,14 +581,26 @@ useEffect(() => {
                 {
                  hashTagList?.map((i, k)=> <View className='flex-row mb-2 justify-around' key={k}>
                   {
-                    i.map((item,x) =>  <View key={x}   style={{
+                  
+                    i.map((item,x) =>  <TouchableOpacity
+                    onPress={() => {
+                      console.log("ran here")
+                       handleDeleteHashTag(item.id)
+                     }}
+                    key={x}   style={{
                       borderStyle:"dashed",
                       borderWidth: 2,
-                      borderColor:"#6700D6"
+                      borderColor:"#1D9BF0"
                     }}
-                    className="w-[100px] h-8 rounded-2xl items-center  justify-center bg-purple-100"> 
-                       <Text className="text-violet-700 text-[10px] font-medium font-['GeneralSans-Regular'] leading-[18px] ">#{item?.text}</Text> 
-                    </View> 
+                    className="w-[100px] h-[32px] rounded-2xl flex-row items-center  justify-center space-x-[4px] bg-blue-100"> 
+                       <Text className="text-blue-500 text-[16px] font-medium font-['GeneralSans-Regular'] leading-[18px] ">#{item?.text}</Text> 
+                      
+                        <Image
+                        source={require("../../../../assets/images/cancel2.png")}
+                        className='w-[13.33px] h-[13.33px] p-2'
+                        />
+                     
+                    </TouchableOpacity> 
                     )
                   }
 
@@ -607,8 +661,8 @@ useEffect(() => {
                 )}
                 name={"stake"}
               />
-              {/* <div><span style="text-neutral-400 text-[11px] font-normal font-['General Sans Variable'] leading-none">Balance:</span><span style="text-neutral-400 text-[11px] font-normal font-['General Sans Variable'] leading-none"> </span><span style="text-gray-950 text-[11px] font-normal font-['General Sans Variable'] leading-none">$300</span></div> */}
-     <View className="items-start mb-4 w-full flex-row ">
+              
+     <View className="items-start w-full flex-row ">
                 <Text className="text-neutral-400 text-[11px] font-normal font-['General Sans Variable'] leading-none text-right w-full italic" >
                 Balance:{" "}
                 <Text className="text-gray-950 text-[11px] font-normal font-['General Sans Variable'] leading-non"  >
@@ -617,16 +671,28 @@ useEffect(() => {
                 </Text>
                
               </View>
+             {
+              isBalanceSufficient ?  
               <View className="w-full">
-                {errors.stake && (
+              {errors.stake && (
+                <Text
+                  className="text-red-500
+                  font-bold "
+                >
+                  {errors.stake.message}
+                </Text>
+              )}
+            </View> :  <View className="w-full">
+              
                   <Text
                     className="text-red-500
                     font-bold "
                   >
-                    {errors.stake.message}
+                    {balanceErrorMessage}
                   </Text>
-                )}
+           
               </View>
+             }
             </View>
           </View>
           {/*stake end */}

@@ -39,7 +39,7 @@ const queryClient = new QueryClient();
       }
         console.log("this is th request status",status)
    
-   const expoToken =    await Notifications.getExpoPushTokenAsync()
+   const expoToken =   await  Notifications.getExpoPushTokenAsync()
    Notifications.setNotificationHandler({
     handleNotification:async() => ({
       shouldShowAlert: true,
@@ -56,7 +56,7 @@ const queryClient = new QueryClient();
 
 
 useEffect(() =>{
-  registerForPushNotification()
+  // registerForPushNotification()
 },[]);
 
 
