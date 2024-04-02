@@ -9,6 +9,7 @@ import { walletWidthDrawPropTypes } from '@/myApp/types'
 import { Controller, useForm } from 'react-hook-form'
 import { useNavigation } from '@react-navigation/native'
 import { WalletPaymentBankComp, WalletPaymentCryptoComp } from '@/myApp/components/WalletComponents'
+import { AntDesign } from '@expo/vector-icons'
 
 
 

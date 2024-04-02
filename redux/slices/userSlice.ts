@@ -3,7 +3,8 @@ import { createSlice } from "@reduxjs/toolkit";
 const userSlice = createSlice({
   name: "user",
   initialState: {
-   contest: []
+   contest: [],
+   notification : []
   },
   reducers: {
  createCreatestAction : (state, action) => {
@@ -12,10 +13,14 @@ const userSlice = createSlice({
 getAllContestAction: (state, action) => {
   state.contest = [ ...action.payload]
 },
+getAllNotification: (state, action) =>{
+  console.log("run in redux", action.payload)
+  state.notification = [ action.payload, ...state.notification]
+}
 
   },
 });
 
-export const {createCreatestAction, getAllContestAction} = userSlice.actions;
+export const {createCreatestAction, getAllContestAction, getAllNotification} = userSlice.actions;
 
 export const userReducer = userSlice.reducer;

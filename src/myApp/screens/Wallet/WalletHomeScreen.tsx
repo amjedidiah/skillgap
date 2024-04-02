@@ -43,7 +43,7 @@ const WalletHomeScreen = () => {
         {/* add button end */}
 
 <View className="px-[20px] flex-1 py-4">
-  <TouchableOpacity onPress={() => naviagtion.goBack()}>
+  <TouchableOpacity onPress={() => navigation.goBack()}>
   <MaterialIcons name="arrow-back-ios" size={24} color="black" />
   </TouchableOpacity>
   {/* wallet balance start */}

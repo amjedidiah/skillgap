@@ -46,11 +46,17 @@ const truncatedText = showFullText ? content : `${content.slice(0,50)}`
       </Text>
     </TouchableOpacity>
     {
-      isContest && <View className="flex-row items-center justify-between mt-4">
-      <AppButton ButtonViewStyle="w-[140px] h-10 py-0 bg-white border-sky-500 border" ButtonTextStyle="text-sky-500" text="Decline" />
+      isContest &&
+       <View className="flex-row items-center justify-between mt-4">
+      
+      <AppButton handleOnpress={() => {
+        console.log("pressed")
+      }} ButtonViewStyle="w-[140px] h-10 py-0 bg-white border-sky-500 border" ButtonTextStyle="text-sky-500" text="Decline" />
+
       <AppButton handleOnpress={() => {
            navigation.navigate('Wallet', { screen: 'walletWithDrawScreen' });
       }} ButtonViewStyle="w-[140px] py-0 bg-sky-500 h-10" text="Accept" />
+
     </View>
     }
   </View>

@@ -8,7 +8,7 @@ import { useSelector } from 'react-redux'
 const ContestantComp = ({content1Img, content2Img, cont1Name, cont2Name, active, heading, amount, contestStatus, allItem, contestType, opponentProfilePicAndSkillGapTagArray}:homeContestantPropType ) => {
 
   const appUserStore = useSelector(data => data?.authReducer?.user)
-console.log("allIten from inner now", allItem)
+// console.log("allIten from inner now", allItem)
 const data = {allItem}
 const navigation = useNavigation()
   return (

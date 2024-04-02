@@ -37,7 +37,7 @@ const navigation = useNavigation()
 const [showModal, setShowModal] = useState(false)
 const appUserStore = useSelector(data => data?.authReducer?.user)
 const appUserContest = useSelector(data => data?.userReducer?.contest)
-  // removing back naviagtion when pressing the back button
+  // removing back navigation when pressing the back button
 
 // console.log("this is the appDataStore", appUserStore)
 // console.log("this are the  contest", appUserContest)

@@ -1,24 +1,21 @@
 import {  createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 
-
-
 import {Image} from "react-native"
-import ProfileScreen from "@/myApp/screens/welcome/ProfileScreen"
 import HomeNavigation from "./HomeNavigation"
 import WalletNavigation from "./WalletNavigation"
 import ArenaNavigation from "./ArenaNavigation"
 import NotificationNavigation from "./NotificationNavigation"
 import ProfileNavigation from "./ProfileNavigation"
-
-
-
-
-
+import useNotificationHooks from "../utils/Hooks/useNotificationHook"
 
 const Tab = createBottomTabNavigator()
 
 
-const ButtonTapNavigation = () => (
+const ButtonTapNavigation = () =>{ 
+  // a function used for seting up app notification
+useNotificationHooks()
+
+  return(
     <Tab.Navigator
     initialRouteName="Home"
   screenOptions= {
@@ -100,7 +97,7 @@ const ButtonTapNavigation = () => (
         
         /> 
     </Tab.Navigator>
-)
+)}
 
 
 export default ButtonTapNavigation

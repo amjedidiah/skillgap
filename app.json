@@ -6,6 +6,7 @@
     "orientation": "portrait",
     "icon": "./assets/images/app_icon.png",
     "userInterfaceStyle": "light",
+  
     "splash": {
       "image": "./assets/images/finalSplashScreen.png",
       "resizeMode": "cover",
@@ -15,8 +16,12 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "notification": {
+        "icon": "./assets/images/icon22.png"
+      }
     },
+    
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/splashnew.png",
@@ -25,7 +30,10 @@
       "permissions": [
         "android.permission.RECORD_AUDIO"
       ],
-      "package": "com.ukonulucky.skillgap"
+      "package": "com.ukonulucky.skillgap",
+      "notification": {
+        "icon": "./assets/images/icon22.png"
+      }
     },
     "web": {
       "favicon": "./assets/images/favicon.png"
@@ -45,7 +53,8 @@
         {
           "icon": "./assets/images/icon22.png",
           "color": "#ffffff",
-          "sounds": ["./assets/sounds/alert2.wav"]
+          "sounds": ["./assets/sounds/alert2.wav"],
+          "mode": "development"
          
         }
       ]

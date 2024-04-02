@@ -9,7 +9,7 @@ import AppTextHeading from "@/myApp/components/AppTextHeading";
 import { useNavigation } from "@react-navigation/native";
 
 const WalletTransactionScreen = () => {
-  const naviagtion = useNavigation();
+ 
 
   const [showModal, setShowModal] = useState(false)
 

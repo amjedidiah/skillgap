@@ -12,6 +12,7 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import OnboardingNavigtion from "./OnboardingNvigation";
 import { TouchableOpacity } from "react-native";
 import { AntDesign } from '@expo/vector-icons';
+import { navigationRef } from "./NavigationRef";
 
 
 
@@ -61,7 +62,7 @@ const magic = new Magic("pk_live_AF0A2FCCABF5C8EF");
 />
      {
       isAuthenticated ? 
-        <ButtonTapNavigation /> : appLoaded ? <AuthNavigtion /> :<OnboardingNavigtion />
+        <ButtonTapNavigation  /> : appLoaded ? <AuthNavigtion /> :<OnboardingNavigtion />
      }
   </SafeAreaProvider>
   ;

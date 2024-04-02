@@ -44,7 +44,8 @@ const PhoneNumberScreen: React.FC = ({
                 alignItems:"center",
                 justifyContent:"center",
                 height:"100%",
-                paddingVertical: 0
+                paddingVertical: 0,
+                backgroundColor:"white",
                  }}
                   codeTextStyle={{ fontSize: 16, 
                      width: 50,
@@ -53,6 +54,7 @@ const PhoneNumberScreen: React.FC = ({
                   height:"100%",
                   justifyContent:"center",
                   alignItems:"center",
+                  backgroundColor:"white",
                 
                   textAlignVertical:"center",
                   flexDirection:"row",

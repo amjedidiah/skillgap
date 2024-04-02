@@ -2,9 +2,9 @@ import axios from "axios";
 
 
 // 192.168.2.3
-const baseUrl22 = "http://192.168.2.3:7000";
+const baseUrl = "http://192.168.242.3:7000";
 
-const baseUrl = "https://skillgap-api-1fc27db9f77b.herokuapp.com";
+const baseUrl22 = "https://skillgap-api-1fc27db9f77b.herokuapp.com";
 
 
 
@@ -56,6 +56,12 @@ export const doesEmailPhoneNumberUserNameExist  = async (data: any) => {
 
 export const logOutApi = async (data: any) => {
   const response = await axios.post(`${baseUrl}/api/v1/user/logOut`, data, {
+    withCredentials: true,
+  });
+  return response.data;
+};
+export const saveExpoToken = async (data: any) => {
+  const response = await axios.post(`${baseUrl}/api/v1/user/save-expo-token`, data, {
     withCredentials: true,
   });
   return response.data;

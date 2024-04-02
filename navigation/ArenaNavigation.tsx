@@ -12,7 +12,7 @@ function ArenaNavigation() {
 
   return (
     <Stack.Navigator
-      initialRouteName="arenaContestScreen"
+      initialRouteName="arenaCreateContestScreen"
       screenOptions={{
         animation: "slide_from_left",
       }}
