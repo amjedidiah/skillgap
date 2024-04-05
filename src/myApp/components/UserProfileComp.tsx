@@ -129,11 +129,12 @@ export const LogOutModalComp = ({ showLogOutModal, setShowLogOutModal }) => {
   const [disableButton, setDisableButton] = useState(false);
 
   const magic = new Magic("pk_live_AF0A2FCCABF5C8EF");
- 
+
   const dispatch = useDispatch();
-  const  userEmailData = useSelector((data) => data?.authReducer?.user?.userEmail) || "";
-  const userEmail = userEmailData ? userEmailData : ""
-  const  jwt  = useSelector((data) => data?.authReducer?.user?.jwt);
+  const userEmailData =
+    useSelector((data) => data?.authReducer?.user?.userEmail) || "";
+  const userEmail = userEmailData ? userEmailData : "";
+  const jwt = useSelector((data) => data?.authReducer?.user?.jwt);
 
   // valaidte email mutation
 
@@ -150,7 +151,6 @@ export const LogOutModalComp = ({ showLogOutModal, setShowLogOutModal }) => {
     isSuccess: logOutSuccess,
   } = logOutUserMutation;
 
-
   useEffect(() => {
     const handleState = async () => {
       console.log("use Efffet ran");
@@ -159,7 +159,7 @@ export const LogOutModalComp = ({ showLogOutModal, setShowLogOutModal }) => {
         // setShowModalLogOut(false);
 
         // setErrorTypeLogOut(null);
-        setDisableButton(false)
+        setDisableButton(false);
         const errorMessage =
           logOutErrorData?.response?.data.message || logOutErrorData?.message;
         // setErrorMesageLogOut("");
@@ -193,27 +193,12 @@ export const LogOutModalComp = ({ showLogOutModal, setShowLogOutModal }) => {
       }
 
       if (logOutSuccess && runUseEffect) {
-        console.log("logOut data", logOutData)
-        // setShowModalLogOut(false);
-        // setErrorTypeLogOut(null);
-        // setErrorMesageLogOut("");
-        console.log("ran at success")
-       
-        console.log("ran 22 at success")
+        console.log("logOut data", logOutData);
+
         await magic.user?.logout();
         dispatch(logOutAction());
-        setDisableButton(false)
+        setDisableButton(false);
         setRunUseEffect(false);
-       
-       
-
-      
-        
-       
-         
-         
-         
-     
       }
     };
     handleState();
@@ -232,7 +217,7 @@ export const LogOutModalComp = ({ showLogOutModal, setShowLogOutModal }) => {
       <View
         className="flex-1 justify-center items-center"
         style={{
-          backgroundColor: "rgba(29, 155, 240, 0.2)",
+          backgroundColor: "rgba(78, 78, 78, 0.2)",
         }}
       >
         <View className="rounded-md bg-white px-4 w-4/5  items-center py-6">
@@ -247,28 +232,28 @@ export const LogOutModalComp = ({ showLogOutModal, setShowLogOutModal }) => {
           />
           <View className="flex-row items-center justify-between  w-full mt-4">
             <AppButton
-            disabled={disableButton}
+              disabled={disableButton}
               handleOnpress={async () => {
-             try {
-              setDisableButton(true)
-              setRunUseEffect(true);
-              await logOutUserMutation.mutateAsync({
-                email: userEmail,
-                jwt,
-              });
-             } catch (error) {
-              console.log(error)
-             }
+                try {
+                  setDisableButton(true);
+                  setRunUseEffect(true);
+                  await logOutUserMutation.mutateAsync({
+                    email: userEmail,
+                    jwt,
+                  });
+                } catch (error) {
+                  console.log(error);
+                }
               }}
               text={disableButton ? "Loading..." : "Yes"}
               ButtonViewStyle="w-[120px] bg-white border-red-500 border"
               ButtonTextStyle="text-red-500"
             />
             <AppButton
-             disabled={disableButton}
+              disabled={disableButton}
               handleOnpress={() => {
-                setRunUseEffect(false)
-                setDisableButton(false)
+                setRunUseEffect(false);
+                setDisableButton(false);
                 setShowLogOutModal(false);
               }}
               text="No"
