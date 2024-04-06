@@ -32,7 +32,9 @@
       ],
       "package": "com.ukonulucky.skillgap",
       "notification": {
-        "icon": "./assets/images/icon22.png"
+        "icon": "./assets/images/icon22.png",
+        "color": "#3B3B3B",
+        "iosDisplayInForeground": true
       }
     },
     "web": {
