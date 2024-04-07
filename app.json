@@ -18,7 +18,7 @@
     "ios": {
       "supportsTablet": true,
       "notification": {
-        "icon": "./assets/images/icon22.png"
+        "icon": "./assets/images/app_icon.png"
       }
     },
     
@@ -32,7 +32,7 @@
       ],
       "package": "com.ukonulucky.skillgap",
       "notification": {
-        "icon": "./assets/images/icon22.png",
+        "icon": "./assets/images/app_icon.png",
         "color": "#3B3B3B",
         "iosDisplayInForeground": true
       }
@@ -53,7 +53,7 @@
       [
         "expo-notifications",
         {
-          "icon": "./assets/images/icon22.png",
+          "icon": "./assets/images/app_icon.png",
           "color": "#ffffff",
           "sounds": ["./assets/sounds/alert2.wav"],
           "mode": "development"

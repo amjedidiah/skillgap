@@ -5,14 +5,11 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import ButtonTapNavigation from "./ButtomNavigation";
 import { HomeStackNavigatorParamList } from "type";
 import { useSelector } from "react-redux";
-import { View } from "react-native-animatable";
 import AuthNavigtion from "./AuthNavigation";
 import { Magic } from "@magic-sdk/react-native-expo";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import OnboardingNavigtion from "./OnboardingNvigation";
-import { TouchableOpacity } from "react-native";
-import { AntDesign } from '@expo/vector-icons';
-import { navigationRef } from "./NavigationRef";
+
 
 
 
@@ -29,7 +26,6 @@ function RouthPage() {
   const appLoaded = useSelector(data => data?.authReducer?.isLoaded)
 
 useEffect(() => {
-  console.log(isloggedIn)
 if(isloggedIn) {
 setIsAunthenticated(true)
 }else{
@@ -38,7 +34,6 @@ setIsAunthenticated(true)
 },[isloggedIn]);
 
 useEffect(() => {
-  console.log(isloggedIn)
 if(appLoaded) {
   setAppLoaded(true)
 }else{
@@ -61,7 +56,7 @@ const magic = new Magic("pk_live_AF0A2FCCABF5C8EF");
 <magic.Relayer
 />
      {
-      isAuthenticated ? 
+      isloggedIn ? 
         <ButtonTapNavigation  /> : appLoaded ? <AuthNavigtion /> :<OnboardingNavigtion />
      }
   </SafeAreaProvider>

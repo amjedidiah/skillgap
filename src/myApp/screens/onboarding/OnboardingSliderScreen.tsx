@@ -148,7 +148,7 @@ const OnboardingSliderScreen = () => {
     );
   };
   return (
-    <View className="flex-1 w-full">
+    <View className="flex-1 w-full ">
       <Carousel
         ref={isCarousel}
         data={onboardingArray}
