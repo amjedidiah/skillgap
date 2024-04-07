@@ -33,10 +33,11 @@ const   useNotification2 = () => {
         const handleNotification = async () => {
             try {
                const newToken = await  registerForPushNotificationsAsync()
-          setExpoPushToken(newToken)
+          console.log("expo push token sent", newToken)
+               setExpoPushToken(newToken)
           const tokenResponse = await saveExpoToken({
            email:user?.userEmail,
-           expoToken: expoPushToken
+           expoToken: newToken
            })
    
    
@@ -106,6 +107,7 @@ async function registerForPushNotificationsAsync() {
 
         // The token should be sent to the server so that it can be used to send push notifications to the device
         console.log("new token",token);
+    
     } else {
         alert("Must use physical device for Push Notifications");
     }
