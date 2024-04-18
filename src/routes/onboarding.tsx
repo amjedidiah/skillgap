@@ -9,7 +9,6 @@ import Animated, {
 import OnboardingButton from "@/components/onboarding/onboarding-button";
 import OnboardingLayout from "@/components/onboarding/onboarding-layout";
 import OnboardingPagination from "@/components/onboarding/onboarding-pagination";
-import { isiOS } from "@/lib/constants";
 
 const pages = [
   {
@@ -86,9 +85,7 @@ export default function Onboarding() {
         showsHorizontalScrollIndicator={false}
         viewabilityConfigCallbackPairs={viewabilityConfigCallbackPairs.current}
       />
-      <View
-        className={`flex-row justify-between items-center p-8 ${isiOS ? "mb-7" : ""}`}
-      >
+      <View className="bg-white flex-row justify-between items-center p-8">
         <OnboardingPagination length={pages.length} x={x} />
         <OnboardingButton
           currentIndex={flatListIndex}

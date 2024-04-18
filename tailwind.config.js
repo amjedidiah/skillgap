@@ -10,6 +10,13 @@ module.exports = {
         },
         gray: {
           DEFAULT: "#8F8F8F",
+          300: "#D0D5DD",
+          700: "#344054",
+        },
+        "dm-l1": "#141414",
+        primary: "#292D32",
+        error: {
+          500: "#F04438",
         },
       },
     },

@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 
 const customFonts = {
   "GeneralSans-Regular": require("../fonts/GeneralSans-Regular.otf"),
+  "GeneralSans-Medium": require("../fonts/GeneralSans-Medium.otf"),
   "GeneralSans-Semibold": require("../fonts/GeneralSans-Semibold.otf"),
 };
 

@@ -6,9 +6,9 @@ import { isAndroid } from "@/lib/constants";
 
 export default function NativeSafeAreaView({
   children,
-  viewColor,
+  viewColor = "white",
   width,
-}: PropsWithChildren<{ viewColor: string; width?: number }>) {
+}: PropsWithChildren<{ viewColor?: string; width?: number }>) {
   if (isAndroid) {
     NavigationBar.setBackgroundColorAsync(viewColor);
     // NavigationBar.setPositionAsync("absolute");

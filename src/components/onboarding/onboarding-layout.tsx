@@ -1,4 +1,4 @@
-import { memo } from "react";
+import { PropsWithChildren, memo } from "react";
 import { View, useWindowDimensions } from "react-native";
 import Animated, {
   Extrapolate,
@@ -13,15 +13,18 @@ function OnboardingLayout({
   title,
   description,
   source,
-  index,
-  x,
-}: {
+  index = 0,
+  x = { value: 0 },
+  children,
+  center = false,
+}: PropsWithChildren<{
   title: string;
   description: string;
   source: string;
-  index: number;
-  x: SharedValue<number>;
-}) {
+  index?: number;
+  x?: SharedValue<number>;
+  center?: boolean;
+}>) {
   const { width: SCREEN_WIDTH } = useWindowDimensions();
   const rnImageStyle = useAnimatedStyle(() => {
     const translateY = interpolate(
@@ -81,7 +84,7 @@ function OnboardingLayout({
   return (
     <NativeSafeAreaView viewColor="white" width={SCREEN_WIDTH}>
       <View className="flex-1 -mt-20">
-        <View className="flex-1">
+        <View className="flex-1 relative top-6">
           <Animated.Image
             source={{
               uri: source,
@@ -89,22 +92,24 @@ function OnboardingLayout({
             style={rnImageStyle}
             alt="onboarding-1"
             className="min-w-full flex-1"
+            progressiveRenderingEnabled
           />
         </View>
-        <View className="basis-[200px] bg-white py-6 px-8 justify-between">
+        <View className="bg-white py-6 px-8 justify-between rounded-t-2xl">
           <View className="gap-2">
             <Animated.Text
               style={[{ fontFamily: "SpaceGrotesk_700Bold" }, rnTextStyle]}
-              className="text-black-100 text-2xl -tracking-[0.24px]"
+              className={`text-black-100 text-2xl -tracking-[0.24px]  ${center ? "text-center" : ""}`}
             >
               {title}
             </Animated.Text>
             <Animated.Text
               style={[{ fontFamily: "GeneralSans-Regular" }, rnTextStyle]}
-              className="text-gray leading-[22px] text-base -tracking-[0.16px]"
+              className={`text-gray leading-[22px] text-base -tracking-[0.16px]  ${center ? "text-center" : ""}`}
             >
               {description}
             </Animated.Text>
+            {children}
           </View>
         </View>
       </View>
