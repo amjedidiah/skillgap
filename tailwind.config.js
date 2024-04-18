@@ -4,6 +4,13 @@ module.exports = {
     extend: {
       colors: {
         "twitter-blue": "#1D9BF0",
+        black: {
+          DEFAULT: "#000000",
+          100: "#020B12",
+        },
+        gray: {
+          DEFAULT: "#8F8F8F",
+        },
       },
     },
   },

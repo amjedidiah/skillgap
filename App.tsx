@@ -1,12 +1,17 @@
-import NativeSafeAreaView from "@/components/native-safe-area-view";
-import { StatusBar } from "expo-status-bar";
-import { Text } from "react-native";
+import { StatusBar as ExpoStatusBar } from "expo-status-bar";
+
+import SplashScreen from "@/components/splash-screen";
+import useAppFonts from "@/hooks/use-app-fonts";
+import Onboarding from "@/routes/onboarding";
 
 export default function App() {
+  const isFontsLoaded = useAppFonts();
+  if (!isFontsLoaded) return <SplashScreen />;
+
   return (
-    <NativeSafeAreaView>
-      <Text>SkillGap!</Text>
-      <StatusBar style="auto" />
-    </NativeSafeAreaView>
+    <>
+      <Onboarding />
+      <ExpoStatusBar style="auto" />
+    </>
   );
 }
