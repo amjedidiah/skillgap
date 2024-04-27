@@ -7,16 +7,8 @@
       "dom",
       "esnext"
     ],
-    "moduleResolution": "node",
-    "skipLibCheck": true,
     "resolveJsonModule": true,
-    "declaration": true,
-    "forceConsistentCasingInFileNames": true,
-    "strict": true,
-    "baseUrl": ".",
-    "paths": {
-      "@/*": ["src/*"]
-    }
+    "declaration": true
   },
   "files": [],
   "include": [],

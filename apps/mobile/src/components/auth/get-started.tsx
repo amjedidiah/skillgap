@@ -1,7 +1,7 @@
 import { useNavigation } from "@react-navigation/native";
 import { Text, TouchableOpacity, View } from "react-native";
 
-import OnboardingLayout from "@/components/onboarding/onboarding-layout";
+import OnboardingLayout from "../onboarding/onboarding-layout";
 
 export default function GetStarted() {
   const navigation = useNavigation();
@@ -13,7 +13,7 @@ export default function GetStarted() {
       source="https://res.cloudinary.com/dv3jszmrc/image/upload/v1713436048/last-spash-screen_atz7ay.jpg"
       center
     >
-      <View className="gap-4">
+      <View className="gap-y-4">
         <TouchableOpacity
           className="bg-dm-l1 rounded-[40px] py-4 px-[10px]"
           onPress={() => navigation.navigate("SignUp" as never)}

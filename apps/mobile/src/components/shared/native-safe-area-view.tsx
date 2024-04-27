@@ -2,7 +2,7 @@ import * as NavigationBar from "expo-navigation-bar";
 import { PropsWithChildren } from "react";
 import { Platform, SafeAreaView, StatusBar } from "react-native";
 
-import { isAndroid } from "@/lib/constants";
+import { isAndroid } from "../../lib/constants";
 
 export default function NativeSafeAreaView({
   children,

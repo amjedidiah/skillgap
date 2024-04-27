@@ -8,7 +8,8 @@ import {
   View,
 } from "react-native";
 
-import { SGFieldError } from "@/icons";
+import ShouldRender from "./should-render";
+import { SGFieldError } from "../../icons";
 
 const borderStyles: StyleProp<TextStyle> = {
   borderWidth: 1,
@@ -47,7 +48,7 @@ const FormField = ({
   const handleBlur = () => setIsFocused(false);
 
   return (
-    <View className="flex gap-[6px]">
+    <View className="flex gap-y-[6px]">
       <Text
         style={{ fontFamily: "GeneralSans-Medium" }}
         className="text-gray-700 text-sm"
@@ -69,8 +70,8 @@ const FormField = ({
             },
         ]}
       >
-        {noInput && children}
-        {!noInput ? (
+        <ShouldRender condition={Boolean(noInput)}>{children}</ShouldRender>
+        <ShouldRender condition={!noInput}>
           <TextInput
             placeholderTextColor={placeholderTextColor}
             keyboardType={keyboardType}
@@ -82,21 +83,21 @@ const FormField = ({
             onBlur={handleBlur}
             {...rest}
           />
-        ) : null}
-        {error && (
+        </ShouldRender>
+        <ShouldRender condition={Boolean(error)}>
           <View className="px-2">
             <SGFieldError />
           </View>
-        )}
+        </ShouldRender>
       </View>
-      {error && (
+      <ShouldRender condition={Boolean(error)}>
         <Text
-          className="text-error-500 text-sm leading-5"
+          className="text-error-500 text-xs leading-5"
           style={{ fontFamily: "GeneralSans-Regular" }}
         >
           {error}
         </Text>
-      )}
+      </ShouldRender>
     </View>
   );
 };

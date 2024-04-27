@@ -30,6 +30,16 @@
         "production",
         "^production"
       ]
+    },
+    "@nx/js:tsc": {
+      "cache": true,
+      "dependsOn": [
+        "^build"
+      ],
+      "inputs": [
+        "production",
+        "^production"
+      ]
     }
   },
   "plugins": [
@@ -90,5 +100,6 @@
         "runAndroidTargetName": "run-android"
       }
     }
-  ]
+  ],
+  "defaultBase": "develop"
 }

@@ -7,7 +7,7 @@ import Animated, {
   useAnimatedStyle,
 } from "react-native-reanimated";
 
-import NativeSafeAreaView from "@/components/shared/native-safe-area-view";
+import NativeSafeAreaView from "../shared/native-safe-area-view";
 
 function OnboardingLayout({
   title,
@@ -22,7 +22,7 @@ function OnboardingLayout({
   description: string;
   source: string;
   index?: number;
-  x?: SharedValue<number>;
+  x?: Pick<SharedValue<number>, "value">;
   center?: boolean;
 }>) {
   const { width: SCREEN_WIDTH } = useWindowDimensions();
@@ -96,7 +96,7 @@ function OnboardingLayout({
           />
         </View>
         <View className="bg-white py-6 px-8 justify-between rounded-t-2xl">
-          <View className="gap-2">
+          <View className="gap-y-2">
             <Animated.Text
               style={[{ fontFamily: "SpaceGrotesk_700Bold" }, rnTextStyle]}
               className={`text-black-100 text-2xl -tracking-[0.24px]  ${center ? "text-center" : ""}`}

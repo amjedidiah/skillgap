@@ -1,8 +1,8 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
-import Auth from "@/routes/auth";
-import Onboarding from "@/routes/onboarding";
+import Auth from "./auth";
+import Onboarding from "./onboarding";
 
 const Stack = createNativeStackNavigator();
 

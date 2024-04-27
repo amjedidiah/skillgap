@@ -24,7 +24,8 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.aestart.skillgap"
+      "package": "com.aestart.skillgap",
+      "softwareKeyboardLayoutMode": "pan"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -37,6 +38,9 @@
         "projectId": "ee042afb-f015-4a81-8563-87699576c8a3"
       }
     },
-    "owner": "aestart"
+    "owner": "aestart",
+    "plugins": [
+      "expo-secure-store"
+    ]
   }
 }

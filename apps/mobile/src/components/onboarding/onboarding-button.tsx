@@ -1,14 +1,20 @@
 import { useNavigation } from "@react-navigation/native";
 import React, { useCallback } from "react";
 import { TouchableOpacity, View } from "react-native";
-import Animated from "react-native-reanimated";
+import Animated, { AnimatedRef } from "react-native-reanimated";
 
-import { isiOS } from "@/lib/constants";
+import { isiOS } from "../../lib/constants";
 
 type Props = {
   currentIndex: Animated.SharedValue<number>;
   length: number;
-  flatListRef: any;
+  flatListRef: AnimatedRef<
+    Animated.FlatList<{
+      source: string;
+      title: string;
+      description: string;
+    }>
+  >;
 };
 
 const AnimatedPressable = Animated.createAnimatedComponent(TouchableOpacity);
@@ -39,7 +45,7 @@ export default function OnboardingButton({
   }, [currentIndex.value, flatListRef, length, navigation]);
 
   return (
-    <View className={`flex-row gap-6  ${isiOS ? "mb-4" : ""}`}>
+    <View className={`flex-row gap-x-6  ${isiOS ? "mb-4" : ""}`}>
       <AnimatedPressable
         className="bg-white p-3 w-12 h-12 rounded-full border border-black-100 flex items-center justify-center"
         onPress={onPrev}

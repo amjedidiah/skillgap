@@ -1,10 +1,10 @@
 import { useNavigation } from "@react-navigation/native";
 import { Text, TouchableOpacity, View } from "react-native";
 
-import AuthLayout from "@/components/auth/auth-layout";
-import FormField from "@/components/shared/form-field";
+import AuthLayout from "./auth-layout";
+import FormField from "../shared/form-field";
 
-export default function SignUp() {
+export default function SignIn() {
   const navigation = useNavigation();
 
   return (
@@ -19,7 +19,7 @@ export default function SignUp() {
           autoCapitalize="none"
         />
 
-        <View className="gap-3 mt-6">
+        <View className="gap-y-3 mt-6">
           <TouchableOpacity className="bg-twitter-blue rounded-[40px] py-4 px-[10px]">
             <Text
               className="text-center text-white text-sm leading-6 -tracking-[0.14px]"

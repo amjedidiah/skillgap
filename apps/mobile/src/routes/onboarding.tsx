@@ -6,9 +6,9 @@ import Animated, {
   useSharedValue,
 } from "react-native-reanimated";
 
-import OnboardingButton from "@/components/onboarding/onboarding-button";
-import OnboardingLayout from "@/components/onboarding/onboarding-layout";
-import OnboardingPagination from "@/components/onboarding/onboarding-pagination";
+import OnboardingButton from "../components/onboarding/onboarding-button";
+import OnboardingLayout from "../components/onboarding/onboarding-layout";
+import OnboardingPagination from "../components/onboarding/onboarding-pagination";
 
 const pages = [
   {

@@ -1,13 +1,13 @@
 import React from "react";
 import { View } from "react-native";
-import Animated from "react-native-reanimated";
+import { SharedValue } from "react-native-reanimated";
 
-import OnboardingPaginationItem from "@/components/onboarding/onboarding-pagination-item";
-import { isiOS } from "@/lib/constants";
+import OnboardingPaginationItem from "./onboarding-pagination-item";
+import { isiOS } from "../../lib/constants";
 
 type Props = {
   length: number;
-  x: Animated.SharedValue<number>;
+  x: SharedValue<number>;
 };
 
 export default function OnboardingPagination({ length, x }: Props) {
