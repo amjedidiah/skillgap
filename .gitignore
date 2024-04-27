@@ -110,8 +110,6 @@ yarn-error.log
 /coverage
 
 # Custom
-yarn.lock
-TODO.md
 
 # Expo
 node_modules/
