@@ -10,7 +10,7 @@ import * as yup from "yup";
 
 import AuthLayout from "./auth-layout";
 import useSignin from "../../hooks/use-signin";
-import { apiSignUp } from "../../lib/api";
+import { apiGetIsUserUnique, apiSignUp } from "../../lib/api";
 import { isAndroid } from "../../lib/constants";
 import FormField from "../shared/form-field";
 import ShouldRender from "../shared/should-render";
@@ -48,27 +48,74 @@ const schema = yup.object({
     ),
   email: yup
     .string()
-    .trim()
-    .email("Invalid email address")
-    .required("Email is required"),
+    .required("Email is required")
+    .test(async (v, context) => {
+      try {
+        await yup.string().trim().email("Invalid email address").validate(v);
+
+        const unique = await apiGetIsUserUnique("email", v);
+        if (!unique)
+          throw new Error("A user with this email address already exists");
+      } catch (error) {
+        if (error instanceof Error)
+          return context.createError({
+            message: error.message,
+          });
+      }
+
+      return true;
+    }),
   tag: yup
     .string()
-    .trim()
     .required("A user tag is required")
-    .test(
-      "length",
-      "Your user tag must be between 4 and 41 characters",
-      (value) => value?.length >= 4 && value?.length <= 41
-    ),
+    .test(async (v, context) => {
+      try {
+        await yup
+          .string()
+          .trim()
+          .min(4, "Your user tag should be at least 4 characters")
+          .max(41, "Your user tag should not be more than 41 characters")
+          .validate(v);
+
+        const unique = await apiGetIsUserUnique("tag", v);
+        if (!unique) throw new Error("A user with this tag already exists");
+      } catch (error) {
+        if (error instanceof Error)
+          return context.createError({
+            message: error.message,
+          });
+      }
+
+      return true;
+    }),
   country: yup.string().trim().required("Country is required"),
   countryCode: yup.string().trim().required("Country code is required"),
   phoneNumber: yup
     .string()
-    .trim()
     .required("Phone number is required")
-    .test("valid", "Please enter a valid phone number", function (value) {
-      const cc = this?.parent.countryCode as CountryCode;
-      return isValidNumber(value, cc);
+    .test(async (v, context) => {
+      try {
+        await yup
+          .string()
+          .trim()
+          .test("valid", "Please enter a valid phone number", function (value) {
+            const cc = context.parent.countryCode as CountryCode;
+            return isValidNumber(v, cc);
+          })
+          .validate(v);
+        const vWithoutPlus = v.slice(1);
+
+        const unique = await apiGetIsUserUnique("phoneNumber", vWithoutPlus);
+        if (!unique)
+          throw new Error("A user with this phone number already exists");
+      } catch (error) {
+        if (error instanceof Error)
+          return context.createError({
+            message: error.message,
+          });
+      }
+
+      return true;
     }),
 });
 
@@ -94,8 +141,6 @@ function SignUp() {
   const lastName = watch("lastName");
 
   const onSubmit = async (data: FormData) => {
-    console.log(data);
-
     try {
       // 1. Magic Auth
       const resp = await signin(data.email);
@@ -114,7 +159,9 @@ function SignUp() {
       console.info(data);
       if (!signupData) throw new Error("Error");
 
-      // 4. Redirect
+      // 4. Complete code in `apps/api/src/v1/models/user.ts` to send welcome email
+
+      // 5. Redirect
       navigation.navigate("CreatePin" as never);
     } catch (error) {
       console.error(`An error occurred signing up ${data.email}: `, error);
@@ -248,7 +295,7 @@ function SignUp() {
               defaultCode={countryCode as CountryCode}
               value={value}
               layout="second"
-              onChangeText={onChange}
+              onChangeFormattedText={onChange}
               containerStyle={{
                 flex: 1,
                 borderRadius: 30,

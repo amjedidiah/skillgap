@@ -22,10 +22,7 @@ export const emailValidator = () =>
       });
       console.info("Validation complete by deep-email-validator:", validators);
 
-      if (!valid)
-        throw new Error(
-          `${email} failed deep-email-validator validation: ${reason}`
-        );
+      if (!valid) throw new Error(`${email} failed validation: ${reason}`);
       return true;
     });
 
@@ -34,18 +31,15 @@ export const emailExistsValidator = () =>
     .toLowerCase()
     .custom(async (value) => {
       const user = await mongoGetUserByProp("email", value);
-      console.log({ user });
       if (user)
-        throw new Error(
-          "An account with this email already exists, use a different one."
-        );
+        throw new Error("A user with this email address already exists.");
 
       return true;
     })
     .normalizeEmail();
 
 export const tagValidator = () =>
-  body("tag", "tag between 4 and 41 characters is required")
+  body("tag", "Your user tag should be between 2 and 20 characters")
     .isString()
     .trim()
     .notEmpty()
@@ -54,10 +48,7 @@ export const tagValidator = () =>
 export const tagExistsValidator = () =>
   body("tag").custom(async (value) => {
     const user = await mongoGetUserByProp("tag", value.toLowerCase());
-    if (user)
-      throw new Error(
-        "An account with this tag already exists, use a different one."
-      );
+    if (user) throw new Error("A user with this tag already exists");
 
     return true;
   });
@@ -94,7 +85,7 @@ export const phoneNumberExistsValidator = () =>
   });
 
 export const nameValidator = (fields: string, label: string) =>
-  body(fields, `${label} between 2 and 20 characters is required`)
+  body(fields, `${label} should be between 2 and 20 characters`)
     .isString()
     .trim()
     .notEmpty()
