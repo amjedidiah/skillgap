@@ -2,7 +2,7 @@ import { isDev } from "@skillgap/shared/constants";
 import axios from "axios";
 import * as SecureStore from "expo-secure-store";
 
-import { ISignupValues } from "../components/auth/sign-up";
+import { ISignupValues } from "../lib/types";
 
 // Create a custom Axios instance
 const api = axios.create({

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "296803881481",
+    "project_id": "skillgap-mobile-app",
+    "storage_bucket": "skillgap-mobile-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:296803881481:android:21c0d07ac495b3686a5ed8",
+        "android_client_info": {
+          "package_name": "com.aestart.skillgap"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAcaCoxVPKyBP2DhIMBkWRVsjBQpJgNv9g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

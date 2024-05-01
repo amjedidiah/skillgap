@@ -8,7 +8,7 @@ const customFonts = {
   "GeneralSans-Medium": require("../fonts/GeneralSans-Medium.otf"),
   "GeneralSans-Semibold": require("../fonts/GeneralSans-Semibold.otf"),
 };
-const SPLASH_SCREEN_DELAY = 2000;
+const SPLASH_SCREEN_DELAY = 3000;
 
 export default function useAppFonts() {
   const [isFontsLoaded, setIsFontsLoaded] = useState(false);

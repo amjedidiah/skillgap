@@ -3,16 +3,23 @@
     "version": ">= 6.0.0"
   },
   "build": {
+    "config": {
+      "node": "18.18.2",
+      "yarn": "1.22.19"
+    },
     "production": {
+      "extends": "config",
       "android": {
         "buildType": "app-bundle"
       }
     },
     "development": {
+      "extends": "config",
       "developmentClient": true,
       "distribution": "internal"
     },
     "preview": {
+      "extends": "config",
       "distribution": "internal",
       "ios": {
         "simulator": true

@@ -25,8 +25,6 @@ const defaultValues = {
   phoneNumber: "",
 };
 
-export type ISignupValues = typeof defaultValues;
-
 const schema = yup.object({
   firstName: yup
     .string()

@@ -1,15 +1,15 @@
 # TODO
 
-## Pending Issues
+## Changelog
 
-- [ ] NIN to limit multiple accounts: this verification must be done before user can create skillContest
-- [ ] Unverified users have stake limits
-- [ ] Update onboarded status when user gets to app landing page
+- [ ] Firebase Crashlytics for monitoring and reporting app crashes
+- [ ] Increased SPLASH_SCREEN_DELAY to 3seconds
 
-## Fixes
+## Current
 
-- [ ] Welcome buttons inactive after first click
-- [ ] autocomplete background color
-- [ ] fonts loading error
+- [ ] Welcome screens, image cropped at the top
+
+- [ ] Update onboarded status after user completes signup
+- [ ] `mongoGetUserByProp` doesn't validate properly for the second phoneNumber in the DB
 
 > App is Only available for iOS 11+
